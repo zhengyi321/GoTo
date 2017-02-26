@@ -46,7 +46,13 @@ android {
     }
     /*百度地图*/
 }
-
+/*Mob免费短信验证码http://www.mob.com/downloads/*/
+repositories{
+    flatDir{
+        dirs 'libs' //就是你放aar的目录地址
+    }
+}
+/*Mob免费短信验证码http://www.mob.com/downloads/*/
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -68,7 +74,7 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
     /*毛玻璃*/
     /*    compile 'com.github.bumptech.glide:glide:3.7.0'
-                                        compile 'jp.wasabeef:glide-transformations:2.0.1'*/
+                                            compile 'jp.wasabeef:glide-transformations:2.0.1'*/
     /*毛玻璃*/
     /*沉浸式状态栏*/
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
@@ -86,16 +92,26 @@ dependencies {
     compile files('libs/locSDK_6.13.jar')
     /*适配性解决方案http://blog.csdn.net/anthony_3/article/details/52033320*/
     /*适配性解决方案http://blog.csdn.net/anthony_3/article/details/52033320
-                            *http://blog.csdn.net/jdsjlzx/article/details/45891551
-                            *
-                            * */
+                                *http://blog.csdn.net/jdsjlzx/article/details/45891551
+                                *
+                                * */
     /*https://github.com/wyouflf/xUtils3
-                    *http://www.cnblogs.com/JczmDeveloper/p/5039970.html
-                    * http://www.open-open.com/lib/view/open1404894803482.html
-                    * */
+                        *http://www.cnblogs.com/JczmDeveloper/p/5039970.html
+                        * http://www.open-open.com/lib/view/open1404894803482.html
+                        * */
     /*base64*/
     compile files('libs/commons-codec-1.10.jar')
+    /*阿里支付*/
     compile files('libs/alipaySdk-20161222.jar')
+    /*阿里支付*/
+    /*极光推送*/
     compile files('libs/jcore-android_v1.1.0.jar')
     compile files('libs/jpush-android_v3.0.1.jar')
+    /*极光推送*/
+    /*Mob免费短信验证码http://www.mob.com/downloads/*/
+    compile files('libs/MobCommons-2016.1201.1839.jar')
+    compile files('libs/MobTools-2016.1201.1839.jar')
+    compile name:'SMSSDK-<version>',ext:'aar'
+    compile name:'SMSSDKGUI-<version>',ext:'aar'
+    /*Mob免费短信验证码http://www.mob.com/downloads/*/
 }

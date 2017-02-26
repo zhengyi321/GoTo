@@ -22,7 +22,7 @@
 
 
 
-    <!--请输入手机号码 请输入验证码-->
+    <!--请输入手机号码 请输入密码  请输入验证码-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -104,7 +104,51 @@
             android:layout_height="@dimen/the_split_line_height"
             android:background="@color/colorActivityAlterTelContentInputGrayWordBg"
             />
-        <!--请输入手机号码 请输入验证码-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/activity_login_input_item_height"
+            android:orientation="horizontal"
+            >
+            <EditText
+                android:id="@+id/et_userreg_content_identity"
+                android:layout_width="@dimen/zero"
+                android:layout_height="match_parent"
+                android:layout_weight="2.5"
+                android:hint="@string/inputConfirmNum"
+                android:password="true"
+                android:textColor="@color/colorActivityRegWhiteBg"
+                android:textSize="@dimen/activity_userreg_content_input_word_style_size"
+                android:background="@null"
+
+                />
+            <RelativeLayout
+                android:id="@+id/rly_userreg_content_smsec"
+                android:layout_width="@dimen/zero"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                >
+
+                <TextView
+                    android:id="@+id/tv_userreg_content_smsec"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/getConfirmNum"
+                    android:textColor="@color/colorActivityRegWhiteBg"
+                    android:textSize="@dimen/activity_userreg_content_input_word_style_size"
+                    android:background="@null"
+                    android:layout_centerInParent="true"
+                    />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/the_split_line_height"
+            android:background="@color/colorActivityAlterTelContentInputGrayWordBg"
+            />
+
+        <!--请输入手机号码 请输入密码 请输入验证码-->
 
         <LinearLayout
             android:layout_width="match_parent"
