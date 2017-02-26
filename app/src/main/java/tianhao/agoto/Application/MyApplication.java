@@ -2,6 +2,8 @@ package tianhao.agoto.Application;
 
 import android.app.Application;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  *
  */
@@ -13,6 +15,8 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         this.instance = this;
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
     }
 
 
