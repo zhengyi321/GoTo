@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lly_mywallet_paperthree"
+    android:layout_width="match_parent"
+    android:layout_height="350dp"
+    android:orientation="vertical"
+    android:layout_gravity="center_horizontal|bottom"
+    android:layout_marginTop="18dp"
+    android:layout_marginLeft="35dp"
+    android:layout_marginRight="35dp"
+    android:background="@drawable/activity_mywallet_account_bg_white_radius">
+
+    <ImageView
+        android:contentDescription="@null"
+        android:id="@+id/portrait"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zero"
+        android:layout_weight="1.4"
+        android:scaleType="centerCrop"/>
+
+
+</LinearLayout>

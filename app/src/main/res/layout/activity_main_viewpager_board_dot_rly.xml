@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--一个图片的圆点指示器view-->
+<!--图片轮播有关界面有board_dot,board_lly,item_picture_rly,main_lly-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+    <ImageView
+        android:id="@+id/iv_main_board_dot"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_centerInParent="true"
+        android:clickable="true"
+        android:layout_margin="2dp"
+        android:background="@drawable/point_selector"
+        />
+<!--<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="15dp"
+    android:layout_height="15dp"
+    android:layout_gravity="center_vertical"
+    android:clickable="true"
+    android:padding="3dp"
+    android:layout_margin="20dp"
+    android:background="@drawable/point_yellow"
+    >
+
+</ImageView>-->
+</RelativeLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--图片轮播有关界面有board_dot,board_lly,item_picture_rly,main_lly-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_horizontal">
+<!--    <tianhao.agoto.common.Widget.ViewPager.NoScrollViewPager
+        android:id="@+id/vp_main_board"
+        android:layout_width="match_parent"
+        android:layout_height="150dip"
+
+        />-->
+
+    <!--这里放置的是图片圆点指示器的view-->
+    <LinearLayout
+        android:id="@+id/ll_main_board_dot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:paddingBottom="10dp"
+
+        />
+</RelativeLayout>

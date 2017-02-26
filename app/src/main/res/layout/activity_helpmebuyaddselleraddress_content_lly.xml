@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    >
+
+    <!--名称 号码-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_helpmebuyaddselleraddress_tabbar_height"
+        android:orientation="horizontal"
+
+        android:background="@color/colorActivityAddressManageAddContacterContentWhiteBg"
+        >
+        <RelativeLayout
+            android:layout_width="@dimen/zero"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/name"
+                android:textColor="@color/colorActivityAddressManageAddContacterContentGrayWordBg"
+                android:textSize="15sp"
+                android:layout_centerInParent="true"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="@dimen/zero"
+            android:layout_height="match_parent"
+            android:layout_weight="5.5"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nameTest"
+                android:textColor="@color/colorActivityAddressManageAddContacterContentBlackWordBg"
+                android:textSize="15sp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+    <!--名称 号码-->
+
+    <!--我是分割线-->
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/the_split_line_height"
+        android:background="@color/colorActivityAddressManageAddContacterContentGrayWordBg"
+        />
+    <!--我是分割线-->
+    <!--地址-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_helpmebuyaddselleraddress_tabbar_height"
+        android:orientation="horizontal"
+
+        android:background="@color/colorActivityAddressManageAddContacterContentWhiteBg"
+        >
+        <RelativeLayout
+            android:layout_width="@dimen/zero"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/address"
+                android:textColor="@color/colorActivityAddressManageAddContacterContentGrayWordBg"
+                android:textSize="15sp"
+                android:layout_centerInParent="true"
+                />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="@dimen/zero"
+            android:layout_height="match_parent"
+            android:layout_weight="4.5"
+            >
+            <EditText
+                android:id="@+id/et_helpmebuyaddselleraddress_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/addressTest"
+                android:textColor="@color/colorActivityAddressManageAddContacterContentBlackWordBg"
+                android:textSize="15sp"
+                android:background="@null"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rly_helpmebuyaddselleraddress_addresssearch"
+            android:layout_width="@dimen/zero"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+
+            <ImageView
+                android:layout_width="@dimen/activity_addressmanageaddcontacter_contactbook_ico_width"
+                android:layout_height="@dimen/activity_addressmanageaddcontacter_contactbook_ico_height"
+                android:background="@drawable/search_gray"
+                android:layout_centerInParent="true"
+                />
+        </RelativeLayout>
+    </LinearLayout>
+    <!--地址-->
+    <!--百度地图-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zero"
+        android:orientation="horizontal"
+        android:layout_weight="7"
+        >
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/mv_helpmebuyaddselleraddress_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+        <!-- <com.baidu.mapapi.map.MapView
+             android:id="@+id/mv_addressmanageaddcontacter_content"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+         </com.baidu.mapapi.map.MapView>-->
+
+    </LinearLayout>
+    <!--百度地图-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zero"
+        android:layout_weight="4"
+        android:orientation="vertical"
+        android:background="@color/colorHelpMeBuyAddSellerAddressActivityTabBarBlackBg"
+        >
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="fill_parent"
+            android:orientation="horizontal"
+            android:layout_height="@dimen/activity_helpmebuyaddselleraddress_tabbar_height"
+            android:background="@color/colorActivityMyOrderContentBlackBg" >
+
+            <!--历史记录-->
+
+            <RelativeLayout
+                android:id="@+id/rly_helpmebuyaddselleraddress_tabbar_history"
+                android:layout_width="@dimen/zero"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                >
+
+                <TextView
+                    android:id="@+id/tv_helpmebuyaddselleraddress_tabbar_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/historyRecord"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorActivityMyOrderTabSwitchSelectedWordGreenBg" />
+                <ImageView
+                    android:id="@+id/iv_helpmebuyaddselleraddress_tabbar_history"
+                    android:layout_width="@dimen/activity_helpmesendaddcontacter_tabbar_ico_width"
+                    android:layout_height="@dimen/activity_helpmesendaddcontacter_tabbar_ico_height"
+                    android:src="@drawable/historyrecordselect"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@id/tv_helpmebuyaddselleraddress_tabbar_history"
+                    android:layout_marginRight="@dimen/activity_helpmesendaddcontacter_tabbar_ico_margin_left_right_size"
+                    />
+            </RelativeLayout>
+            <!--历史记录-->
+            <!--收藏地址-->
+            <RelativeLayout
+                android:id="@+id/rly_helpmebuyaddselleraddress_tabbar_collectaddress"
+                android:layout_width="@dimen/zero"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                >
+                <TextView
+                    android:id="@+id/tv_helpmebuyaddselleraddress_tabbar_collectaddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textSize="14sp"
+                    android:text="@string/collectAddress"
+                    android:textColor="@color/colorActivityMyOrderTabSwitchUnSelectedWordGrayBg" />
+                <ImageView
+                    android:id="@+id/iv_helpmebuyaddselleraddress_tabbar_collectaddress"
+                    android:layout_width="@dimen/activity_helpmesendaddcontacter_tabbar_ico_collect_width"
+                    android:layout_height="@dimen/activity_helpmesendaddcontacter_tabbar_ico_collect_height"
+                    android:src="@drawable/collectaddressnormal"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@id/tv_helpmebuyaddselleraddress_tabbar_collectaddress"
+                    android:layout_marginRight="@dimen/activity_helpmesendaddcontacter_tabbar_ico_margin_left_right_size"
+                    />
+            </RelativeLayout>
+            <!--收藏地址-->
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/iv_helpmebuyaddselleraddress_tab_greenbottom"
+            android:layout_width="@dimen/activity_myorder_tabbar_bottom_green_width"
+            android:layout_height="@dimen/activity_myorder_tabbar_bottom_green_height"
+            android:scaleType="matrix"
+            android:src="@color/colorActivityMyOrderTabSwitchGreenBg"
+            android:layout_marginLeft="50dp"
+            />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/the_split_line_height"
+            android:background="@color/colorActivityMyOrderContentSplitLineGrayBg"
+            />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp_helpmebuyaddselleraddress_content"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1.0"
+            android:background="@color/colorActivityMyOrderContentBlackBg"
+            android:flipInterval="30"
+            android:persistentDrawingCache="animation" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,182 @@
+<resources>
+    <string name="app_name">GoTo</string>
+    <string name="app_name_chinese">走兔同城</string>
+    <string name="main_activity_topbar_title">走兔同城</string>
+    <string name="headImageNameTest">胡小姐</string>
+    <string name="headImageTelTest">18058378727</string>
+    <string name="myOrderTest">我的订单</string>
+    <string name="shareOrderGet"> 分享订单领取优惠</string>
+    <string name="defaultAddress">常用地址</string>
+    <string name="myMoney">我的钱包</string>
+    <string name="message">消息</string>
+    <string name="oneUnknowMessage">1条未读消息</string>
+    <string name="active">活动</string>
+    <string name="doubleForFree">双十一免费送</string>
+    <string name="setting">设置</string>
+    <string name="hotTelForGov">官方热线</string>
+    <string name="sisterForEveryThing">萌妹客服包治百病</string>
+    <string name="version">版本号1.0.0</string>
+    <string name="serviceItem">服务项目</string>
+    <string name="helpMeBuy">帮我买</string>
+    <string name="helpMePass">帮我送</string>
+    <string name="orderbyonetouch">一键下单</string>
+    <!--<string name="askandsuggest">咨询&建议</string>-->
+    <string name="toPay">去支付</string>
+    <string name="moneyTest">￥9.0元</string>
+    <string name="buyAddress">购买地址</string>
+    <string name="addressNameTest">车站路联华超市</string>
+    <string name="addressTest">浙江省乐清市柳市镇巴度电商园446号</string>
+    <string name="receiverInfo">收件人信息</string>
+    <string name="nameTest">陈先生</string>
+    <string name="telTest">18058378727</string>
+    <string name="writeTheBestInfoForTheGoodsPlease">请尽可能详细填写商品名称规格数量等</string>
+    <string name="shoppingOrder">购物清单</string>
+    <string name="orderRemark">订单备注</string>
+    <string name="goodsPrice">商品金额</string>
+    <string name="payBySmallTicket">凭购物小票,线下支付</string>
+    <string name="unknowPrice">价格未知</string>
+    <string name="senderInfo">发件人信息</string>
+    <string name="goodsWeight">物品重量</string>
+    <string name="senddis">配送里程</string>
+    <string name="goodsType">物品种类</string>
+    <string name="receiveTime">收件时间</string>
+    <string name="weightKgTest">2kg</string>
+    <string name="mileTest">5.6km</string>
+    <string name="dinner">餐饮</string>
+    <string name="timeTest">今 17:15</string>
+    <string name="exitLogin">退出登入</string>
+    <string name="settingTel">修改手机号</string>
+    <string name="viewBack">意见反馈</string>
+    <string name="serviceTerm">服务条款</string>
+    <string name="chargeStandar">收费标准</string>
+    <string name="goodSay">给予好评</string>
+    <string name="aboutGoto">关于走兔</string>
+    <string name="activityPast">往期活动</string>
+    <string name="searchforinputordernumorkeyword">输入订单号或者关键字查询吧</string>
+    <string name="allOrder">全部订单</string>
+    <string name="waitForSay">待评价</string>
+    <string name="orderNum">订单编号</string>
+    <string name="orderTime">下单时间</string>
+    <string name="orderTimeTest">2016-01-12 14:25:30</string>
+    <!--出处：http://m.blog.csdn.net/article/details?id=50493004-->
+    <string name="leftArrowUnicode">\u2190</string>
+    <string name="rightArrowUnicode">------------\u2192</string>
+    <!--出处：http://m.blog.csdn.net/article/details?id=50493004-->
+    <string name="mywallet">我的钱包</string>
+    <string name="chargeNow">立即充值</string>
+    <string name="submitOk">确认提交</string>
+    <string name="ideasubmitsaid">亲爱的客户,您的意见与评论对我们非常重要,\n 希望您仔细耐心写完每一次反馈</string>
+    <string name="confirmDegree">身份验证</string>
+    <string name="bangNewTel">绑定新手机</string>
+    <string name="finish">完成</string>
+    <string name="areaNum">+86</string>
+    <string name="inputTelNum">请输入手机号码</string>
+    <string name="inputConfirmNum">请输入验证码</string>
+    <string name="getConfirmNum">获取验证码</string>
+    <string name="inputPass">请输入密码</string>
+    <string name="about">关于</string>
+    <string name="gotocityv1.0">走兔同城v1.0.0</string>
+    <string name="gotoinstru">\t \t走兔同城是一款同城快递在线服务应用,为用户提供快递查询、在线寄件、物流跟踪等服务,致力于解决用户与快递员之间由于位置、时间、信息不对称而导致的寄收快递体验差的问题。</string>
+    <string name="gotocity">走兔同城</string>
+    <string name="companyrights">©2017 gotogoto.com all rights reserved</string>
+    <string name="serviceProto">服务协议</string>
+    <string name="serviceProtoItem">1.为保证托寄物安全送达，寄件人寄件时应履行以下义务： 如实申报托寄物内容和价值，并准确、清除地填写寄件人、收件人的名称、地址、联系电话等资料；\n\n
+
+2.寄件人不得邮寄或在所邮寄货物中夹带国家禁止运输的物品，对承运人已接受委托，后发现属于承运人不能安全、合法运送的物品（包括但不限于危险品、违禁品、假冒伪劣产品），承运人保留拒绝运送的权利，因违背此约定造成承运人的一切损失由寄件人承担赔偿责任。\n\n
+
+3.委托承运货物重量计量单位为千克。
+ 一、20公里范围内
+(1)、基础定价：3公里范围内，首重不超过5公斤，每单配送价格5元；
+(2)、超出距离定价：超出3公里范围，每增加1公里，增收2元；
+(3)、超出重量定价：首重10公斤，每增加1公斤，增1元。
+(4)、体积重量：体积重量是一种反映包裹密度的计算方式。低密度的包裹，比较其实际重量，占用的空间通常较大。计算出来的体积重量，会与其实际重量比较，取较重者为计费重量，用以计算运费。根据市场惯例，体积重量(kg)的计算方法为:长度(cm)x宽度(cm)x高度(cm)÷6000
+二、20公里范围外
+ （1）、超出20公里，双倍定价；
+ （2）、每增加1公里，增收4元；
+\n\n
+4.寄件人或收件人不得无故拒付任何服务费用；收件人拒绝支付费用的，寄件人承担支付与托运物品给有关费用的连带责任。寄件人或收件人无故不支付费用的，承运人可以对承运货物行使处置权、留置权及其它补救性权利，由此而产生的后果由寄件人或收件人承担。
+\n\n
+5.承运人建议寄件人办理货物保价运输，声明保价并支付相应保价费。承运人对寄件人托运的单票货物报价限额为2万元。单票货物报价超过2万元的，寄件人应拆分托运。若寄件人声明保价并支付保价费，发生货物丢损，承运人按如下规则赔偿：货物全部灭失，按货物保价声明价值赔偿；货物部分毁损或灭失，按声明价值和损失比例赔偿，最高不超过声明价值。声明价值高于实际价值的，按实际价值赔偿。
+\n\n
+6.寄件人未办理保价而发生货物丢损，承运人按照实际损失在丢损货物所对应运费的5倍赔偿额以内赔偿。按以上方式计算得出的赔偿额超过货物实际价值的部分无效。
+\n\n
+7.寄件人委托承运人代收货款不代表该次货物的实际价值；如果运输货物在运输途中出现损坏或灭失赔偿额按照本条款第5、6条约定赔偿，与代收货款无关。收货人签收后因货物品名、性质、型号等原因而不支付代收货款，承运人不承担代收货款无法收回的责任。\n\n </string>
+    <string name="accountBalance">账户余额</string>
+    <string name="ticket">优惠卷</string>
+    <string name="personPoints">个人积分</string>
+    <string name="numTest">6</string>
+    <string name="addressManage">地址管理</string>
+    <string name="addAddress">添加地址</string>
+    <string name="wordMo">默</string>
+    <string name="delete">删除</string>
+    <string name="query">确认</string>
+    <string name="forUpThePasserSpiderPleaseConfirmCareful">为了提高跑腿员配送效率，请阁下再次核对物品</string>
+    <string name="writeCarefulTheGoodsNumAndType">请务必详细填写物品规格及数量</string>
+    <string name="goodsTypes">商品种类</string>
+    <string name="goodsPriceByUnites">商品金额(元)</string>
+    <string name="name">姓名</string>
+    <string name="tel">号码</string>
+    <string name="address">地址</string>
+    <string name="setDefaultAddress">设置为默认地址</string>
+    <string name="historyRecord">历史记录</string>
+    <string name="collectAddress">收藏地址</string>
+    <string name="waitforsay">等待评价</string>
+    <string name="orderStatus">订单状态</string>
+    <string name="orderDetail">订单详情</string>
+    <string name="goodsDetail">物品信息</string>
+    <string name="sendData">配送信息</string>
+    <string name="sendPerson">配送人员</string>
+    <string name="sendTime">下单时间</string>
+    <string name="serviceTime">送达时间</string>
+    <string name="payType">支付方式</string>
+    <string name="payByZhiFuBao">支付宝支付</string>
+    <string name="paySuccessful">支付成功</string>
+    <string name="passerGotOrder">骑手已接单</string>
+    <string name="passerReachPickPoint">骑手抵达取件点</string>
+    <string name="passerReachPiePoint">骑手抵达派件点</string>
+    <string name="orderFinish">订单完成</string>
+    <string name="contactTel">联系电话:  </string>
+    <string name="passerSpeed">跑腿速度</string>
+    <string name="serviceAttitude">服务态度</string>
+    <string name="pleaseWriteMoreThanEightWordSuggest">请阁下写下不少于8个字的建议，不吝赐教</string>
+    <string name="minTest">11:31</string>
+    <string name="course">里程</string>
+    <string name="price">价格</string>
+    <string name="time">时间</string>
+    <string name="courseTest">5.4km</string>
+    <string name="priceTest">9.0元</string>
+    <string name="hourTest">0h34m</string>
+    <string name="payDetail">付款详情</string>
+    <string name="orderTotalMoney">订单总金额</string>
+    <string name="theWayOfFee">(基础跑腿费5元+额外里程2元/1km)</string>
+    <string name="payByAccount">账户支付(推荐使用)</string>
+    <string name="accountBanlanceTest">账户余额¥0.0元</string>
+    <string name="payByWX">微信支付</string>
+    <string name="suggestPayByWXUpfiveVersion">推荐安装微信5.0及以上版本的使用</string>
+    <string name="suggestThePeopleWhoHaveZhiFuBaoToPay">推荐有支付宝帐号的用户使用</string>
+    <string name="payIsOK">确认支付</string>
+    <string name="allMessage">全部消息</string>
+    <string name="unRead">未读</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="loginmeansyouagree">登录表示阁下已同意</string>
+    <string name="gotocityserviceitem">走兔同城服务协议</string>
+    <string name="registerbynoaccount">没有账号?点击注册</string>
+    <string name="thirdlogin">第三方登录</string>
+    <string name="inputTheAddressType">请选择要添加的地址类型</string>
+    <string name="addContacterAddress">添加联系人地址</string>
+    <string name="addSellerAddress">添加商家地址</string>
+    <string name="cancel">取消</string>
+
+    <string name="noChilli">不辣</string>
+    <string name="smallChilli">微辣</string>
+    <string name="mediaChilli">中辣</string>
+    <string name="specialChilli">特辣</string>
+    <string name="haveOnion">放葱</string>
+    <string name="noOnion">不放葱</string>
+    <string name="haveCaraway">放香菜</string>
+    <string name="noCaraway">不放香菜</string>
+    <string name="haveVinegar">放醋</string>
+    <string name="noVinegar">不放醋</string>
+    <string name="manualInput">手动输入</string>
+</resources>

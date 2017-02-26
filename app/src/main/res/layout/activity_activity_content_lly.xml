@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
+    >
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/transparent"
+        >
+        <!--<ImageView
+            android:id="@+id/iv_activity_activity_content_bg"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scaleType="fitXY"
+            />
+        <tianhao.agoto.common.Widget.RoundImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@color/colorActivityActivityPicBlackBg"
+            android:scaleType="fitXY"
+            android:layout_marginTop="@dimen/activity_activity_content_pic_bg_margin_top"
+            android:layout_marginLeft="@dimen/activity_activity_content_pic_bg_margin_left_right"
+            android:layout_marginRight="@dimen/activity_activity_content_pic_bg_margin_left_right"
+            android:layout_marginBottom="@dimen/activity_activity_content_pic_bg_margin_bottom"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/activity_activity_content_pic_bg_margin_top"
+            android:layout_marginLeft="@dimen/activity_activity_content_pic_bg_margin_left_right"
+            android:layout_marginRight="@dimen/activity_activity_content_pic_bg_margin_left_right"
+            android:layout_marginBottom="@dimen/activity_activity_content_pic_bg_margin_bottom"
+            android:orientation="vertical"
+            >
+
+            <tianhao.agoto.common.Widget.RoundedImageView.RoundedImageView
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/zero"
+                android:scaleType="fitXY"
+                app:riv_corner_radius_top_left="10dp"
+                app:riv_corner_radius_top_right="10dp"
+                app:riv_corner_radius_bottom_left="0dp"
+                app:riv_corner_radius_bottom_right="0dp"
+                android:src="@drawable/splash"
+                android:layout_weight="1"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/zero"
+                android:layout_weight="1"
+                >
+            </LinearLayout>
+        </LinearLayout>-->
+
+
+        <!--这里留一个linearlayout来放置图片轮播器的view-->
+        <LinearLayout
+            android:id="@+id/lly_activity_board_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:tag="board_viewpager"
+            android:orientation="vertical"
+            />
+        <!--这里留一个linearlayout来放置图片轮播器的view-->
+
+
+        <include layout="@layout/activity_activity_topbar_lly"/>
+
+
+
+
+    </FrameLayout>
+</LinearLayout>

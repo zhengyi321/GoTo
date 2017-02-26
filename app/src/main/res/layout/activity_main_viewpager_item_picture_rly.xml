@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--图片的view-->
+<!--图片轮播有关界面有board_dot,board_lly,item_picture_rly,main_lly-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="150dip"
+    >
+
+<!--轮播图片 item-->
+    <tianhao.agoto.Common.Widget.ImageView.RoundImageView
+        android:id="@+id/riv_main_item_picture"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/wheel1"
+        android:layout_centerInParent="true"
+        android:layout_marginRight="@dimen/activity_main_content_margin_size"
+        android:layout_marginLeft="@dimen/activity_main_content_margin_size"
+        android:scaleType="fitXY"
+
+        />
+
+</RelativeLayout>

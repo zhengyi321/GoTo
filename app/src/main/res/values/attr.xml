@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RoundImageView">
+        <attr name="x_radius" format="dimension"/>
+        <attr name="y_radius" format="dimension"/>
+    </declare-styleable>
+
+    <!--roundimageview-->
+    <declare-styleable name="RoundedImageView">
+        <attr name="riv_corner_radius" format="dimension" />
+        <attr name="riv_corner_radius_top_left" format="dimension" />
+        <attr name="riv_corner_radius_top_right" format="dimension" />
+        <attr name="riv_corner_radius_bottom_left" format="dimension" />
+        <attr name="riv_corner_radius_bottom_right" format="dimension" />
+        <attr name="riv_border_width" format="dimension" />
+        <attr name="riv_border_color" format="color" />
+        <attr name="riv_mutate_background" format="boolean" />
+        <attr name="riv_oval" format="boolean" />
+        <attr name="android:scaleType" />
+        <attr name="riv_tile_mode">
+            <enum name="clamp" value="0" />
+            <enum name="repeat" value="1" />
+            <enum name="mirror" value="2" />
+        </attr>
+        <attr name="riv_tile_mode_x">
+            <enum name="clamp" value="0" />
+            <enum name="repeat" value="1" />
+            <enum name="mirror" value="2" />
+        </attr>
+        <attr name="riv_tile_mode_y">
+            <enum name="clamp" value="0" />
+            <enum name="repeat" value="1" />
+            <enum name="mirror" value="2" />
+        </attr>
+    </declare-styleable>
+
+
+    <!--roundimageview-->
+    <!--gifview-->
+
+    <declare-styleable name="GifView">
+        <attr name="isgifimage" format="boolean"/>
+    </declare-styleable>
+    <!--gifview-->
+    <!--三角图标-->
+    <declare-styleable name="SuperscriptView">
+        <attr name="rightEdge" format="dimension" />
+        <attr name="leftEdge" format="dimension" />
+        <attr name="topEdge" format="dimension" />
+        <attr name="smallLeftEdge" format="dimension" />
+        <attr name="smallRightEdge" format="dimension" />
+        <attr name="smallTopEdge" format="dimension" />
+        <attr name="gravity">
+            <flag name="leftTop" value="1" />
+            <flag name="rightTop" value="2" />
+        </attr>
+    </declare-styleable>
+    <!--三角图标-->
+
+    <!--遮罩-->
+    <declare-styleable name="MaskImage">
+        <!-- Identifier for the image that represents the Imageview's content. -->
+        <attr name="image" format="reference" />
+        <!-- crop Imageview's content same as mask -->
+        <attr name="mask" format="reference" />
+
+    </declare-styleable>
+
+
+    <!--遮罩-->
+
+</resources>

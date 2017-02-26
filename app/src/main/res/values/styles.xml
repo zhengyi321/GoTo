@@ -1,0 +1,40 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!--主页面标题字体-->
+    <style name="main_activity_topbar_title_text_style">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#ffffff</item>
+
+    </style>
+
+    <!--我的钱包卡片效果-->
+    <declare-styleable name="SwipeFlingAdapterView">
+        <attr name="y_offset_step" format="dimension" />
+        <attr name="rotation_degrees" format="float" />
+        <attr name="min_adapter_stack" format="integer" />
+        <attr name="max_visible" format="integer" />
+    </declare-styleable>
+    <!--我的钱包卡片效果-->
+
+    <!--popupwindow-->
+    <style name="PopupAnimation" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/pop_enter</item>
+        <item name="android:windowExitAnimation">@anim/pop_exit</item>
+    </style>
+
+    <style name="PopupRVAnimation" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/pop_rv_rtl_enter</item>
+        <item name="android:windowExitAnimation">@anim/pop_rv_ltr_exit</item>
+    </style>
+    <!--popupwindow-->
+
+</resources>

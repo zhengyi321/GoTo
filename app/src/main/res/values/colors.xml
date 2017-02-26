@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <!--主页面背景色-->
+    <color name="colorMainActivityTopBarBg">#2c2d37</color>
+    <color name="colorMainActivityContentBg">#2c2d37</color>
+    <color name="colorMainActivityContent">#292a34</color>
+    <color name="colorMainActivityBg">#2c2d37</color>
+    <color name="coloNone">#00000000</color>
+    <color name="colorMainActivityLeftMenuTelBg">#6e6e75</color>
+    <color name="colorMainActivityLeftMenuSplitLine">#585960</color>
+    <color name="colorMainActivityLeftMenuBg">#30313b</color>
+    <color name="colorMainActivityLeftMenuWordBg">#d5d5d7</color>
+    <color name="colorMainActivityLeftMenuGreenForWord">#9ac70f</color>
+    <color name="colorMainActivityAdGrayBg">#63646b</color>
+    <color name="colorMainActivityAdBg">#ffffff</color>
+    <color name="colorMainActivityServiceItemWord">#6c6c73</color>
+    <color name="colorMainActivityServiceItem">#ffffff</color>
+
+    <!--帮我买颜色集合-->
+    <color name="colorHelpMeBuyActivityBottomPayGreenBg">#befa00</color>
+    <color name="colorHelpMeBuyActivityBottomPayWordBlackBg">#2c2d37</color>
+    <color name="colorHelpMeBuyActivityGreenCircleBg">#78dc2f</color>
+    <color name="colorHelpMeBuyActivityRedCircleBg">#ff2d2d</color>
+    <color name="colorHelpMeBuyActivityPointGreenBg">#78dc2f</color>
+    <color name="colorHelpMeBuyActivityPointRedBg">#ff2d2d</color>
+    <color name="colorHelpMeBuyActivityItemWhiteBg">#ffffff</color>
+    <color name="colorHelpMeBuyActivityContentBg">#eeeeee</color>
+    <color name="colorHelpMeBuyActivityContentBuyAddressGrayAddress">#9f9f9f</color>
+    <color name="colorHelpMeBuyActivityContentBuyAddressBlackAddress">#000000</color>
+    <color name="colorHelpMeBuyActivityContentShoppingByTicketsRedBg">#f15858</color>
+    <!--帮我买颜色集合-->
+    <!--帮我买添加联系人-->
+    <color name="colorHelpMeBuyAddSellerAddressActivityTabBarBlackBg">#2c2d37</color>
+    <color name="colorHelpMeBuyAddSellerAddressActivityTabBarGreenBg">#b4ec04</color>
+    <color name="colorHelpMeBuyAddSellerAddressActivityTabBarWhiteBg">#ffffff</color>
+    <color name="colorHelpMeBuyAddSellerAddressActivityTabBarGrayBg">#96969b</color>
+    <!--帮我买添加联系人-->
+    <!--帮我送颜色集合-->
+    <color name="colorHelpMeSendActivityContentItemWhiteBg">#ffffff</color>
+    <color name="colorHelpMeSendActivityContentItemGrayBg">#7f7f7f</color>
+    <color name="colorHelpMeSendActivityContentItemBlackBg">#000000</color>
+
+    <!--帮我送颜色集合-->
+    <!--帮我送添加联系人-->
+    <color name="colorHelpMeSendAddContacterActivityTabBarBlackBg">#2c2d37</color>
+    <color name="colorHelpMeSendAddContacterActivityTabBarWhiteBg">#ffffff</color>
+    <color name="colorHelpMeSendAddContacterActivityTabBarGrayBg">#96969b</color>
+    <color name="colorHelpMeSendAddContacterActivityTabBarGreenBg">#befa00</color>
+    <!--帮我送添加联系人-->
+    <!--设置-->
+    <color name="colorSettingActivityBottomBarBlackBg">#2c2d37</color>
+    <color name="colorSettingActivityBottomBarGeenWordBg">#b5ed03</color>
+    <color name="colorSettingActivityContentBlackWordBg">#000000</color>
+    <color name="colorSettingActivityContentWhiteBg">#eeeeee</color>
+    <!--设置-->
+    <!--活动页-->
+    <color name="colorActivityActivityPicBlackBg">#3a3c4d</color>
+    <color name="colorActivityActivityTopBarActivityPastWordBg">#686263</color>
+    <!--标签背景颜色-->
+    <color name="mask_tags_1">#f45170</color>
+    <color name="mask_tags_2">#f0cc23</color>
+    <color name="mask_tags_3">#a289df</color>
+    <color name="mask_tags_4">#ff6161</color>
+    <color name="mask_tags_5">#678ce0</color>
+    <color name="mask_tags_6">#42d1db</color>
+    <color name="mask_tags_7">#51cc96</color>
+    <color name="mask_tags_8">#1da8fe</color>
+    <color name="mask_tags_9">#9ec72c</color>
+    <color name="mask_tags_10">#478de4</color>
+    <!--活动页-->
+
+    <!--我的订单页面-->
+    <color name="colorActivityMyOrderTopbarSearchGrayBg">#3a3b4b</color>
+    <color name="colorActivityMyOrderTopbarTitleSearchWordBg">#5d5f6b</color>
+    <color name="colorActivityMyOrderTabSwitchGreenBg">#befa00</color>
+    <color name="colorActivityMyOrderTabSwitchSelectedWordGreenBg">#befa00</color>
+    <color name="colorActivityMyOrderTabSwitchUnSelectedWordGrayBg">#96969b</color>
+    <color name="colorActivityMyOrderContentBlackBg">#2c2d37</color>
+    <color name="colorActivityMyOrderContentSplitLineGrayBg">#3d3d47</color>
+    <color name="colorActivityMyOrderTabBarVPItemLVItemWhiteBg">#ffffff</color>
+    <color name="colorActivityMyOrderTabBarVPItemLVItemGrayWordBg">#d0d0d0</color>
+    <color name="colorActivityMyOrderTabBarVPItemLVItemBlackWordBg">#000000</color>
+    <!--我的订单页面-->
+    <!--查看订单-->
+    <color name="colorActivityOrderCheckGreenWordBg">#befa00</color>
+
+    <!--订单详情-->
+    <color name="colorFragmentOrderCheckOrderDetailGrayBg">#7a7a80</color>
+    <color name="colorFragmentOrderCheckOrderDetailBlackBg">#000000</color>
+    <color name="colorFragmentOrderCheckOrderDetailWhiteBg">#ffffff</color>
+    <!--订单详情-->
+    <!--订单状态-->
+    <color name="colorFragmentOrderCheckOrderStatusGreenBg">#befa00</color>
+    <color name="colorFragmentOrderCheckOrderStatusBlackBg">#2c2d37</color>
+    <color name="colorFragmentOrderCheckOrderStatusWhiteBg">#fefefe</color>
+    <color name="colorFragmentOrderCheckOrderStatusGrayBg">#3c3d46</color>
+    <color name="colorFragmentOrderCheckOrderStatusGrayBorderBg">#56575f</color>
+    <!--订单状态-->
+    <!--订单确认后的付款界面-->
+    <color name="colorDialogPopupPayConfirmBlackWordBg">#000000</color>
+    <color name="colorDialogPopupPayConfirmYellowWordBg">#ff9c00</color>
+    <color name="colorDialogPopupPayConfirmGrayWordBg">#adadad</color>
+    <color name="colorDialogPopupPayConfirmGreenWordBg">#befa00</color>
+
+    <!--订单确认后的付款界面-->
+    <!--查看订单-->
+    <!--我的钱包-->
+    <color name="colorActivityMyWalletTopBarChargeGreenBg">#befa00</color>
+    <color name="colorActivityMyWalletContentMoneyYellowBg">#ffe000</color>
+    <color name="colorActivityMyWalletContentGrayBg">#96969b</color>
+    <color name="colorActivityMyWalletWaveFrontLittleBlueColor">#32354c</color>
+    <color name="colorActivityMyWalletWaveBehindDeepBlueColor">#27283c</color>
+    <color name="colorActivityMyWalletContentWhiteWordBg">#ffffff</color>
+    <color name="colorActivityMyWalletContentBlackBg">#2c2d37</color>
+    <!--我的钱包-->
+    <!--意见反馈-->
+    <color name="colorActivityIdeaSubmitBottomGreenWordBg">#befa00</color>
+    <color name="colorActivityIdeaSubmitBottomBlackBg">#2c2d37</color>
+    <color name="colorActivityIdeaSubmitContentWhiteBg">#eeeeee</color>
+    <color name="colorActivityIdeaSubmitContentYellowWordBg">#beac9b</color>
+    <color name="colorActivityIdeaSubmitContentBlackWordBg">#2c2d37</color>
+
+    <!--意见反馈-->
+    <!--修改手机号码-->
+    <color name="colorActivityAlterTelTabGreenWordBg">#befa00</color>
+    <color name="colorActivityAlterTelContentBlackBg">#2c2d37</color>
+    <color name="colorActivityAlterTelTabGrayWordBg">#76767d</color>
+    <color name="colorActivityAlterTelContentInputWhiteWordBg">#d5d5d7</color>
+    <color name="colorActivityAlterTelContentInputGrayWordBg">#56575f</color>
+    <color name="colorActivityAlterTelContentConfirmGreenBg">#befa00</color>
+    <color name="colorActivityAlterTelGetConfirmBlackWordBg">#2c2d37</color>
+    <!--修改手机号码-->
+    <!--关于走兔-->
+    <color name="colorActivityAboutGotoContentWhiteBg">#ebebeb</color>
+    <color name="colorActivityAboutGotoTopBarGreenTitleWordBg">#a8dc09</color>
+    <color name="colorActivityAboutGotoContentBlackWordBg">#0a0a0a</color>
+    <color name="colorActivityAboutGotoContentGrayWordBg">#858585</color>
+    <!--关于走兔-->
+    <!--服务条款-->
+    <color name="colorActivityServiceItemTopBarGreenTitleWordBg">#b2d64b</color>
+    <color name="colorActivityServiceItemContentBlackWordBg">#151515</color>
+    <color name="colorActivityServiceItemContentWhiteBg">#ffffff</color>
+    <!--服务条款-->
+
+    <!--地址管理-->
+    <color name="colorActivityAddressManageTopBarGreenWordBg">#befa00</color>
+    <color name="colorActivityAddressManageTopBarWhiteWordBg">#ffffff</color>
+    <color name="colorActivityAddressManageIcoBlackBg">#2c2d37</color>
+    <color name="colorActivityAddressManageContentGreenWordBg">#befa00</color>
+    <color name="colorActivityAddressManageContentWhiteBg">#f5f5f5</color>
+    <color name="colorActivityAddressManageContentRedDeleteBg">#fa2e2e</color>
+    <color name="colorActivityAddressManageContentBlackWordBg">#2c2d37</color>
+    <color name="colorActivityAddressManageContentGrayWordBg">#95969b</color>
+    <!--地址管理-->
+    <!--购物清单-->
+    <color name="colorActivityShoppingListTopBarGreenWordBg">#befa00</color>
+    <color name="colorActivityShoppingListContentBlackBg">#272831</color>
+    <color name="colorActivityShoppingListContentWhiteBg">#ffffff</color>
+    <color name="colorActivityShoppingListContentGraySaidBg">#adaeb0</color>
+    <color name="colorActivityShoppingListContentGrayWordBg">#6c6c73</color>
+    <color name="colorActivityShoppingListContentDishLineGrayBg">#ababaf</color>
+    <color name="colorActivityShoppingListContentRedWordBg">#f15858</color>
+    <color name="colorActivityShoppingListContentYellowWordBg">#ff9c00</color>
+
+    <!--<color name="colorActivityShoppingListContentBlackBg">#2c2d37</color>-->
+    <!--购物清单-->
+    <!--新建联系人-->
+    <color name="colorActivityAddressManageAddContacterContentGrayWordBg">#808080</color>
+    <color name="colorActivityAddressManageAddContacterContentBlackWordBg">#010101</color>
+    <color name="colorActivityAddressManageAddContacterContentWhiteBg">#ffffff</color>
+
+    <!--新建联系人-->
+
+    <!--登录页面-->
+    <color name="colorActivityLoginBlackBg">#2c2d37</color>
+    <color name="colorActivityLoginWhiteWordBg">#ffffff</color>
+    <color name="colorActivityLoginGrayBg">#808080</color>
+
+    <!--登录页面-->
+    <!--注册页面-->
+    <color name="colorActivityRegBlackBg">#2c2d37</color>
+    <color name="colorActivityRegWhiteBg">#ffffff</color>
+    <!--注册页面-->
+
+
+    <!--仿ios对话框-->
+    <!--覆盖颜色-->
+    <color name="bgColor_overlay">#60000000</color>
+    <!--窗口背景颜色-->
+    <color name="bgColor_alertview_alert">#f8f8f8</color>
+    <color name="bgColor_alertview_alert_start">#f0f0f0</color>
+    <!--标题颜色-->
+    <color name="textColor_alert_title">#000000</color>
+    <color name="textColor_actionsheet_title">#8f8f8f</color>
+    <!--消息颜色-->
+    <color name="textColor_alert_msg">#000000</color>
+    <color name="textColor_actionsheet_msg">#8f8f8f</color>
+    <!--线条颜色-->
+    <color name="bgColor_divier">#d7d7db</color>
+    <!--取消按钮颜色-->
+    <color name="textColor_alert_button_cancel">#007aff</color>
+    <!--高亮按钮颜色-->
+    <color name="textColor_alert_button_destructive">#ff3b30</color>
+    <!--普通按钮文字颜色-->
+    <color name="textColor_alert_button_others">#007aff</color>
+    <!--点击颜色-->
+    <color name="bgColor_alert_button_press">#EAEAEA</color>
+    <!--actionsheet模式的取消按钮背景颜色-->
+    <color name="bgColor_actionsheet_cancel_nor">#ffffff</color>
+    <!--仿ios对话框-->
+
+    <!--常见颜色-->
+    <!--透明-->
+    <color name="transparent">#00000000</color>
+
+    <!--透明灰色-->
+    <color name="transparentgray">#00A9A9A9</color>
+    <!--米色-->
+    <color name="rice">#f5f0ec</color>
+    <!-- 棕紫色 -->
+    <color name="brown_puple">#310a05</color>
+    <!-- 登陆红 -->
+    <color name="login_red">#e72f17</color>
+    <color name="white">#FFFFFF</color>
+    <!-- 白色 -->
+    <color name="ivory">#FFFFF0</color>
+    <!-- 象牙色 -->
+    <color name="lightyellow">#FFFFE0</color>
+    <!-- 亮黄色 -->
+    <color name="yellow">#FFFF00</color>
+    <!-- 黄色 -->
+    <color name="snow">#FFFAFA</color>
+    <!-- 雪白色 -->
+    <color name="floralwhite">#FFFAF0</color>
+    <!-- 花白色 -->
+    <color name="lemonchiffon">#FFFACD</color>
+    <!-- 柠檬绸色 -->
+    <color name="cornsilk">#FFF8DC</color>
+    <!-- 米绸色 -->
+    <color name="seashell">#FFF5EE</color>
+    <!-- 海贝色 -->
+    <color name="lavenderblush">#FFF0F5</color>
+    <!-- 淡紫红 -->
+    <color name="papayawhip">#FFEFD5</color>
+    <!-- 番木色 -->
+    <color name="blanchedalmond">#FFEBCD</color>
+    <!-- 白杏色 -->
+    <color name="mistyrose">#FFE4E1</color>
+    <!-- 浅玫瑰色 -->
+    <color name="bisque">#FFE4C4</color>
+    <!-- 桔黄色 -->
+    <color name="moccasin">#FFE4B5</color>
+    <!-- 鹿皮色 -->
+    <color name="navajowhite">#FFDEAD</color>
+    <!-- 纳瓦白 -->
+    <color name="peachpuff">#FFDAB9</color>
+    <!-- 桃色 -->
+    <color name="gold">#FFD700</color>
+    <!-- 金色 -->
+    <color name="pink">#FFC0CB</color>
+    <!-- 粉红色 -->
+    <color name="lightpink">#FFB6C1</color>
+    <!-- 亮粉红色 -->
+    <color name="orange">#FFA500</color>
+    <!-- 橙色 -->
+    <color name="lightsalmon">#FFA07A</color>
+    <!-- 亮肉色 -->
+    <color name="darkorange">#FF8C00</color>
+    <!-- 暗桔黄色 -->
+    <color name="coral">#FF7F50</color>
+    <!-- 珊瑚色 -->
+    <color name="hotpink">#FF69B4</color>
+    <!-- 热粉红色 -->
+    <color name="tomato">#FF6347</color>
+    <!-- 西红柿色 -->
+    <color name="orangered">#FF4500</color>
+    <!-- 红橙色 -->
+    <color name="deeppink">#FF1493</color>
+    <!-- 深粉红色 -->
+    <color name="fuchsia">#FF00FF</color>
+    <!-- 紫红色 -->
+    <color name="magenta">#FF00FF</color>
+    <!-- 红紫色 -->
+    <color name="red">#FF0000</color>
+    <!-- 红色 -->
+    <color name="oldlace">#FDF5E6</color>
+    <!-- 老花色 -->
+    <color name="lightgoldenrodyellow">#FAFAD2</color>
+    <!-- 亮金黄色 -->
+    <color name="linen">#FAF0E6</color>
+    <!-- 亚麻色 -->
+    <color name="antiquewhite">#FAEBD7</color>
+    <!-- 古董白 -->
+    <color name="salmon">#FA8072</color>
+    <!-- 鲜肉色 -->
+    <color name="ghostwhite">#F8F8FF</color>
+    <!-- 幽灵白 -->
+    <color name="mintcream">#F5FFFA</color>
+    <!-- 薄荷色 -->
+    <color name="whitesmoke">#F5F5F5</color>
+    <!-- 烟白色 -->
+    <color name="beige">#F5F5DC</color>
+    <!-- 米色 -->
+    <color name="wheat">#F5DEB3</color>
+    <!-- 浅黄色 -->
+    <color name="sandybrown">#F4A460</color>
+    <!-- 沙褐色 -->
+    <color name="azure">#F0FFFF</color>
+    <!-- 天蓝色 -->
+    <color name="honeydew">#F0FFF0</color>
+    <!-- 蜜色 -->
+    <color name="aliceblue">#F0F8FF</color>
+    <!-- 艾利斯兰 -->
+    <color name="khaki">#F0E68C</color>
+    <!-- 黄褐色 -->
+    <color name="lightcoral">#F08080</color>
+    <!-- 亮珊瑚色 -->
+    <color name="palegoldenrod">#EEE8AA</color>
+    <!-- 苍麒麟色 -->
+    <color name="violet">#EE82EE</color>
+    <!-- 紫罗兰色 -->
+    <color name="darksalmon">#E9967A</color>
+    <!-- 暗肉色 -->
+    <color name="lavender">#E6E6FA</color>
+    <!-- 淡紫色 -->
+    <color name="lightcyan">#E0FFFF</color>
+    <!-- 亮青色 -->
+    <color name="burlywood">#DEB887</color>
+    <!-- 实木色 -->
+    <color name="plum">#DDA0DD</color>
+    <!-- 洋李色 -->
+    <color name="gainsboro">#DCDCDC</color>
+    <!-- 淡灰色 -->
+    <color name="crimson">#DC143C</color>
+    <!-- 暗深红色 -->
+    <color name="palevioletred">#DB7093</color>
+    <!-- 苍紫罗兰色 -->
+    <color name="goldenrod">#DAA520</color>
+    <!-- 金麒麟色 -->
+    <color name="orchid">#DA70D6</color>
+    <!-- 淡紫色 -->
+    <color name="thistle">#D8BFD8</color>
+    <!-- 蓟色 -->
+    <color name="lightgray">#D3D3D3</color>
+    <!-- 亮灰色 -->
+    <color name="lightgrey">#D3D3D3</color>
+    <!-- 亮灰色 -->
+    <color name="tan">#D2B48C</color>
+    <!-- 茶色 -->
+    <color name="chocolate">#D2691E</color>
+    <!-- 巧可力色 -->
+    <color name="peru">#CD853F</color>
+    <!-- 秘鲁色 -->
+    <color name="indianred">#CD5C5C</color>
+    <!-- 印第安红 -->
+    <color name="mediumvioletred">#C71585</color>
+    <!-- 中紫罗兰色 -->
+    <color name="silver">#C0C0C0</color>
+    <!-- 银色 -->
+    <color name="darkkhaki">#BDB76B</color>
+    <!-- 暗黄褐色 -->
+    <color name="rosybrown">#BC8F8F</color>
+    <!-- 褐玫瑰红 -->
+    <color name="mediumorchid">#BA55D3</color>
+    <!-- 中粉紫色 -->
+    <color name="darkgoldenrod">#B8860B</color>
+    <!-- 暗金黄色 -->
+    <color name="firebrick">#B22222</color>
+    <!-- 火砖色 -->
+    <color name="powderblue">#B0E0E6</color>
+    <!-- 粉蓝色 -->
+    <color name="lightsteelblue">#B0C4DE</color>
+    <!-- 亮钢兰色 -->
+    <color name="paleturquoise">#AFEEEE</color>
+    <!-- 苍宝石绿 -->
+    <color name="greenyellow">#ADFF2F</color>
+    <!-- 黄绿色 -->
+    <color name="lightblue">#ADD8E6</color>
+    <!-- 亮蓝色 -->
+    <color name="darkgray">#A9A9A9</color>
+    <!-- 暗灰色 -->
+    <color name="darkgrey">#A9A9A9</color>
+    <!-- 暗灰色 -->
+    <color name="brown">#A52A2A</color>
+    <!-- 褐色 -->
+    <color name="sienna">#A0522D</color>
+    <!-- 赭色 -->
+    <color name="darkorchid">#9932CC</color>
+    <!-- 暗紫色 -->
+    <color name="palegreen">#98FB98</color>
+    <!-- 苍绿色 -->
+    <color name="darkviolet">#9400D3</color>
+    <!-- 暗紫罗兰色 -->
+    <color name="mediumpurple">#9370DB</color>
+    <!-- 中紫色 -->
+    <color name="lightgreen">#90EE90</color>
+    <!-- 亮绿色 -->
+    <color name="darkseagreen">#8FBC8F</color>
+    <!-- 暗海兰色 -->
+    <color name="saddlebrown">#8B4513</color>
+    <!-- 重褐色 -->
+    <color name="darkmagenta">#8B008B</color>
+    <!-- 暗洋红 -->
+    <color name="darkred">#8B0000</color>
+    <!-- 暗红色 -->
+    <color name="blueviolet">#8A2BE2</color>
+    <!-- 紫罗兰蓝色 -->
+    <color name="lightskyblue">#87CEFA</color>
+    <!-- 亮天蓝色 -->
+    <color name="skyblue">#87CEEB</color>
+    <!-- 天蓝色 -->
+    <color name="gray">#808080</color>
+    <!-- 灰色 -->
+    <color name="grey">#808080</color>
+    <!-- 灰色 -->
+    <color name="olive">#808000</color>
+    <!-- 橄榄色 -->
+    <color name="purple">#800080</color>
+    <!-- 紫色 -->
+    <color name="maroon">#800000</color>
+    <!-- 粟色 -->
+    <color name="aquamarine">#7FFFD4</color>
+    <!-- 碧绿色 -->
+    <color name="chartreuse">#7FFF00</color>
+    <!-- 黄绿色 -->
+    <color name="lawngreen">#7CFC00</color>
+    <!-- 草绿色 -->
+    <color name="mediumslateblue">#7B68EE</color>
+    <!-- 中暗蓝色 -->
+    <color name="lightslategray">#778899</color>
+    <!-- 亮蓝灰 -->
+    <color name="lightslategrey">#778899</color>
+    <!-- 亮蓝灰 -->
+    <color name="slategray">#708090</color>
+    <!-- 灰石色 -->
+    <color name="slategrey">#708090</color>
+    <!-- 灰石色 -->
+    <color name="olivedrab">#6B8E23</color>
+    <!-- 深绿褐色 -->
+    <color name="slateblue">#6A5ACD</color>
+    <!-- 石蓝色 -->
+    <color name="dimgray">#696969</color>
+    <!-- 暗灰色 -->
+    <color name="dimgrey">#696969</color>
+    <!-- 暗灰色 -->
+    <color name="mediumaquamarine">#66CDAA</color>
+    <!-- 中绿色 -->
+    <color name="cornflowerblue">#6495ED</color>
+    <!-- 菊兰色 -->
+    <color name="cadetblue">#5F9EA0</color>
+    <!-- 军兰色 -->
+    <color name="darkolivegreen">#556B2F</color>
+    <!-- 暗橄榄绿 -->
+    <color name="indigo">#4B0082</color>
+    <!-- 靛青色 -->
+    <color name="mediumturquoise">#48D1CC</color>
+    <!-- 中绿宝石 -->
+    <color name="darkslateblue">#483D8B</color>
+    <!-- 暗灰蓝色 -->
+    <color name="steelblue">#4682B4</color>
+    <!-- 钢兰色 -->
+    <color name="royalblue">#4169E1</color>
+    <!-- 皇家蓝 -->
+    <color name="turquoise">#40E0D0</color>
+    <!-- 青绿色 -->
+    <color name="mediumseagreen">#3CB371</color>
+    <!-- 中海蓝 -->
+    <color name="limegreen">#32CD32</color>
+    <!-- 橙绿色 -->
+    <color name="darkslategray">#2F4F4F</color>
+    <!-- 暗瓦灰色 -->
+    <color name="darkslategrey">#2F4F4F</color>
+    <!-- 暗瓦灰色 -->
+    <color name="seagreen">#2E8B57</color>
+    <!-- 海绿色 -->
+    <color name="forestgreen">#228B22</color>
+    <!-- 森林绿 -->
+    <color name="lightseagreen">#20B2AA</color>
+    <!-- 亮海蓝色 -->
+    <color name="dodgerblue">#1E90FF</color>
+    <!-- 闪兰色 -->
+    <color name="midnightblue">#191970</color>
+    <!-- 中灰兰色 -->
+    <color name="aqua">#00FFFF</color>
+    <!-- 浅绿色 -->
+    <color name="cyan">#00FFFF</color>
+    <!-- 青色 -->
+    <color name="springgreen">#00FF7F</color>
+    <!-- 春绿色 -->
+    <color name="lime">#00FF00</color>
+    <!-- 酸橙色 -->
+    <color name="mediumspringgreen">#00FA9A</color>
+    <!-- 中春绿色 -->
+    <color name="darkturquoise">#00CED1</color>
+    <!-- 暗宝石绿 -->
+    <color name="deepskyblue">#00BFFF</color>
+    <!-- 深天蓝色 -->
+    <color name="darkcyan">#008B8B</color>
+    <!-- 暗青色 -->
+    <color name="teal">#008080</color>
+    <!-- 水鸭色 -->
+    <color name="green">#008000</color>
+    <!-- 绿色 -->
+    <color name="darkgreen">#006400</color>
+    <!-- 暗绿色 -->
+    <color name="blue">#0000FF</color>
+    <!-- 蓝色 -->
+    <color name="mediumblue">#0000CD</color>
+    <!-- 中兰色 -->
+    <color name="darkblue">#00008B</color>
+    <!-- 暗蓝色 -->
+    <color name="navy">#000080</color>
+    <!-- 海军色 -->
+    <color name="black">#000000</color>
+    <!-- 黑色 -->
+    <!--常见颜色-->
+</resources>

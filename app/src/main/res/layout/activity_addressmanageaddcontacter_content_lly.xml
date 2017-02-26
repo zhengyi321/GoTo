@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--名称 号码-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zero"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:background="@color/colorActivityAddressManageAddContacterContentWhiteBg"
+        >
+        <RelativeLayout
+            android:layout_width="@dimen/zero"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/name"
+                android:textColor="@color/colorActivityAddressManageAddContacterContentGrayWordBg"
+                android:textSize="15sp"
+                android:layout_centerInParent="true"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="@dimen/zero"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nameTest"
+                android:textColor="@color/colorActivityAddressManageAddContacterContentBlackWordBg"
+                android:textSize="15sp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="@dimen/zero"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tel"
+                android:textColor="@color/colorActivityAddressManageAddContacterContentGrayWordBg"
+                android:textSize="15sp"
+                android:layout_centerInParent="true"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="@dimen/zero"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/telTest"
+                android:textColor="@color/colorActivityAddressManageAddContacterContentBlackWordBg"
+                android:textSize="15sp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                />
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rly_addressmanageaddcontacter_phonecontact"
+            android:layout_width="@dimen/zero"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+            <ImageView
+                android:layout_width="@dimen/activity_addressmanageaddcontacter_contactbook_ico_width"
+                android:layout_height="@dimen/activity_addressmanageaddcontacter_contactbook_ico_height"
+                android:background="@drawable/contactbook"
+                android:layout_centerInParent="true"
+                />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+    <!--名称 号码-->
+
+    <!--我是分割线-->
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/the_split_line_height"
+        android:background="@color/colorActivityAddressManageAddContacterContentGrayWordBg"
+        />
+    <!--我是分割线-->
+    <!--地址-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zero"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:background="@color/colorActivityAddressManageAddContacterContentWhiteBg"
+        >
+        <RelativeLayout
+            android:layout_width="@dimen/zero"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/address"
+                android:textColor="@color/colorActivityAddressManageAddContacterContentGrayWordBg"
+                android:textSize="15sp"
+                android:layout_centerInParent="true"
+                />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="@dimen/zero"
+            android:layout_height="match_parent"
+            android:layout_weight="4.5"
+            >
+            <EditText
+                android:id="@+id/et_addressmanageaddcontacter_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/addressTest"
+                android:textColor="@color/colorActivityAddressManageAddContacterContentBlackWordBg"
+                android:textSize="15sp"
+                android:background="@null"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rly_addressmanageaddcontacter_addresssearch"
+            android:layout_width="@dimen/zero"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+
+            <ImageView
+                android:layout_width="@dimen/activity_addressmanageaddcontacter_contactbook_ico_width"
+                android:layout_height="@dimen/activity_addressmanageaddcontacter_contactbook_ico_height"
+                android:background="@drawable/search_gray"
+                android:layout_centerInParent="true"
+                />
+        </RelativeLayout>
+    </LinearLayout>
+    <!--地址-->
+    <!--百度地图-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zero"
+        android:orientation="horizontal"
+        android:layout_weight="7"
+        >
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/mv_addressmanageaddcontacter_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+       <!-- <com.baidu.mapapi.map.MapView
+            android:id="@+id/mv_addressmanageaddcontacter_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </com.baidu.mapapi.map.MapView>-->
+
+    </LinearLayout>
+    <!--百度地图-->
+</LinearLayout>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:umadsdk="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/colorActivityMyOrderContentBlackBg"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal"
+        android:layout_height="@dimen/activity_myorder_tabbar_height"
+        android:background="@color/colorActivityMyOrderContentBlackBg" >
+        <RelativeLayout
+            android:id="@+id/rly_myorder_allorder"
+            android:layout_width="@dimen/zero"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+        <TextView
+            android:id="@+id/tv_myorder_allorder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/allOrder"
+            android:textSize="14sp"
+            android:textColor="@color/colorActivityMyOrderTabSwitchSelectedWordGreenBg" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rly_myorder_waitforsay"
+            android:layout_width="@dimen/zero"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            >
+        <TextView
+            android:id="@+id/tv_myorder_waitforsay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="14sp"
+            android:text="@string/waitForSay"
+            android:textColor="@color/colorActivityMyOrderTabSwitchUnSelectedWordGrayBg" />
+        </RelativeLayout>
+    </LinearLayout>
+
+<!--    <ImageView
+        android:id="@+id/iv_myorder_tab_greenbottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="matrix"
+        android:background="@color/transparent"
+        android:src="@drawable/icon_tab_winter_a" />-->
+    <ImageView
+        android:id="@+id/iv_myorder_tab_greenbottom"
+        android:layout_width="@dimen/activity_myorder_tabbar_bottom_green_width"
+        android:layout_height="@dimen/activity_myorder_tabbar_bottom_green_height"
+        android:scaleType="matrix"
+        android:src="@color/colorActivityMyOrderTabSwitchGreenBg"
+        android:layout_marginLeft="50dp"
+        />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/the_split_line_height"
+        android:background="@color/colorActivityMyOrderContentSplitLineGrayBg"
+        />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_myorder"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1.0"
+        android:background="@color/colorActivityMyOrderContentBlackBg"
+        android:flipInterval="30"
+        android:persistentDrawingCache="animation" />
+
+</LinearLayout>

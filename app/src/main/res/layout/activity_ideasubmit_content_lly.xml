@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorActivityIdeaSubmitContentWhiteBg"
+    android:padding="15dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    >
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/zero"
+            android:layout_weight="4"
+            android:gravity="start"
+            android:background="@null"
+            android:textColor="@color/colorActivityIdeaSubmitContentBlackWordBg"
+            />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/the_split_line_height"
+        android:background="@color/gray"
+
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zero"
+        android:layout_weight="1"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ideasubmitsaid"
+            android:textColor="@color/colorActivityIdeaSubmitContentYellowWordBg"
+            android:textSize="15sp"
+            android:layout_centerVertical="true"
+            />
+        <ImageView
+            android:layout_width="6dp"
+            android:layout_height="25dp"
+            android:background="@drawable/tanhao"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            />
+    </RelativeLayout>
+</LinearLayout>
