@@ -2,6 +2,7 @@ package tianhao.agoto.Activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -89,6 +90,12 @@ public class HelpMeBuyAddSellerAddressActivity extends Activity implements Baidu
     private List<View> viewList; // Tab页面列表
     /*viewpage recycleview 历史记录 收藏地址 功能*/
 
+    /*名称  地址*/
+    @BindView(R.id.et_helpmebuyaddselleraddress_content_namecall)
+    EditText etHelpMeBuyAddSellerAddressContentNameCall;
+
+    /*名称  地址*/
+
     /*百度地图定位 begin2*/
     @BindView(R.id.mv_helpmebuyaddselleraddress_content)
     MapView mMapView;
@@ -105,8 +112,8 @@ public class HelpMeBuyAddSellerAddressActivity extends Activity implements Baidu
 
 
     /*地名转换经纬度*/
-    @BindView(R.id.et_helpmebuyaddselleraddress_content)
-    EditText etHelpMeBuyAddSellerAddressContent;
+    @BindView(R.id.et_helpmebuyaddselleraddress_content_address)
+    EditText etHelpMeBuyAddSellerAddressContentAddress;
     private GeoCoder search=null;
     private String city;
     /*地名转换经纬度*/
@@ -189,9 +196,9 @@ public class HelpMeBuyAddSellerAddressActivity extends Activity implements Baidu
         vpHelpMeBuyAddSellerAddressContent.setOnPageChangeListener(new MyOnPageChangeListener());
         RecyclerView rv = null;
         List<String> dataList = new ArrayList<String>();
+       /* dataList.add("");
         dataList.add("");
-        dataList.add("");
-        dataList.add("");
+        dataList.add("");*/
         initRecycleView(rv,0,dataList);
     }
 
@@ -336,10 +343,10 @@ public class HelpMeBuyAddSellerAddressActivity extends Activity implements Baidu
             ivHelpMeBuyAddSellerAddressTabGreenBottom.startAnimation(animation);
             RecyclerView rv = null;
             List<String> dataList = new ArrayList<String>();
+          /*  dataList.add("");
             dataList.add("");
             dataList.add("");
-            dataList.add("");
-            dataList.add("");
+            dataList.add("");*/
             initRecycleView(rv,arg0,dataList);
             switch (arg0){
                 case 0:
@@ -429,7 +436,8 @@ public class HelpMeBuyAddSellerAddressActivity extends Activity implements Baidu
      /*   mBaiduMap.clear();
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(result.getLocation()));*/
         addressLocation = result.getAddress();
-        etHelpMeBuyAddSellerAddressContent.setText(addressLocation);
+        etHelpMeBuyAddSellerAddressContentAddress.setText(addressLocation);
+        getLaLoFromCity();
     }
     /*根据经纬度搜索地址*/
 
@@ -450,12 +458,17 @@ public class HelpMeBuyAddSellerAddressActivity extends Activity implements Baidu
         longitude = mapStatus.target.longitude;
         LatLng ptCenter = new LatLng(latitude, longitude);
         search.reverseGeoCode(new ReverseGeoCodeOption().location(ptCenter));
+
     }
     /*获取手指在地图上的经纬度*/
 
     @OnClick(R.id.rly_helpmebuyaddselleraddress_addresssearch)
     public void rlyHelpMeBuyAddSellerAddressAddressSearchOnclick(){
-        getLaLoFromCity();
+        Intent intent = new Intent(this,BaiduAddressSearchSuggestActivity.class);
+        startActivity(intent);
+
+
+       /* getLaLoFromCity();*/
     }
 
 
@@ -472,7 +485,7 @@ public class HelpMeBuyAddSellerAddressActivity extends Activity implements Baidu
 
     /**得到当前所在城市**/
     private void getCity(){
-        addressLocation = etHelpMeBuyAddSellerAddressContent.getText().toString();
+        addressLocation = etHelpMeBuyAddSellerAddressContentAddress.getText().toString();
         if(addressLocation!=null&&!addressLocation.equals("")){
             int indexProvince=addressLocation.indexOf("省");
             int indexCity=addressLocation.indexOf("市");

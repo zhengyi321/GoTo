@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:text="@string/chargeNow"
             android:textColor="@color/colorActivityMyWalletTopBarChargeGreenBg"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:layout_centerInParent="true"
             />
     </RelativeLayout>

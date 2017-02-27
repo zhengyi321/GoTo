@@ -185,7 +185,9 @@
     <color name="colorActivityRegBlackBg">#2c2d37</color>
     <color name="colorActivityRegWhiteBg">#ffffff</color>
     <!--注册页面-->
-
+    <!--地图搜索关键词建议页面-->
+    <color name="colorActivityBaiduAddressSearchSuggestBlackBg">#2c2d37</color>
+    <!--地图搜索关键词建议页面-->
 
     <!--仿ios对话框-->
     <!--覆盖颜色-->

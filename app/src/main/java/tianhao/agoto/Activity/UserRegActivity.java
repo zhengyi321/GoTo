@@ -170,7 +170,7 @@ public class UserRegActivity extends Activity {
                 String des = object.optString("detail");//错误描述
                 int status = object.optInt("status");//错误代码
                 if (status > 0 && !TextUtils.isEmpty(des)) {
-                    /*Toast.makeText(this, des, Toast.LENGTH_SHORT).show();*/
+                    Toast.makeText(this, des, Toast.LENGTH_LONG).show();
                     return;
                 }
             } catch (Exception e) {

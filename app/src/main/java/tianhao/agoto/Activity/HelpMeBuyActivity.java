@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.alipay.sdk.app.AuthTask;
 import com.alipay.sdk.app.PayTask;
@@ -55,6 +56,23 @@ public class HelpMeBuyActivity extends Activity{
 
     @BindView(R.id.lly_helpmebuy)
     LinearLayout llyHelpMeBuy;
+    /*购买地址*/
+    @BindView(R.id.tv_helpmebuy_content_address)
+    TextView tvHelpMeBuyContentAddress;
+    /*购买详细地址*/
+    @BindView(R.id.tv_helpmebuy_content_addressdetail)
+    TextView tvHelpMeBuyContentAddressDetail;
+
+    /*收件人姓名*/
+    @BindView(R.id.tv_helpmebuy_content_receivename)
+    TextView tvHelpMeBuyContentReceiveName;
+    /*收件人电话*/
+    @BindView(R.id.tv_helpmebuy_content_receivetel)
+    TextView tvHelpMeBuyContentReceiveTel;
+    /*收件人地址*/
+    @BindView(R.id.tv_helpmebuy_content_receiveaddressdetail)
+    TextView tvHelpMeBuyContentReceiveAddressDetail;
+
 
     /*不辣*/
     @BindView(R.id.cb_helpmebuy_content_nochilli)
@@ -128,13 +146,13 @@ public class HelpMeBuyActivity extends Activity{
     }
     /*收件人信息*/
 
-    /*商家地址*/
+    /*购买地址*/
     @OnClick(R.id.lly_helpmebuy_sellerdetail)
     public void llyHelpMeBuySellerDetailOnclick(){
         Intent intent = new Intent(this,HelpMeBuyAddSellerAddressActivity.class);
         startActivity(intent);
     }
-    /*商家地址*/
+    /*购买地址*/
 
     /*支付*/
     @OnClick(R.id.rly_helpmebuy_bottom_topay)
@@ -144,6 +162,8 @@ public class HelpMeBuyActivity extends Activity{
         PopupOnClickEvents popupOnClickEvents = new PopupOnClickEvents();
         popupOnClickEvents.PayConfirm(this,llyHelpMeBuy,new ArrayList<String>());
     }
+
+
 
 
 

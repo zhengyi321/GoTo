@@ -10,8 +10,10 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -25,7 +27,8 @@ public class ImageUtils {
 
 
 
-     public Bitmap drawableToBitamp(Drawable drawable)
+
+    public Bitmap drawableToBitamp(Drawable drawable)
     {
          Bitmap bitmap;
          BitmapDrawable bd = (BitmapDrawable) drawable;
@@ -45,6 +48,8 @@ public class ImageUtils {
         return bitmap;
 
     }
+
+
 
     public Bitmap getBitmap(String url) {
         Bitmap bm = null;

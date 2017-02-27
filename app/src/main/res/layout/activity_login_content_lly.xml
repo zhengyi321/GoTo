@@ -268,6 +268,7 @@
                 android:layout_weight="1"
                 ></RelativeLayout>
             <RelativeLayout
+                android:id="@+id/rly_login_content_qqlogin"
                 android:layout_width="@dimen/zero"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
@@ -281,6 +282,7 @@
 
             </RelativeLayout>
             <RelativeLayout
+                android:id="@+id/rly_login_content_wxlogin"
                 android:layout_width="@dimen/zero"
                 android:layout_height="match_parent"
                 android:layout_weight="3"

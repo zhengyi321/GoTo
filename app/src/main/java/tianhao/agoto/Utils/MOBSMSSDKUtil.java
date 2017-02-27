@@ -22,8 +22,8 @@ import static org.apache.commons.codec.digest.MessageDigestAlgorithms.MD5;
 
 public class MOBSMSSDKUtil {
 
-    private String AppKey = "1ba1c7a305068";
-    private String APPSecret = "096f0187d03334152678d08a767e8ea7";
+    private String AppKey = "1ba1c7a305068";//1ba1c7a305068
+    private String APPSecret = "096f0187d03334152678d08a767e8ea7";//096f0187d03334152678d08a767e8ea7
     private  final int CODE_ING = 1;   //已发送，倒计时
     private  final int CODE_REPEAT = 2;  //重新发送
     private  final int SMSDDK_HANDLER = 3;  //短信回调

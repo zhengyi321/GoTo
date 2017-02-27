@@ -22,7 +22,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/name"
+                android:text="@string/nameCall"
                 android:textColor="@color/colorActivityAddressManageAddContacterContentGrayWordBg"
                 android:textSize="15sp"
                 android:layout_centerInParent="true"
@@ -35,14 +35,16 @@
             android:layout_height="match_parent"
             android:layout_weight="5.5"
             >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/nameTest"
+            <EditText
+                android:id="@+id/et_helpmebuyaddselleraddress_content_namecall"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/addAddress"
                 android:textColor="@color/colorActivityAddressManageAddContacterContentBlackWordBg"
                 android:textSize="15sp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
+                android:visibility="invisible"
                 />
 
         </RelativeLayout>
@@ -90,7 +92,7 @@
             android:layout_weight="4.5"
             >
             <EditText
-                android:id="@+id/et_helpmebuyaddselleraddress_content"
+                android:id="@+id/et_helpmebuyaddselleraddress_content_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/addressTest"

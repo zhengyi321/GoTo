@@ -16,12 +16,24 @@
             android:layout_width="@dimen/zero"
             android:layout_height="match_parent"
             android:layout_weight="1">
-            <tianhao.agoto.Common.Widget.ImageView.CircleImageView
+            <!--<ImageView
+                android:id="@+id/civ_main_leftmenu_headimg"
                 android:layout_width="@dimen/activity_main_leftmenu_headImage_size"
                 android:layout_height="@dimen/activity_main_leftmenu_headImage_size"
                 android:src="@drawable/headimagetest"
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="@dimen/activity_main_leftmenu_paddingleft_right_size"
+                android:scaleType="fitXY"
+
+                />-->
+            <tianhao.agoto.Common.Widget.ImageView.CircleImageView
+                android:id="@+id/civ_main_leftmenu_headimg"
+                android:layout_width="@dimen/activity_main_leftmenu_headImage_size"
+                android:layout_height="@dimen/activity_main_leftmenu_headImage_size"
+                android:src="@drawable/headimagetest"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="@dimen/activity_main_leftmenu_paddingleft_right_size"
+                android:scaleType="fitXY"
 
                 />
         </RelativeLayout>

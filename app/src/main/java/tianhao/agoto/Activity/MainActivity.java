@@ -3,23 +3,37 @@ package tianhao.agoto.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import net.tsz.afinal.FinalBitmap;
+
+import java.net.URL;
 
 import butterknife.ButterKnife;
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.sina.weibo.SinaWeibo;
+import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.wechat.friends.Wechat;
+import tianhao.agoto.Common.Widget.ImageView.CircleImageView;
 import tianhao.agoto.Fragment.MainFragment;
 import tianhao.agoto.R;
 import tianhao.agoto.Common.Widget.DB.ContactInjfoDao;
+import tianhao.agoto.Utils.ImageUtils;
 
 /*
 
@@ -48,6 +62,11 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout llyMainLeftMenuLogin;
     @BindView(R.id.dly_main_activity)
     DrawerLayout dlyMainActivity;
+   /* @BindView(R.id.civ_main_leftmenu_headimg)
+    ImageView civMainLeftMenuHeadImg;*/
+    @BindView(R.id.civ_main_leftmenu_headimg)
+    CircleImageView civMainLeftMenuHeadImg;
+
 
     @BindView(R.id.tv_main_leftmenu_name)
     TextView tvMainLeftMenuName;
@@ -211,11 +230,23 @@ public class MainActivity extends AppCompatActivity {
  /*       MemoryUtils memoryUtils = new MemoryUtils();
         memoryUtils.cleanMemoryNoText(this);*/
     }
+
     /*登陆以后初始化名字*/
     private void initAfterLogin(){
         String userName = mDao.queryDate("userName");
         if(userName != null){
             tvMainLeftMenuName.setText(userName);
+            String headImgUrl = mDao.queryDate("thirdHeadUrl");
+            if((!headImgUrl.isEmpty()) &&(headImgUrl != null)){
+                /*Toast.makeText(this,"headimgurl:"+headImgUrl,Toast.LENGTH_LONG).show();*/
+                FinalBitmap finalBitMap=null;
+                finalBitMap=FinalBitmap.create(MainActivity.this);
+                finalBitMap.display(civMainLeftMenuHeadImg, headImgUrl);
+                /*ImageUtils imageUtils = new ImageUtils();
+                Bitmap bitmap = imageUtils.getbitmap(headImgUrl);
+                civMainLeftMenuHeadImg.setImageBitmap(bitmap);*/
+
+            }
             /*Toast.makeText(this,"onResume"+userLogin.getUserName(),Toast.LENGTH_LONG).show();*/
         }
     }

@@ -25,7 +25,7 @@
             android:textSize="18sp"
             android:layout_centerVertical="true"
             android:textStyle="bold"
-
+            android:visibility="invisible"
             />
     </RelativeLayout>
     <RelativeLayout
