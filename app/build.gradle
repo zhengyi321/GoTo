@@ -45,6 +45,7 @@ android {
         release.setRoot('build-types/release')
     }
     /*百度地图*/
+
 }
 /*Mob免费短信验证码http://www.mob.com/downloads/*/
 repositories{
@@ -53,6 +54,7 @@ repositories{
     }
 }
 /*Mob免费短信验证码http://www.mob.com/downloads/*/
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -111,7 +113,7 @@ dependencies {
     /*Mob免费短信验证码http://www.mob.com/downloads/*/
     compile files('libs/MobCommons-2016.1201.1839.jar')
     compile files('libs/MobTools-2016.1201.1839.jar')
-    compile name:'SMSSDK-<version>',ext:'aar'
-    compile name:'SMSSDKGUI-<version>',ext:'aar'
+    compile name:'SMSSDK-2.1.3',ext:'aar'
+    compile name:'SMSSDKGUI-2.1.3',ext:'aar'
     /*Mob免费短信验证码http://www.mob.com/downloads/*/
 }

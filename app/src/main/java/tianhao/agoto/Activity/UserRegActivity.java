@@ -5,18 +5,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
 import rx.Observer;
 import tianhao.agoto.Bean.UserReg;
 import tianhao.agoto.NetWorks.UserSettingNetWorks;
 import tianhao.agoto.R;
+import tianhao.agoto.Utils.MOBSMSSDKUtil;
 import tianhao.agoto.Utils.PhoneFormatCheckUtils;
 
 /**
@@ -33,10 +39,16 @@ public class UserRegActivity extends Activity {
     @BindView(R.id.et_userreg_content_tel)
     EditText etUserRegContentTel;
     /*手机号码*/
-    /*验证码*/
+    /*密码*/
     @BindView(R.id.et_userreg_content_pass)
     EditText etUserRegContentPass;
+    /*密码*/
     /*验证码*/
+    @BindView(R.id.et_userreg_content_identity)
+    EditText etUserRegContentIdentity;
+    /*验证码*/
+
+
     /*注册提交*/
     @BindView(R.id.rly_userreg_content_regsubmit)
     RelativeLayout rlyUserRegContentRegSubmit;
@@ -61,17 +73,19 @@ public class UserRegActivity extends Activity {
     @BindView(R.id.rly_userreg_topbar_leftmenu_back)
     RelativeLayout rlyUserRegTopBarLeftMenuBack;
     /*回退上一页*/
-
+    MOBSMSSDKUtil mobsmssdkUtil ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_userreg_lly);
-        init();
+        init(this);
     }
 
-    private void init(){
+    private void init(Activity activity){
         ButterKnife.bind(this);
+        mobsmssdkUtil = new MOBSMSSDKUtil(activity);
+        mobSMSRegister();
     }
 
     /*点击获取验证码*/
@@ -83,7 +97,7 @@ public class UserRegActivity extends Activity {
                 second = 60;
                 beginTimeing();
             }else{
-                Toast.makeText(this,"亲，请耐心等待。。",Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"亲，验证码已发送，请耐心等待。。",Toast.LENGTH_LONG).show();
             }
         /*第一次点击倒计时*/
         }else{
@@ -101,11 +115,69 @@ public class UserRegActivity extends Activity {
     /*判断是否正确输入手机号码*/
     /*多线程开始倒计时    http://blog.csdn.net/yhm2046/article/details/8213629/*/
     private void beginTimeing(){
+        String tel = etUserRegContentTel.getText().toString();
+        mobsmssdkUtil.getVerificationCode(tel);
         ThreadShow threadShow = new ThreadShow();
         Thread thread = new Thread(threadShow);
         thread.start();
     }
+    private void mobSMSRegister(){
+        EventHandler eventHandler = new EventHandler() {
+            @Override
+            public void afterEvent(int event, int result, Object data) {
+                smsSDKResultComplete(event,result,data);
+            }
+        };
+        // 注册回调监听接口
+        SMSSDK.registerEventHandler(eventHandler);
+    }
 
+    public void smsSDKResultComplete(int event, int result, Object data){
+        //回调完成
+        if (result == SMSSDK.RESULT_COMPLETE)
+        {
+            //验证码验证成功
+            if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE)
+            {
+               /* Toast.makeText(activity, "验证成功", Toast.LENGTH_LONG).show();*/
+              /*  if (check())//其他合法性的检测
+                {
+
+                    //user.setUserIdCard(userIdCard);
+                    //user.setUserImage("");    //暂时为空
+                    //注册->服务器
+
+                }*/
+                regSubmit();
+
+            }
+            //已发送验证码
+            else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE)
+            {
+                /*Toast.makeText(activity, "验证码已经发送", Toast.LENGTH_SHORT).show();*/
+
+            } else
+            {
+                ((Throwable) data).printStackTrace();
+
+            }
+        }if(result==SMSSDK.RESULT_ERROR)
+        {
+            try {
+                Throwable throwable = (Throwable) data;
+                throwable.printStackTrace();
+                JSONObject object = new JSONObject(throwable.getMessage());
+                String des = object.optString("detail");//错误描述
+                int status = object.optInt("status");//错误代码
+                if (status > 0 && !TextUtils.isEmpty(des)) {
+                    /*Toast.makeText(this, des, Toast.LENGTH_SHORT).show();*/
+                    return;
+                }
+            } catch (Exception e) {
+                //do something
+            }
+        }
+    }
     // handler类接收数据
     Handler handler = new Handler() {
         public void handleMessage(Message msg) {
@@ -148,7 +220,11 @@ public class UserRegActivity extends Activity {
     /*注册提交点击事件*/
     @OnClick(R.id.rly_userreg_content_regsubmit)
     public void rlyUserRegContentRegSubmitOnclick(){
-        regSubmit();
+        if(isPhoneNum()) {
+            String tel = etUserRegContentTel.getText().toString();
+            String identity = etUserRegContentIdentity.getText().toString();
+            mobsmssdkUtil.confirmVerifSubmit(tel,identity);
+        }
     }
     /*注册提交点击事件*/
 

@@ -115,7 +115,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2.5"
                 android:hint="@string/inputConfirmNum"
-                android:password="true"
                 android:textColor="@color/colorActivityRegWhiteBg"
                 android:textSize="@dimen/activity_userreg_content_input_word_style_size"
                 android:background="@null"
