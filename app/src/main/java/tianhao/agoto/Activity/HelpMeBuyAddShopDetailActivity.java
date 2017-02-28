@@ -2,8 +2,9 @@ package tianhao.agoto.Activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.database.DataSetObserver;
+import android.content.Intent;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
@@ -18,8 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.Adapter;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,51 +47,58 @@ import com.baidu.mapapi.search.geocode.GeoCodeOption;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.zip.Inflater;
-import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 
-import butterknife.ButterKnife;
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import tianhao.agoto.R;
 import tianhao.agoto.Utils.SystemUtils;
-
 
 /**
  * Created by zhyan on 2017/2/19.
  */
 
-public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap.OnMapStatusChangeListener,OnGetGeoCoderResultListener {
+public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap.OnMapStatusChangeListener,OnGetGeoCoderResultListener {
 
     /*viewpage recycleview 历史记录 收藏地址 功能 begin*/
-    @BindView(R.id.tv_helpmesendaddcontacter_tabbar_history)
-    TextView tvHelpMeSendAddContacterTabBarHistory;
-    @BindView(R.id.iv_helpmesendaddcontacter_tabbar_history)
-    ImageView ivHelpMeSendAddContacterTabBarHistory;
-    @BindView(R.id.tv_helpmesendaddcontacter_tabbar_collectaddress)
-    TextView tvHelpMeSendAddContacterTabBarCollectAddress;
-    @BindView(R.id.iv_helpmesendaddcontacter_tabbar_collectaddress)
-    ImageView ivHelpMeSendAddContacterTabBarCollectAddress;
-    @BindView(R.id.iv_helpmesendaddcontacter_tab_greenbottom)
-    ImageView ivHelpMeSendAddContacterTabGreenBottom;
-    @BindView(R.id.vp_helpmesendaddcontacter_content)
-    ViewPager vpHelpMeSendAddContacterContent;
-    @BindView(R.id.rly_helpmesendaddcontacter_tabbar_history)
-    RelativeLayout rlyHelpMeSendAddContacterTabBarHistory;
-    @BindView(R.id.rly_helpmesendaddcontacter_tabbar_collectaddress)
-    RelativeLayout rlyHelpMeSendAddContacterTabBarCollectAddress;
+    @BindView(R.id.tv_helpmebuyaddselleraddress_tabbar_history)
+    TextView tvHelpMeBuyAddSellerAddressTabBarHistory;
+    @BindView(R.id.iv_helpmebuyaddselleraddress_tabbar_history)
+    ImageView ivHelpMeBuyAddSellerAddressTabBarHistory;
+    @BindView(R.id.tv_helpmebuyaddselleraddress_tabbar_collectaddress)
+    TextView tvHelpMeBuyAddSellerAddressTabBarCollectAddress;
+    @BindView(R.id.iv_helpmebuyaddselleraddress_tabbar_collectaddress)
+    ImageView ivHelpMeBuyAddSellerAddressTabBarCollectAddress;
+    @BindView(R.id.iv_helpmebuyaddselleraddress_tab_greenbottom)
+    ImageView ivHelpMeBuyAddSellerAddressTabGreenBottom;
+    @BindView(R.id.vp_helpmebuyaddselleraddress_content)
+    ViewPager vpHelpMeBuyAddSellerAddressContent;
+    @BindView(R.id.rly_helpmebuyaddselleraddress_tabbar_history)
+    RelativeLayout rlyHelpMeBuyAddSellerAddressTabBarHistory;
+    @BindView(R.id.rly_helpmebuyaddselleraddress_tabbar_collectaddress)
+    RelativeLayout rlyHelpMeBuyAddSellerAddressTabBarCollectAddress;
     private int offset = 0;// 动画图片偏移量
     private int currIndex = 0;// 当前页卡编号
     private List<View> viewList; // Tab页面列表
     /*viewpage recycleview 历史记录 收藏地址 功能*/
 
+    /*名称  地址*/
+    @BindView(R.id.et_helpmebuyaddselleraddress_content_namecall)
+    EditText etHelpMeBuyAddSellerAddressContentNameCall;
+
+    /*名称  地址*/
+    @BindView(R.id.rly_helpmebuy_addselleraddress_topbar_leftmenu)
+    RelativeLayout rlyHelpMeBuyAddSellerAddressTopBarLeftMenu;
+    @BindView(R.id.rly_helpmebuy_addselleraddress_topbar_rightmenu)
+    RelativeLayout rlyHelpMeBuyAddSellerAddressTopBarRightMenu;
+
     /*百度地图定位 begin2*/
-    @BindView(R.id.mv_helpmesendaddcontacter_content)
+    @BindView(R.id.mv_helpmebuyaddselleraddress_content)
     MapView mMapView;
     private BaiduMap mBaiduMap;
     private LocationClient locationClient=null;
@@ -101,27 +107,43 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
     private double longitude,longitudeLocation;
     private String addressLocation = "";
     private Boolean isFirst = true;
-
-    @BindView(R.id.rly_helpmesendaddcontacter_addresssearch)
-    RelativeLayout rlyHelpMeSendAddContacterAddressSearch;
+    private double blat,blon;
+    @BindView(R.id.rly_helpmebuyaddselleraddress_addresssearch)
+    RelativeLayout rlyHelpMeBuyAddSellerAddressAddressSearch;
 
 
     /*地名转换经纬度*/
-    @BindView(R.id.et_helpmesendaddcontacter_content)
-    EditText etHelpMeSendAddContacterContent;
+    @BindView(R.id.et_helpmebuyaddselleraddress_content_address)
+    EditText etHelpMeBuyAddSellerAddressContentAddress;
     private GeoCoder search=null;
     private String city;
     /*地名转换经纬度*/
     /*百度地图定位 end2*/
-
+    private final int RESULT_OK = 10;//startactivityforresult
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initBaiDuSDK();
-        setContentView(R.layout.activity_helpmesendaddcontacter_lly);
-        init();
+        setContentView(R.layout.activity_helpmebuyadd_shopdetail_lly);
+        /*init();*/
     }
 
+    @OnClick(R.id.rly_helpmebuy_addselleraddress_topbar_leftmenu)
+    public void rlyHelpMeBuyAddSellerAddressTopBarLeftMenuOnclick(){
+        this.finish();
+    }
+    @OnClick(R.id.rly_helpmebuy_addselleraddress_topbar_rightmenu)
+    public void rlyHelpMeBuyAddSellerAddressTopBarRightMenuOnclick(){
+        Bundle bundle = new Bundle();
+        bundle.putString("nameCall",etHelpMeBuyAddSellerAddressContentNameCall.getText().toString());
+        bundle.putString("address",etHelpMeBuyAddSellerAddressContentAddress.getText().toString());
+        bundle.putString("blat", "" + blat);
+        bundle.putString("blon", "" + blon);
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
     private void init(){
         ButterKnife.bind(this);
         initSwitchContent();
@@ -145,15 +167,15 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
      */
     private void InitTabBg(Boolean isFirst) {
         if(isFirst) {
-            tvHelpMeSendAddContacterTabBarHistory.setTextColor(getResources().getColor(R.color.colorHelpMeSendAddContacterActivityTabBarGreenBg));
-            ivHelpMeSendAddContacterTabBarHistory.setImageResource(R.drawable.historyrecordselect);
-            tvHelpMeSendAddContacterTabBarCollectAddress.setTextColor(getResources().getColor(R.color.colorHelpMeSendAddContacterActivityTabBarGrayBg));
-            ivHelpMeSendAddContacterTabBarCollectAddress.setImageResource(R.drawable.collectaddressnormal);
+            tvHelpMeBuyAddSellerAddressTabBarHistory.setTextColor(getResources().getColor(R.color.colorHelpMeBuyAddSellerAddressActivityTabBarGreenBg));
+            ivHelpMeBuyAddSellerAddressTabBarHistory.setImageResource(R.drawable.historyrecordselect);
+            tvHelpMeBuyAddSellerAddressTabBarCollectAddress.setTextColor(getResources().getColor(R.color.colorHelpMeBuyAddSellerAddressActivityTabBarGrayBg));
+            ivHelpMeBuyAddSellerAddressTabBarCollectAddress.setImageResource(R.drawable.collectaddressnormal);
         }else{
-            tvHelpMeSendAddContacterTabBarHistory.setTextColor(getResources().getColor(R.color.colorHelpMeSendAddContacterActivityTabBarGrayBg));
-            ivHelpMeSendAddContacterTabBarHistory.setImageResource(R.drawable.historyrecordnormal);
-            tvHelpMeSendAddContacterTabBarCollectAddress.setTextColor(getResources().getColor(R.color.colorHelpMeSendAddContacterActivityTabBarGreenBg));
-            ivHelpMeSendAddContacterTabBarCollectAddress.setImageResource(R.drawable.collectaddressselect);
+            tvHelpMeBuyAddSellerAddressTabBarHistory.setTextColor(getResources().getColor(R.color.colorHelpMeBuyAddSellerAddressActivityTabBarGrayBg));
+            ivHelpMeBuyAddSellerAddressTabBarHistory.setImageResource(R.drawable.historyrecordnormal);
+            tvHelpMeBuyAddSellerAddressTabBarCollectAddress.setTextColor(getResources().getColor(R.color.colorHelpMeBuyAddSellerAddressActivityTabBarGreenBg));
+            ivHelpMeBuyAddSellerAddressTabBarCollectAddress.setImageResource(R.drawable.collectaddressselect);
         }
     }
 
@@ -175,8 +197,8 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
         offset = (screenW / 2  ) / 2;// 计算偏移量  screenW/有几个tab 就除以几
         Matrix matrix = new Matrix();
         matrix.postTranslate(offset, 0);
-        ivHelpMeSendAddContacterTabGreenBottom.setImageMatrix(matrix);
-        ivHelpMeSendAddContacterTabGreenBottom.setLayoutParams(params);
+        ivHelpMeBuyAddSellerAddressTabGreenBottom.setImageMatrix(matrix);
+        ivHelpMeBuyAddSellerAddressTabGreenBottom.setLayoutParams(params);
     }
     /**
      * 初始化ViewPager
@@ -184,17 +206,17 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
     private void InitViewPager() {
         viewList = new ArrayList<View>();
         LayoutInflater mInflater = getLayoutInflater();
-        viewList.add(mInflater.inflate(R.layout.activity_helpmesendaddcontacter_content_vp_itemrv_lly, null));
-        viewList.add(mInflater.inflate(R.layout.activity_helpmesendaddcontacter_content_vp_itemrv_lly, null));
-        vpHelpMeSendAddContacterContent.setAdapter(new MyPagerAdapter(viewList));
-        vpHelpMeSendAddContacterContent.setCurrentItem(0);
-        vpHelpMeSendAddContacterContent.setOnPageChangeListener(new MyOnPageChangeListener());
-        RecyclerView rv = null;
+        viewList.add(mInflater.inflate(R.layout.activity_helpmebuyadd_shopdetail_content_vp_itemrv_lly, null));
+        viewList.add(mInflater.inflate(R.layout.activity_helpmebuyadd_shopdetail_content_vp_itemrv_lly, null));
+        vpHelpMeBuyAddSellerAddressContent.setAdapter(new MyPagerAdapter(viewList));
+        vpHelpMeBuyAddSellerAddressContent.setCurrentItem(0);
+        vpHelpMeBuyAddSellerAddressContent.setOnPageChangeListener(new MyOnPageChangeListener());
+
         List<String> dataList = new ArrayList<String>();
+       /* dataList.add("");
         dataList.add("");
-        dataList.add("");
-        dataList.add("");
-        initRecycleView(rv,0,dataList);
+        dataList.add("");*/
+        initRecycleView(0,dataList);
     }
 
 
@@ -274,12 +296,12 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
 
         @Override
         public ItemContentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ItemContentViewHolder(inflater.inflate(R.layout.activity_helpmesendaddcontacter_content_vp_itemrv_item_lly, parent, false));
+            return new MyRecycleViewAdapter.ItemContentViewHolder(inflater.inflate(R.layout.activity_helpmebuyadd_shopdetail_content_vp_itemrv_item_lly, parent, false));
 
         }
 
         @Override
-        public void onBindViewHolder(ItemContentViewHolder holder, int position) {
+        public void onBindViewHolder(MyRecycleViewAdapter.ItemContentViewHolder holder, int position) {
 
         }
 
@@ -335,14 +357,14 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
             currIndex = arg0;
             animation.setFillAfter(true);// True:图片停在动画结束位置
             animation.setDuration(200);
-            ivHelpMeSendAddContacterTabGreenBottom.startAnimation(animation);
-            RecyclerView rv = null;
+            ivHelpMeBuyAddSellerAddressTabGreenBottom.startAnimation(animation);
+
             List<String> dataList = new ArrayList<String>();
+          /*  dataList.add("");
             dataList.add("");
             dataList.add("");
-            dataList.add("");
-            dataList.add("");
-            initRecycleView(rv,arg0,dataList);
+            dataList.add("");*/
+            initRecycleView(arg0,dataList);
             switch (arg0){
                 case 0:
                     InitTabBg(true);
@@ -363,28 +385,42 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
 
 
 
-    private void initRecycleView(RecyclerView rv,int pos,List<String> dataList){
-        /*多线程运行 行不通*/
+    private void initRecycleView(int pos,List<String> dataList){
+  /*      *//*多线程运行 行不通*//*
         MyRecycleViewAdapter adapter = new MyRecycleViewAdapter(viewList.get(pos).getContext(),dataList);
-        rv =(RecyclerView) viewList.get(pos).findViewById(R.id.rv_helpmesendaddcontacter_vp_item);
+        rv =(RecyclerView) viewList.get(pos).findViewById(R.id.rv_helpmebuyaddselleraddress_vp_item);
         rv.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(viewList.get(pos).getContext());
         //设置为垂直布局，这也是默认的
         layoutManager.setOrientation(OrientationHelper. VERTICAL);
         //设置布局管理器
         rv.setLayoutManager(layoutManager);
+*/
 
+        int count = pos + 1;
+        if(count <= dataList.size()) {
+            RecyclerView rv = null;
+        /*多线程运行 行不通*/
+            MyRecycleViewAdapter adapter = new MyRecycleViewAdapter(viewList.get(pos).getContext(), dataList);
+            rv = (RecyclerView) viewList.get(pos).findViewById(R.id.rv_helpmebuyadd_receiverdetail_vp_item);
+            rv.setAdapter(adapter);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(viewList.get(pos).getContext());
+            //设置为垂直布局，这也是默认的
+            layoutManager.setOrientation(OrientationHelper.VERTICAL);
+            //设置布局管理器
+            rv.setLayoutManager(layoutManager);
+        }
     }
 
 
-    @OnClick(R.id.rly_helpmesendaddcontacter_tabbar_history)
-    public void rlyHelpMeSendAddContacterTabBarHistoryOnclick(){
-        vpHelpMeSendAddContacterContent.setCurrentItem(0);
+    @OnClick(R.id.rly_helpmebuyaddselleraddress_tabbar_history)
+    public void rlyHelpMeBuyAddSellerAddressTabBarHistoryOnclick(){
+        vpHelpMeBuyAddSellerAddressContent.setCurrentItem(0);
     }
 
-    @OnClick(R.id.rly_helpmesendaddcontacter_tabbar_collectaddress)
-    public void rlyHelpMeSendAddContacterTabBarCollectAddressOnclick(){
-        vpHelpMeSendAddContacterContent.setCurrentItem(1);
+    @OnClick(R.id.rly_helpmebuyaddselleraddress_tabbar_collectaddress)
+    public void rlyHelpMeBuyAddSellerAddressTabBarCollectAddressOnclick(){
+        vpHelpMeBuyAddSellerAddressContent.setCurrentItem(1);
 
     }
     /*viewpage recycleview 历史记录 收藏地址 功能 end*/
@@ -410,95 +446,23 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
         /**根据经纬度得到屏幕中心点地址**/
         search.setOnGetGeoCodeResultListener(this);
     }
-
-    /*根据经纬度搜索地址*/
-
-    @Override
-    public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
-        if (geoCodeResult.getLocation() != null) {
-            latitudeLocation = geoCodeResult.getLocation().latitude;
-            longitudeLocation = geoCodeResult.getLocation().longitude;
-            location(latitudeLocation, longitudeLocation);
-        }
-    }
-
-    @Override
-    public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
-        if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
-            Toast.makeText(HelpMeSendAddContacterActivity.this, "抱歉，未能找到结果", Toast.LENGTH_LONG).show();
-            return;
-        }
-     /*   mBaiduMap.clear();
-        mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(result.getLocation()));*/
-        addressLocation = result.getAddress();
-        etHelpMeSendAddContacterContent.setText(addressLocation);
-    }
-    /*根据经纬度搜索地址*/
-
-    /*获取手指在地图上的经纬度*/
-    @Override
-    public void onMapStatusChangeStart(MapStatus mapStatus) {
-
-    }
-
-    @Override
-    public void onMapStatusChange(MapStatus mapStatus) {
-
-    }
-
-    @Override
-    public void onMapStatusChangeFinish(MapStatus mapStatus) {
-        latitude = mapStatus.target.latitude;
-        longitude = mapStatus.target.longitude;
-        LatLng ptCenter = new LatLng(latitude, longitude);
-        search.reverseGeoCode(new ReverseGeoCodeOption().location(ptCenter));
-    }
-    /*获取手指在地图上的经纬度*/
-
-    @OnClick(R.id.rly_helpmesendaddcontacter_addresssearch)
-    public void rlyHelpMeSendAddContacterAddressSearchOnclick(){
-        getLaLoFromCity();
-    }
-
-
-    private void getLaLoFromCity(){
-        getCity();
-        /*location(latitudeLocation, longitudeLocation);*/
-        /*search=GeoCoder.newInstance();*/
-        search.geocode(new GeoCodeOption().city(city).address(addressLocation));
-      /*  *得到经纬度**/
-       /* search.setOnGetGeoCodeResultListener(this);*/
-    }
-
-    /**得到当前所在城市**/
-    private void getCity(){
-        addressLocation = etHelpMeSendAddContacterContent.getText().toString();
-        if(addressLocation!=null&&!addressLocation.equals("")){
-            int indexProvince=addressLocation.indexOf("省");
-            int indexCity=addressLocation.indexOf("市");
-            city = addressLocation.substring(indexProvince + 1, indexCity);
-
-        }
-    }
-
-
     /**配置定位SDK参数**/
     private void initLocation(){
         LocationClientOption option=new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
         option.setCoorType("bd09ll");
-//        int span=1000;
-//        option.setScanSpan(span);
+        int span=1000;
+        option.setScanSpan(span);
         option.setIsNeedAddress(true);
-        option.setOpenGps(true);
+        option.setNeedDeviceDirect(true);
+       /* option.setOpenGps(true);
         option.setLocationNotify(true);
         option.setIsNeedLocationDescribe(true);
         option.setIsNeedLocationPoiList(true);
         option.setIgnoreKillProcess(false);
-        option.setEnableSimulateGps(false);
+        option.setEnableSimulateGps(false);*/
         locationClient.setLocOption(option);
     }
-
 
 
     /**接收异步返回的定位结果**/
@@ -577,38 +541,42 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
     /**定位**/
     private void showCurrentPosition(BDLocation location){
         mBaiduMap.setMyLocationEnabled(true);
-        MyLocationData locationData=new MyLocationData.Builder()
-                .accuracy(location.getRadius())
-                .direction(100).latitude(location.getLatitude())
-                .longitude(location.getLongitude()).build();
-//        MyLocationConfiguration.LocationMode locationMode=MyLocationConfiguration.LocationMode.NORMAL;
-//        BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher);
-//        MyLocationConfiguration config = new MyLocationConfiguration(locationMode, true, mCurrentMarker);
-//        baiduMap.setMyLocationConfigeration(config);
-        mBaiduMap.setMyLocationData(locationData);
+        /*etHelpMeBuyAddSellerAddressContentAddress.setText(location.getAddrStr() + location.getBuildingName() +location.getFloor()+location.getStreet()+location.getStreetNumber());*/
         latitudeLocation=location.getLatitude();
         longitudeLocation=location.getLongitude();
         addressLocation=location.getAddrStr();
+        MyLocationData locationData=new MyLocationData.Builder()
+                /*.accuracy(location.getRadius())*/
+                /*.direction(100)*/.latitude(latitudeLocation)
+                .longitude(longitudeLocation).build();
+        mBaiduMap.setMyLocationData(locationData);
         location(latitudeLocation, longitudeLocation);
     }
 
     /**经纬度地址动画显示在屏幕中间  有关mark网站的出处http://blog.csdn.net/callmesen/article/details/40540895**/
     private void location(double latitude,double longitude){
         mBaiduMap.clear();
+
+
         LatLng ll = new LatLng(latitude, longitude);
         //定义地图状态
         MapStatus mMapStatus = new MapStatus.Builder()
                 .target(ll)
-                /*.zoom(18)*/
+                /*.zoom(40)*/
                 .build();
         //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
         mBaiduMap.animateMapStatus(mMapStatusUpdate);
-        //准备 marker 的图片
-        BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(R.drawable.greenpoint);
+        //准备 marker   的图片  定位图标
+        /*BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.search_map);*/
+        TextView textView = new TextView(this);
+        Drawable drawable1 = getResources().getDrawable(R.drawable.search_map);
+        drawable1.setBounds(0, 0, 20, 25);//第一0是距左边距离，第二0是距上边距离，40分别是长宽
+        textView.setCompoundDrawables(drawable1,null,null,null);
+        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromView(textView);
         /*BitmapDescriptor bitmap = null;*/
 //准备 marker option 添加 marker 使用
-        MarkerOptions markerOptions = new MarkerOptions().icon(bitmap).position(ll);
+        MarkerOptions markerOptions = new MarkerOptions().icon(bitmapDescriptor).position(ll);
 //获取添加的 marker 这样便于后续的操作
 
         mBaiduMap.addOverlay(markerOptions);
@@ -619,5 +587,152 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
         /*mBaiduMap.setMyLocationEnabled(true);*/
     }
 
+
+
+    @Override
+    public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
+        if (geoCodeResult.getLocation() != null) {
+            latitudeLocation = geoCodeResult.getLocation().latitude;
+            longitudeLocation = geoCodeResult.getLocation().longitude;
+            location(latitudeLocation, longitudeLocation);
+        }
+    }
+
+    @Override
+    public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
+        if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
+            Toast.makeText(this, "抱歉，未能找到结果", Toast.LENGTH_LONG).show();
+            return;
+        }
+     /*   mBaiduMap.clear();
+        mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(result.getLocation()));*/
+        LatLng latLng = result.getLocation();
+        addressLocation = result.getAddress();
+        /*if(isFirst) {*/
+        etHelpMeBuyAddSellerAddressContentAddress.setText(addressLocation+"  "+result.getSematicDescription());
+        location(latLng.latitude,latLng.longitude);
+        /*getLaLoFromCity();*/
+       /* }else{
+            *//**//*
+        }*/
+        /**/
+    }
+    /*根据经纬度搜索地址*/
+
+    /*获取手指在地图上的经纬度*/
+    @Override
+    public void onMapStatusChangeStart(MapStatus mapStatus) {
+
+    }
+
+    @Override
+    public void onMapStatusChange(MapStatus mapStatus) {
+
+    }
+
+    @Override
+    public void onMapStatusChangeFinish(MapStatus mapStatus) {
+        latitude = mapStatus.target.latitude;
+        longitude = mapStatus.target.longitude;
+        LatLng ptCenter = new LatLng(latitude, longitude);
+        search.reverseGeoCode(new ReverseGeoCodeOption().location(ptCenter));
+
+    }
+    /*获取手指在地图上的经纬度*/
+
+    @OnClick(R.id.rly_helpmebuyaddselleraddress_addresssearch)
+    public void rlyHelpMeBuyAddSellerAddressAddressSearchOnclick(){
+        Intent intent = new Intent(this,BaiduAddressSearchSuggestActivity.class);
+        startActivityForResult(intent,RESULT_OK);
+       /* getLaLoFromCity();*/
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (resultCode) { //resultCode为回传的标记，我在B中回传的是RESULT_OK
+            case RESULT_OK:
+                Bundle b=data.getExtras(); //data为B中回传的Intent
+                String address=b.getString("address");//str即为回传的值
+                String lat = b.getString("lat");
+                String lon = b.getString("lon");
+                if((lat != null) && (lon != null)) {
+                     blat = Double.parseDouble(lat);
+                     blon = Double.parseDouble(lon);
+                    location(blat, blon);
+                    etHelpMeBuyAddSellerAddressContentAddress.setText(address);
+                }
+
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void getLaLoFromCity(){
+        /*getCity();*/
+        addressLocation = etHelpMeBuyAddSellerAddressContentAddress.getText().toString();
+        if(addressLocation!=null&&!addressLocation.equals("")){
+            int indexProvince=addressLocation.indexOf("省");
+            int indexCity=addressLocation.indexOf("市");
+            if(addressLocation.length() > 0) {
+                if(indexCity > 0){
+                    city = addressLocation.substring(0, indexCity);
+                    search.geocode(new GeoCodeOption().city(city).address(addressLocation));
+                    return;
+                }
+                search.geocode(new GeoCodeOption().city("温州市").address(addressLocation));
+            }
+        }
+
+        /*location(latitudeLocation, longitudeLocation);*/
+        /*search=GeoCoder.newInstance();*/
+       /* if(city != null) {
+            search.geocode(new GeoCodeOption().city(city).address(addressLocation));
+        }*/
+      /*  *得到经纬度**/
+       /* search.setOnGetGeoCodeResultListener(this);*/
+    }
+
+    /**得到当前所在城市**/
+    private void getCity(){
+        addressLocation = etHelpMeBuyAddSellerAddressContentAddress.getText().toString();
+        if(addressLocation!=null&&!addressLocation.equals("")){
+            int indexProvince=addressLocation.indexOf("省");
+            int indexCity=addressLocation.indexOf("市");
+            if(indexCity < 0) {
+                city = null;
+            }else{
+                city = addressLocation.substring(indexProvince + 1, indexCity);
+            }
+        }
+    }
+
+
+
+
+
+
+
     /*百度地图 end*/
+
+    /*根据经纬度搜索地址*/
+
+    protected void onDestroy(){
+        locationClient.unRegisterLocationListener(locationListener);
+        mBaiduMap.clear();
+        search.destroy();
+        isFirst = true;
+        super.onDestroy();
+    }
+
+    protected void onResume(){
+        super.onResume();
+        init();
+    }
+    protected void onPause(){
+        super.onPause();
+        locationClient.unRegisterLocationListener(locationListener);
+        mBaiduMap.clear();
+        search.destroy();
+        /*isFirst = true;*/
+    }
 }

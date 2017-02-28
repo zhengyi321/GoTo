@@ -321,7 +321,12 @@
             android:hardwareAccelerated="false"
             />
         <activity
-            android:name=".Activity.HelpMeBuyAddSellerAddressActivity"
+            android:name=".Activity.HelpMeBuyAddShopDetailActivity"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="false"
+            />
+        <activity
+            android:name=".Activity.HelpMeBuyAddReceiverDetailActivity"
             android:screenOrientation="portrait"
             android:hardwareAccelerated="false"
             />

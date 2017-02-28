@@ -62,12 +62,21 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:text="@string/addressNameTest"
                             android:textColor="@color/colorHelpMeBuyActivityContentBuyAddressBlackAddress"
                             android:textSize="12sp"
                             android:textStyle="bold"
-                            android:visibility="invisible"
                             />
+                               <!-- <TextView
+                                    android:id="@+id/tv_helpmebuy_content_address"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:text="@string/addressNameTest"
+                                    android:textColor="@color/colorHelpMeBuyActivityContentBuyAddressBlackAddress"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"
+                                    android:visibility="invisible"
+                                    />-->
                         </RelativeLayout>
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -82,9 +91,19 @@
                                     android:textSize="12sp"
                                     android:textStyle="normal"
                                     android:textColor="@color/colorHelpMeBuyActivityContentBuyAddressGrayAddress"
+
+                                    />
+                                <!--<TextView
+                                    android:id="@+id/tv_helpmebuy_content_addressdetail"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:textSize="12sp"
+                                    android:textStyle="normal"
+                                    android:textColor="@color/colorHelpMeBuyActivityContentBuyAddressGrayAddress"
                                     android:text="@string/addressTest"
                                     android:visibility="invisible"
-                                    />
+                                    />-->
                         </RelativeLayout>
 
 
@@ -160,14 +179,35 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
+                                    android:textColor="@color/colorHelpMeBuyActivityContentBuyAddressBlackAddress"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"
+                                    android:layout_marginRight="@dimen/activity_helpmebuy_content_item_name_margin_tel_size"
+
+                                    />
+                                <!--<TextView
+                                    android:id="@+id/tv_helpmebuy_content_receivename"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:text="@string/nameTest"
                                     android:textColor="@color/colorHelpMeBuyActivityContentBuyAddressBlackAddress"
                                     android:textSize="12sp"
                                     android:textStyle="bold"
                                     android:layout_marginRight="@dimen/activity_helpmebuy_content_item_name_margin_tel_size"
                                     android:visibility="invisible"
-                                    />
+                                    />-->
                                 <TextView
+                                    android:id="@+id/tv_helpmebuy_content_receivetel"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:textColor="@color/colorHelpMeBuyActivityContentBuyAddressBlackAddress"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"
+
+                                    />
+                                <!--<TextView
                                     android:id="@+id/tv_helpmebuy_content_receivetel"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -177,7 +217,7 @@
                                     android:textSize="12sp"
                                     android:textStyle="bold"
                                     android:visibility="invisible"
-                                    />
+                                    />-->
                         </LinearLayout>
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -192,9 +232,19 @@
                                     android:textSize="12sp"
                                     android:textStyle="normal"
                                     android:textColor="@color/colorHelpMeBuyActivityContentBuyAddressGrayAddress"
+
+                                    />
+                                <!--<TextView
+                                    android:id="@+id/tv_helpmebuy_content_receiveaddressdetail"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:textSize="12sp"
+                                    android:textStyle="normal"
+                                    android:textColor="@color/colorHelpMeBuyActivityContentBuyAddressGrayAddress"
                                     android:text="@string/addressTest"
                                     android:visibility="invisible"
-                                    />
+                                    />-->
                         </RelativeLayout>
 
 

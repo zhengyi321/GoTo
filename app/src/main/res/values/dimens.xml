@@ -43,7 +43,7 @@
     <dimen name="activity_main_content_service_item_ico_height">300dp</dimen>
     <!--主页-->
     <!--帮我买-->
-    <dimen name="activity_helpmebuy_content_normalitem_height">80dp</dimen>
+    <dimen name="activity_helpmebuy_content_normalitem_height">100dp</dimen>
     <dimen name="activity_helpmebuy_content_have_edittext_item_height">140dp</dimen>
     <dimen name="activity_helpmebuy_topbar_leftmenu_width">10dp</dimen>
     <dimen name="activity_helpmebuy_topbar_leftmenu_height">15dp</dimen>
@@ -296,6 +296,10 @@
     <dimen name="activity_userreg_head_ico_height">75dp</dimen>
     <dimen name="activity_userreg_content_input_word_style_size">13sp</dimen>
     <!--注册页-->
+
+    <!--百度搜索页-->
+    <dimen name="activity_baiduaddress_search_suggest_rv_item">50dp</dimen>
+    <!--百度搜索页-->
 
     <!--仿ios对话框-->
     <!--标题文字大小-->

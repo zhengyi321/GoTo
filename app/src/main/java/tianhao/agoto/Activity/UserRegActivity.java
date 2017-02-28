@@ -266,4 +266,9 @@ public class UserRegActivity extends Activity {
         });
     }
     /*注册信息*/
+
+    protected void onDestroy(){
+        SMSSDK.unregisterAllEventHandler();
+        super.onDestroy();
+    }
 }

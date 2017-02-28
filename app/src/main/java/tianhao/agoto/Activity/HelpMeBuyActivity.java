@@ -113,6 +113,11 @@ public class HelpMeBuyActivity extends Activity{
     /*手动输入*/
     @BindView(R.id.cb_helpmebuy_content_manualinput)
     CheckBox cbHelpMeBuyContentManualinput;
+
+    private final int RESULT_BUY = 10;//购买地址
+    private double blat,rlat,blon,rlon;
+    private final int RESULT_RECE = 11;//收件人信息
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,25 +139,49 @@ public class HelpMeBuyActivity extends Activity{
     @OnClick(R.id.lly_helpmebuy_shoppinglist)
     public void llyHelpMeBuyShoppingListOnclick(){
         Intent intent = new Intent(this,ShoppingListActivity.class);
-        startActivityForResult(intent,1);
+        startActivityForResult(intent,RESULT_BUY);
     }
     /*帮我买购物清单*/
-
+ /*购买地址*/
+    @OnClick(R.id.lly_helpmebuy_sellerdetail)
+    public void llyHelpMeBuySellerDetailOnclick(){
+        Intent intent = new Intent(this,HelpMeBuyAddShopDetailActivity.class);
+        startActivityForResult(intent,RESULT_BUY);
+    }
+    /*购买地址*/
     /*收件人信息*/
     @OnClick(R.id.lly_helpmebuy_contacterdetail)
     public void llyHelpMeBuyContacterDetailOnclick(){
-        Intent intent = new Intent(this,AddressManageAddContacterActivity.class);
-        startActivity(intent);
+        Intent intent = new Intent(this,HelpMeBuyAddReceiverDetailActivity.class);
+        startActivityForResult(intent,RESULT_RECE);
     }
     /*收件人信息*/
 
-    /*购买地址*/
-    @OnClick(R.id.lly_helpmebuy_sellerdetail)
-    public void llyHelpMeBuySellerDetailOnclick(){
-        Intent intent = new Intent(this,HelpMeBuyAddSellerAddressActivity.class);
-        startActivity(intent);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (resultCode) { //resultCode为回传的标记，我在B中回传的是RESULT_OK
+            case RESULT_BUY:
+                Bundle b=data.getExtras(); //data为B中回传的Intent
+                String nameCall=b.getString("nameCall");//str即为回传的值
+                String address=b.getString("address");//str即为回传的值
+                String lat = b.getString("blat");
+                String lon = b.getString("blon");
+                if((lat != null) && (lon != null)) {
+                    blat = Double.parseDouble(lat);
+                    blon = Double.parseDouble(lon);
+                }
+                tvHelpMeBuyContentAddress.setText(nameCall);
+                tvHelpMeBuyContentAddressDetail.setText(address);
+                break;
+            case RESULT_RECE:
+
+                break;
+            default:
+                break;
+        }
     }
-    /*购买地址*/
+
+
+
 
     /*支付*/
     @OnClick(R.id.rly_helpmebuy_bottom_topay)

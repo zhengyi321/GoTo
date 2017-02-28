@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="@dimen/activity_helpmesendaddcontacter_tabbar_vp_rv_item_height"
+    android:background="@color/colorHelpMeSendAddContacterActivityTabBarBlackBg"
+    >
+    <RelativeLayout
+        android:layout_width="@dimen/zero"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        >
+        <ImageView
+            android:layout_width="@dimen/activity_helpmesendaddcontacter_tabbar_ico_width"
+            android:layout_height="@dimen/activity_helpmesendaddcontacter_tabbar_ico_height"
+            android:background="@drawable/historyrecordwhite"
+            android:layout_centerInParent="true"
+            />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="@dimen/zero"
+        android:layout_height="match_parent"
+        android:layout_weight="6"
+        android:orientation="vertical"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/zero"
+            android:layout_weight="1"
+            >
+            <TextView
+                android:id="@+id/tv_helpmesendaddcontacter_tab_vp_rv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nameTest"
+                android:textColor="@color/colorHelpMeSendAddContacterActivityTabBarWhiteBg"
+                android:layout_centerVertical="true"
+                android:textSize="13sp"
+                />
+
+            <TextView
+                android:id="@+id/tv_helpmesendaddcontacter_tab_vp_rv_tel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/telTest"
+                android:textColor="@color/colorHelpMeSendAddContacterActivityTabBarWhiteBg"
+                android:layout_centerVertical="true"
+                android:textSize="13sp"
+                android:layout_toRightOf="@id/tv_helpmesendaddcontacter_tab_vp_rv_name"
+                android:layout_marginLeft="20dp"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/zero"
+            android:layout_weight="1"
+            >
+            <TextView
+                android:id="@+id/tv_helpmesendaddcontacter_tab_vp_rv_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/addressTest"
+                android:textColor="@color/colorHelpMeSendAddContacterActivityTabBarGrayBg"
+                android:layout_centerVertical="true"
+                android:textSize="13sp"
+                />
+        </RelativeLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/the_split_line_height"
+            android:background="@color/colorHelpMeSendAddContacterActivityTabBarGrayBg"
+            />
+    </LinearLayout>
+</LinearLayout>
