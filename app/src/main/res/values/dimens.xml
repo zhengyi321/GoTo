@@ -15,8 +15,8 @@
     <dimen name="activity_main_common_title_margin_size">20dp</dimen>
     <dimen name="activity_main_content_margin_size">10dp</dimen>
     <dimen name="activity_main_content_service_item_each_other_margin_size">5dp</dimen>
-    <dimen name="activity_main_common_topbar_center_title_width">80dp</dimen>
-    <dimen name="activity_main_common_topbar_center_title_height">20dp</dimen>
+    <dimen name="activity_main_common_topbar_center_title_width">70dp</dimen>
+    <dimen name="activity_main_common_topbar_center_title_height">15dp</dimen>
     <dimen name="activity_main_common_topbar_left_ico_width">20dp</dimen>
     <dimen name="activity_main_common_topbar_left_ico_height">16dp</dimen>
     <dimen name="activity_main_common_topbar_right_ico_width">12dp</dimen>
@@ -82,7 +82,7 @@
     <!--帮我买新建商家地址-->
 
     <!--帮我送-->
-     <dimen name="activity_helpmesend_content_normalitem_height">80dp</dimen>
+     <dimen name="activity_helpmesend_content_normalitem_height">85dp</dimen>
     <dimen name="activity_helpmesend_content_have_edittext_item_height">140dp</dimen>
     <dimen name="activity_helpmesend_content_normalitem_margin_top_size">25dp</dimen>
     <dimen name="activity_helpmesend_content_normalitem_margin_normalitem_size">15dp</dimen>
@@ -102,7 +102,7 @@
     <!--帮我送新建联系人-->
     <!--设置-->
     <dimen name="activity_setting_topbar_title_width">40dp</dimen>
-    <dimen name="activity_setting_topbar_title_height">20dp</dimen>
+    <dimen name="activity_setting_topbar_title_height">15dp</dimen>
     <dimen name="activity_setting_item_height">55dp</dimen>
     <dimen name="activity_setting_topitem_margin_bottom_size">30dp</dimen>
     <dimen name="activity_setting_item_margin_left_size">20dp</dimen>
@@ -136,8 +136,8 @@
 
 
     <!--订单查询-->
-    <dimen name="activity_ordercheck_topbar_center_title_width">100dp</dimen>
-    <dimen name="activity_ordercheck_topbar_center_title_height">20dp</dimen>
+    <dimen name="activity_ordercheck_topbar_center_title_width">80dp</dimen>
+    <dimen name="activity_ordercheck_topbar_center_title_height">15dp</dimen>
     <dimen name="activity_ordercheck_content_tabbar_height">45dp</dimen>
     <!--订单 详情-->
     <dimen name="fragment_ordercheck_orderdetail_normaltext_size">13sp</dimen>
@@ -198,8 +198,8 @@
     <!--订单查询-->
 
     <!--我的钱包-->
-    <dimen name="activity_mywallet_topbar_center_title_width">80dp</dimen>
-    <dimen name="activity_mywallet_topbar_center_title_height">20dp</dimen>
+    <dimen name="activity_mywallet_topbar_center_title_width">65dp</dimen>
+    <dimen name="activity_mywallet_topbar_center_title_height">15dp</dimen>
     <dimen name="activity_mywallet_account_banlance_margin_top_size">0dp</dimen>
     <dimen name="activity_mywallet_content_account_word_size">15sp</dimen>
     <dimen name="activity_mywallet_content_money_yellow_word_size">30sp</dimen>
@@ -208,8 +208,8 @@
 
 
     <!--修改手机号码-->
-    <dimen name="activity_altertel_topbar_center_title_width">120dp</dimen>
-    <dimen name="activity_altertel_topbar_center_title_height">20dp</dimen>
+    <dimen name="activity_altertel_topbar_center_title_width">100dp</dimen>
+    <dimen name="activity_altertel_topbar_center_title_height">15dp</dimen>
     <dimen name="activity_altertel_tab_height">60dp</dimen>
     <dimen name="activity_altertel_padding_left_right">20dp</dimen>
     <dimen name="activity_altertel_tab_big_gray_point_width">5dp</dimen>
@@ -233,7 +233,7 @@
     <dimen name="activity_aboutgoto_logo_width">80dp</dimen>
     <dimen name="activity_aboutgoto_logo_height">80dp</dimen>
     <dimen name="activity_aboutgoto_logo_name_margin_top_size">20dp</dimen>
-    <dimen name="activity_aboutgoto_topbar_title_textstyle_size">20sp</dimen>
+    <dimen name="activity_aboutgoto_topbar_title_textstyle_size">16sp</dimen>
     <dimen name="activity_aboutgoto_content_margin_size">20dp</dimen>
     <dimen name="activity_aboutgoto_content_word_size">14sp</dimen>
     <dimen name="activity_aboutgoto_bottom_rights_word_size">12sp</dimen>
@@ -255,13 +255,15 @@
     <dimen name="activity_addressmanage_ico_rightarrow_height">15dp</dimen>
     <!--地址管理-->
     <!--购物清单-->
-    <dimen name="activity_shoppinglist_content_margin_left_right_size">20dp</dimen>
-    <dimen name="activity_shoppinglist_content_margin_top_bottom_size">40dp</dimen>
+    <dimen name="activity_shoppinglist_content_margin_left_right_size">10dp</dimen>
+    <dimen name="activity_shoppinglist_content_margin_top_bottom_size">30dp</dimen>
     <dimen name="activity_shoppinglist_head_ico_img_width">35dp</dimen>
     <dimen name="activity_shoppinglist_head_ico_img_height">35dp</dimen>
     <dimen name="activity_shoppinglist_splitline_item_height">15dp</dimen>
     <dimen name="activity_shoppinglist_splitline_point_black_width">7dp</dimen>
     <dimen name="activity_shoppinglist_splitline_point_black_height">14dp</dimen>
+    <dimen name="activity_shoppinglist_content_item_height">45dp</dimen>
+    <dimen name="activity_shoppinglist_content_item_margin_left_right_size">20dp</dimen>
     <!--购物清单-->
 
      <!--地址管理 新建联系人-->

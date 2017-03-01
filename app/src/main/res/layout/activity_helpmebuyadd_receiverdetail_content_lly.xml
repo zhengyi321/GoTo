@@ -37,6 +37,15 @@
             android:layout_weight="1.5"
             >
             <TextView
+                android:id="@+id/tv_helpmebuyadd_receiverdetail_content_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorActivityAddressManageAddContacterContentBlackWordBg"
+                android:textSize="15sp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                />
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/nameTest"
@@ -44,7 +53,7 @@
                 android:textSize="15sp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                />
+                />-->
 
         </RelativeLayout>
 
@@ -70,6 +79,15 @@
             android:layout_weight="2"
             >
             <TextView
+                android:id="@+id/tv_helpmebuyadd_receiverdetail_content_tel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorActivityAddressManageAddContacterContentBlackWordBg"
+                android:textSize="15sp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                />
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/telTest"
@@ -77,10 +95,11 @@
                 android:textSize="15sp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                />
+                />-->
 
         </RelativeLayout>
         <RelativeLayout
+            android:id="@+id/rly_helpmebuyadd_receiverdetail_addcontacter"
             android:layout_width="@dimen/zero"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -108,6 +127,7 @@
     <!--地址-->
 
     <LinearLayout
+        android:id="@+id/lly_helpmebuyadd_receiverdetail_searchaddress"
         android:layout_width="match_parent"
         android:layout_height="@dimen/zero"
         android:orientation="horizontal"
@@ -136,7 +156,17 @@
             android:layout_height="match_parent"
             android:layout_weight="4.5"
             >
-            <EditText
+            <TextView
+                android:id="@+id/tv_helpmebuyadd_receiverdetail_contentaddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorActivityAddressManageAddContacterContentBlackWordBg"
+                android:textSize="15sp"
+                android:background="@null"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                />
+            <!--<EditText
                 android:id="@+id/et_helpmebuyadd_receiverdetail_contentaddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -146,7 +176,7 @@
                 android:background="@null"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                />
+                />-->
 
         </RelativeLayout>
 
@@ -192,7 +222,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/zero"
-        android:layout_weight="4"
+        android:layout_weight="2.5"
         android:orientation="vertical"
         android:background="@color/colorHelpMeSendAddContacterActivityTabBarBlackBg"
         >

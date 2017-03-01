@@ -41,12 +41,17 @@ public class MyScrollView  extends ScrollView {
      */
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+        boolean isTouch = super.onTouchEvent(ev);
         if (inner != null) {
-            commOnTouchEvent(ev);
+             commOnTouchEvent(ev);
         }
 
-        return super.onTouchEvent(ev);
+        /*return super.onTouchEvent(ev);*/
+        return isTouch;
     }
+
+
+
 
     /***
      * 触摸事件
@@ -55,8 +60,10 @@ public class MyScrollView  extends ScrollView {
      */
     public void commOnTouchEvent(MotionEvent ev) {
         int action = ev.getAction();
+
         switch (action) {
             case MotionEvent.ACTION_DOWN:
+
                 break;
             case MotionEvent.ACTION_UP:
                 // 手指松开.
@@ -64,6 +71,7 @@ public class MyScrollView  extends ScrollView {
                     animation();
                     isCount = false;
                 }
+
                 break;
             /***
              * 排除出第一次移动计算，因为第一次无法得知y坐标， 在MotionEvent.ACTION_DOWN中获取不到，
@@ -94,11 +102,14 @@ public class MyScrollView  extends ScrollView {
                             inner.getRight(), inner.getBottom() - deltaY / 2);
                 }
                 isCount = true;
+
                 break;
 
             default:
+
                 break;
         }
+
     }
 
     /***

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorHelpMeSendAddContacterActivityTabBarBlackBg">
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_helpmesendaddcontacter_vp_item"
+        android:id="@+id/rv_helpmesendadd_contacter_vp_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"

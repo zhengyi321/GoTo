@@ -1,16 +1,22 @@
 package tianhao.agoto.Activity;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.ContactsContract;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -101,20 +107,40 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
 
 
     /*地名转换经纬度*/
-    @BindView(R.id.et_helpmebuyadd_receiverdetail_contentaddress)
-    EditText etHelpMeBuyAddReceiverDetailContentAddress;
+    @BindView(R.id.tv_helpmebuyadd_receiverdetail_contentaddress)
+    TextView tvHelpMeBuyAddReceiverDetailContentAddress;
     private GeoCoder search=null;
     private String city;
     /*地名转换经纬度*/
     /*百度地图定位 end2*/
+    @BindView(R.id.lly_helpmebuyadd_receiverdetail_searchaddress)
+    LinearLayout llyHelpMeBuyAddReceiverDetailSearchAddress;
+    /*手机通讯录*/
+    @BindView(R.id.rly_helpmebuyadd_receiverdetail_addcontacter)
+    RelativeLayout rlyHelpMeBuyAddReceiverDetailAddContacter;
+    @BindView(R.id.tv_helpmebuyadd_receiverdetail_content_name)
+    TextView tvHelpMeBuyAddReceiverDetailContentName;
+    @BindView(R.id.tv_helpmebuyadd_receiverdetail_content_tel)
+    TextView tvHelpMeBuyAddReceiverDetailContentTel;
 
-
+    /*手机通讯录*/
+    /*返回*/
+    @BindView(R.id.rly_helpmebuyadd_receiverdetail_topbar_leftmenu)
+    RelativeLayout rlyHelpMeBuyAddReceiverDetailTopBarLeftMenu;
+    /*返回*/
+    /*确认*/
+    @BindView(R.id.rly_helpmebuyadd_receiverdetail_topbar_rightmenu)
+    RelativeLayout rlyHelpMeBuyAddReceiverDetailTopBarRightMenu;
+    /*确认*/
+    private final int RESULT_ADDRESS = 11;
+    private final int RESULT_CONTACTER = 12;
+    private Double rlat,rlon;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initBaiDuSDK();
+       /* initBaiDuSDK();*/
         setContentView(R.layout.activity_helpmebuyadd_receiverdetail_lly);
-  /*      init();*/
+        init();
     }
 
 
@@ -131,6 +157,107 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
         InitTabBg(true);
         InitImageView();
         InitViewPager();
+    }
+    /*返回上级菜单*/
+    @OnClick(R.id.rly_helpmebuyadd_receiverdetail_topbar_leftmenu)
+    public void rlyHelpMeBuyAddReceiverDetailTopBarLeftMenuOnclick(){
+        finish();
+    }
+    /*返回上级菜单*/
+    /*信息确认返回*/
+    @OnClick(R.id.rly_helpmebuyadd_receiverdetail_topbar_rightmenu)
+    public void rlyHelpMeBuyAddReceiverDetailTopBarRightMenuOnclick(){
+        Bundle bundle = new Bundle();
+        bundle.putString("nameCall",tvHelpMeBuyAddReceiverDetailContentName.getText().toString());
+        bundle.putString("tel",tvHelpMeBuyAddReceiverDetailContentTel.getText().toString());
+        bundle.putString("address",tvHelpMeBuyAddReceiverDetailContentAddress.getText().toString());
+        bundle.putString("rlat", "" + rlat);
+        bundle.putString("rlon", "" + rlon);
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+        setResult(RESULT_ADDRESS, intent);
+        finish();
+    }
+    /*信息确认返回*/
+    /*通讯录  http://www.2cto.com/kf/201203/122494.html
+    *http://5200415.blog.51cto.com/3851969/969821
+    * */
+    @OnClick(R.id.rly_helpmebuyadd_receiverdetail_addcontacter)
+    public void rlyHelpMeBuyAddReceiverDetailAddContacterOnclick(){
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType(ContactsContract.Contacts.CONTENT_TYPE);//vnd.android.cursor.dir/contact
+        startActivityForResult(intent, RESULT_CONTACTER);
+ /*       getPhoneContracts(this);*/
+    }
+     public void getPhoneContracts(Intent data){
+         if(data != null) {
+             Uri contactData = data.getData();
+             Cursor c = managedQuery(contactData, null, null, null, null);
+             if (c.moveToFirst()) {
+                 String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                 String hasPhone = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                 String phoneNumber = null;
+                 if (hasPhone.equalsIgnoreCase("1")) {
+                     hasPhone = "true";
+                 } else {
+                     hasPhone = "false";
+                 }
+                 tvHelpMeBuyAddReceiverDetailContentName.setText(name);
+                 if (Boolean.parseBoolean(hasPhone)) {
+                     int contactId = c.getInt(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
+                     Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
+                     while (phones.moveToNext()) {
+                         phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                         if (phoneNumber != null) {
+                             tvHelpMeBuyAddReceiverDetailContentTel.setText(phoneNumber);
+                         }
+                     }
+                     phones.close();
+                 }
+             }
+         }
+
+     }
+    /*通讯录
+    * http://www.2cto.com/kf/201203/122494.html
+    * http://5200415.blog.51cto.com/3851969/969821
+    * */
+    @OnClick(R.id.lly_helpmebuyadd_receiverdetail_searchaddress)
+    public void llyHelpMeBuyAddReceiverDetailSearchAddressOnclick(){
+        Intent intent = new Intent(this,BaiduAddressSearchSuggestActivity.class);
+        startActivityForResult(intent,RESULT_ADDRESS);
+    }
+
+
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+        /*Toast.makeText(this,"resultcode"+resultCode,Toast.LENGTH_LONG).show();*/
+        switch (reqCode) {
+            case (RESULT_CONTACTER) :
+                if (resultCode == Activity.RESULT_OK) {
+                    getPhoneContracts(data);
+                }
+                break;
+            case RESULT_ADDRESS:
+                getAddressData(data);
+                break;
+            default:
+                break;
+        }
+    }
+    private void getAddressData(Intent data){
+        if(data != null) {
+            Bundle b = data.getExtras(); //data为B中回传的Intent
+            String address = b.getString("address");//str即为回传的值
+            String lat = b.getString("lat");
+            String lon = b.getString("lon");
+            if ((lat != null) && (lon != null)) {
+                rlat = Double.parseDouble(lat);
+                rlon = Double.parseDouble(lon);
+                location(rlat, rlon);
+                tvHelpMeBuyAddReceiverDetailContentAddress.setText(address);
+            }
+        }
     }
 
     /**
@@ -183,7 +310,6 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
         vpHelpMeBuyAddReceiverDetailContent.setAdapter(new MyPagerAdapter(viewList));
         vpHelpMeBuyAddReceiverDetailContent.setCurrentItem(0);
         vpHelpMeBuyAddReceiverDetailContent.setOnPageChangeListener(new MyOnPageChangeListener());
-        RecyclerView rv = null;
         List<String> dataList = new ArrayList<String>();
    /*     dataList.add("");
         dataList.add("");
@@ -416,16 +542,20 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
     private void initLocation(){
         LocationClientOption option=new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-        option.setCoorType("bd09ll");
-        int span=1000;
-        option.setScanSpan(span);
-        option.setIsNeedAddress(true);
-        option.setOpenGps(true);
-        option.setLocationNotify(true);
-        option.setIsNeedLocationDescribe(true);
-        option.setIsNeedLocationPoiList(true);
+
+        /*int span=1000;
+        option.setScanSpan(span);*/
+      /*  option.setOpenGps(true);*/
+/*        option.setLocationNotify(true);
+        option.setIsNeedLocationDescribe(true);*/
+       /* option.setIsNeedLocationPoiList(true);
         option.setIgnoreKillProcess(false);
-        option.setEnableSimulateGps(false);
+        option.setEnableSimulateGps(false);*/
+        option.setCoorType("bd09ll");// 设置定位结果类型
+        option.setScanSpan(5000);// 设置发起定位请求的间隔时间,ms
+        option.setIsNeedAddress(true);// 返回的定位结果包含地址信息
+        option.setNeedDeviceDirect(true);// 设置返回结果包含手机的方向
+
         locationClient.setLocOption(option);
     }
 
@@ -579,7 +709,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
         LatLng latLng = result.getLocation();
         addressLocation = result.getAddress();
         /*if(isFirst) {*/
-        etHelpMeBuyAddReceiverDetailContentAddress.setText(addressLocation+"  "+result.getSematicDescription());
+        tvHelpMeBuyAddReceiverDetailContentAddress.setText(addressLocation+"  "+result.getSematicDescription());
         location(latLng.latitude,latLng.longitude);
 
     }
@@ -605,22 +735,27 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
 
     /*百度地图 end*/
     protected void onResume(){
+   /*     init();*/
         super.onResume();
-        init();
+
     }
     protected void onPause(){
         super.onPause();
-        locationClient.unRegisterLocationListener(locationListener);
+      /*  locationClient.unRegisterLocationListener(locationListener);
         mBaiduMap.clear();
-        search.destroy();
+        search.destroy();*/
 
     }
 
     protected void onDestroy(){
-        locationClient.unRegisterLocationListener(locationListener);
         mBaiduMap.clear();
         search.destroy();
         isFirst = true;
+        mMapView.onDestroy();
+        locationClient.unRegisterLocationListener(locationListener);
+        if(locationClient!=null){
+            locationClient.stop();
+        }
         super.onDestroy();
     }
 }

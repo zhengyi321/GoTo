@@ -70,7 +70,7 @@ public class AddressManageAddSellerAddressActivity extends Activity  implements 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initBaiDuSDK();
+        /*initBaiDuSDK();*/
         setContentView(R.layout.activity_addressmanageaddselleraddress_lly);
         init();
     }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import butterknife.ButterKnife;
 import butterknife.BindView;
@@ -23,9 +24,29 @@ public class HelpMeSendActivity extends Activity {
     RelativeLayout rlyHelpMeSendTopBarLeftMenu;
 
 
-    @BindView(R.id.lly_helpmesend_receiverdata)
+    @BindView(R.id.lly_helpmesend_content_receiverdata)
     LinearLayout llyHelpMeSendReceiverData;
+    @BindView(R.id.lly_helpmesend_content_senderdata)
+    LinearLayout llyHelpMeSendContentSenderData;
 
+    @BindView(R.id.tv_helpmesend_content_receiveraddr)
+    TextView tvHelpMeSendContentReceiverAddr;
+    @BindView(R.id.tv_helpmesend_content_receivername)
+    TextView tvHelpMeSendContentReceiverName;
+    @BindView(R.id.tv_helpmesend_content_receivertel)
+    TextView tvHelpMeSendContentReceiverTel;
+
+    @BindView(R.id.tv_helpmesend_content_senderaddr)
+    TextView tvHelpMeSendContentSenderAddr;
+    @BindView(R.id.tv_helpmesend_content_sendername)
+    TextView tvHelpMeSendContentSenderName;
+    @BindView(R.id.tv_helpmesend_content_sendertel)
+    TextView tvHelpMeSendContentSenderTel;
+
+    private final int RESULT_SENDER = 10;
+    private final int RESULT_RECEIVER = 11;
+
+    private Double blat,rlat,blon,rlon;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,12 +63,76 @@ public class HelpMeSendActivity extends Activity {
         finish();
     }
     /*后退到主界面*/
-    /*添加联系人*/
-
-    @OnClick(R.id.lly_helpmesend_receiverdata)
+    /*收件人信息*/
+    @OnClick(R.id.lly_helpmesend_content_receiverdata)
     public void llyHelpMeSendReceiverDataOnclick(){
+        Bundle bundle = new Bundle();
+        bundle.putString("receiver",""+RESULT_RECEIVER);
         Intent intent = new Intent(this,HelpMeSendAddContacterActivity.class);
-        startActivity(intent);
+        intent.putExtras(bundle);
+        startActivityForResult(intent,RESULT_RECEIVER);
     }
-    /*添加联系人*/
+    /*收件人信息*/
+
+    /*发件人*/
+    @OnClick(R.id.lly_helpmesend_content_senderdata)
+    public void llyHelpMeSendSenderDataOnclick(){
+        Bundle bundle = new Bundle();
+        bundle.putString("sender",""+RESULT_SENDER);
+        Intent intent = new Intent(this,HelpMeSendAddContacterActivity.class);
+        intent.putExtras(bundle);
+        startActivityForResult(intent,RESULT_SENDER);
+        /*startActivity(intent);*/
+    }
+    /*发件人*/
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (resultCode) { //resultCode为回传的标记，我在B中回传的是RESULT_OK
+            case RESULT_SENDER:
+                getDataFromAddActivity(data,true);
+                break;
+            case RESULT_RECEIVER:
+                getDataFromAddActivity(data,false);
+
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void getDataFromAddActivity(Intent data,boolean isSender){
+        if(data != null){
+            Bundle b=data.getExtras(); //data为B中回传的Intent
+            String nameCall=b.getString("nameCall");//str即为回传的值
+            String address=b.getString("address");//str即为回传的值
+            String telphone = b.getString("tel");
+            String lat = b.getString("blat");
+            String lon = b.getString("blon");
+
+            if(isSender){
+                if((lat != null) && (lon != null)) {
+                    blat = Double.parseDouble(lat);
+                    blon = Double.parseDouble(lon);
+                }
+                tvHelpMeSendContentSenderName.setText(nameCall);
+                tvHelpMeSendContentSenderAddr.setText(address);
+                tvHelpMeSendContentSenderTel.setText(telphone);
+            }else{
+                tvHelpMeSendContentReceiverName.setText(nameCall);
+                tvHelpMeSendContentReceiverAddr.setText(address);
+                tvHelpMeSendContentReceiverTel.setText(telphone);
+                if((lat != null) && (lon != null)) {
+                    rlat = Double.parseDouble(lat);
+                    rlon = Double.parseDouble(lon);
+                }
+            }
+        }
+    }
+
+    protected void onStop(){
+        super.onStop();
+
+    }
 }

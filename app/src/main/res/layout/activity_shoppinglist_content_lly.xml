@@ -14,43 +14,38 @@
     <RelativeLayout
         android:id="@+id/rly_shoppinglist_content_paperone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginBottom="@dimen/activity_shoppinglist_content_margin_top_bottom_size"
-        android:layout_marginTop="38dp"
-        android:background="@drawable/activity_shoppinglist_white_bg_shadow">
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/flurwhitefirst"
+
+        >
 
 
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rly_shoppinglist_content_papertwo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="@dimen/activity_shoppinglist_content_margin_top_bottom_size"
-        android:layout_marginTop="48dp"
-        android:background="@drawable/activity_shoppinglist_white_bg_shadow"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="22dp"
+        android:background="@drawable/flurwhitesecond"
+
         >
 
     </RelativeLayout>
-    <tianhao.agoto.Common.Widget.SwipeCardView.SwipeFlingAdapterView
-        android:id="@+id/sfav_shoppinglist_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal|bottom"
 
-        />
      <!--提醒客户仔细订阅外卖-->
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="25dp"
+            android:layout_marginBottom="10dp"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -63,6 +58,14 @@
 
         </RelativeLayout>
         <!--提醒客户仔细订阅外卖-->
+        <tianhao.agoto.Common.Widget.SwipeCardView.SwipeFlingAdapterView
+            android:id="@+id/sfav_shoppinglist_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal|bottom"
+
+            />
+
     </FrameLayout>
 
 

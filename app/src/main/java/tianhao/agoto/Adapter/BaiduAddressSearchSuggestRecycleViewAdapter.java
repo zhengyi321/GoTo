@@ -44,12 +44,12 @@ public class BaiduAddressSearchSuggestRecycleViewAdapter extends RecyclerView.Ad
     /*实时更新数据*/
 
     @Override
-    public BaiduAddressSearchSuggestRecycleViewAdapter.ItemContentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new BaiduAddressSearchSuggestRecycleViewAdapter.ItemContentViewHolder(inflater.inflate(R.layout.activity_baiduaddress_search_suggest_rv_item_lly, parent, false));
+    public ItemContentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new ItemContentViewHolder(inflater.inflate(R.layout.activity_baiduaddress_search_suggest_rv_item_lly, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(BaiduAddressSearchSuggestRecycleViewAdapter.ItemContentViewHolder holder, int position) {
+    public void onBindViewHolder(ItemContentViewHolder holder, int position) {
         if((poiInfoList.get(position) != null)&& (poiInfoList.get(position).location != null)) {
             /*holder.tvBaiduAddressSearchSuggestRVItemContentName.setText(suggestionInfoList.get(position).city + suggestionInfoList.get(position).district + suggestionInfoList.get(position).key);*/
             holder.tvBaiduAddressSearchSuggestRVItemContentName.setText(poiInfoList.get(position).address );

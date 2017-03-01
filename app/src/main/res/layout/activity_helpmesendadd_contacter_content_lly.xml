@@ -37,6 +37,16 @@
             android:layout_weight="1.5"
             >
             <TextView
+                android:id="@+id/tv_helpmesendadd_contacter_contentname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorActivityAddressManageAddContacterContentBlackWordBg"
+                android:textSize="15sp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                />
+            <!--<TextView
+                android:id="@+id/tv_helpmesendadd_contacter_contenttel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/nameTest"
@@ -44,7 +54,7 @@
                 android:textSize="15sp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                />
+                />-->
 
         </RelativeLayout>
 
@@ -70,6 +80,15 @@
             android:layout_weight="2"
             >
             <TextView
+                android:id="@+id/tv_helpmesendadd_contacter_contenttel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorActivityAddressManageAddContacterContentBlackWordBg"
+                android:textSize="15sp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                />
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/telTest"
@@ -78,9 +97,10 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 />
-
+-->
         </RelativeLayout>
         <RelativeLayout
+            android:id="@+id/rly_helpmesendadd_contacter_searchcontacter"
             android:layout_width="@dimen/zero"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -108,6 +128,7 @@
     <!--地址-->
 
     <LinearLayout
+        android:id="@+id/lly_helpmesendadd_contacter_searchaddress"
         android:layout_width="match_parent"
         android:layout_height="@dimen/zero"
         android:orientation="horizontal"
@@ -136,8 +157,18 @@
             android:layout_height="match_parent"
             android:layout_weight="4.5"
             >
-            <EditText
-                android:id="@+id/et_helpmesendaddcontacter_content"
+            <TextView
+                android:id="@+id/tv_helpmesendadd_contacter_contentaddr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorActivityAddressManageAddContacterContentBlackWordBg"
+                android:textSize="15sp"
+                android:background="@null"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                />
+            <!--<EditText
+                android:id="@+id/et_helpmesendadd_contacter_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/addressTest"
@@ -146,12 +177,12 @@
                 android:background="@null"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                />
+                />-->
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/rly_helpmesendaddcontacter_addresssearch"
+            android:id="@+id/rly_helpmesendadd_contacter_addresssearch"
             android:layout_width="@dimen/zero"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -175,7 +206,7 @@
         android:layout_weight="7"
         >
         <com.baidu.mapapi.map.MapView
-            android:id="@+id/mv_helpmesendaddcontacter_content"
+            android:id="@+id/mv_helpmesendadd_contacter_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
@@ -192,7 +223,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/zero"
-        android:layout_weight="4"
+        android:layout_weight="2.5"
         android:orientation="vertical"
         android:background="@color/colorHelpMeSendAddContacterActivityTabBarBlackBg"
         >
@@ -206,14 +237,14 @@
             <!--历史记录-->
 
             <RelativeLayout
-                android:id="@+id/rly_helpmesendaddcontacter_tabbar_history"
+                android:id="@+id/rly_helpmesendadd_contacter_tabbar_history"
                 android:layout_width="@dimen/zero"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 >
 
                 <TextView
-                    android:id="@+id/tv_helpmesendaddcontacter_tabbar_history"
+                    android:id="@+id/tv_helpmesendadd_contacter_tabbar_history"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
@@ -221,25 +252,25 @@
                     android:textSize="14sp"
                     android:textColor="@color/colorActivityMyOrderTabSwitchSelectedWordGreenBg" />
                 <ImageView
-                    android:id="@+id/iv_helpmesendaddcontacter_tabbar_history"
+                    android:id="@+id/iv_helpmesendadd_contacter_tabbar_history"
                     android:layout_width="@dimen/activity_helpmesendaddcontacter_tabbar_ico_width"
                     android:layout_height="@dimen/activity_helpmesendaddcontacter_tabbar_ico_height"
                     android:src="@drawable/historyrecordselect"
                     android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@id/tv_helpmesendaddcontacter_tabbar_history"
+                    android:layout_toLeftOf="@id/tv_helpmesendadd_contacter_tabbar_history"
                     android:layout_marginRight="@dimen/activity_helpmesendaddcontacter_tabbar_ico_margin_left_right_size"
                     />
             </RelativeLayout>
             <!--历史记录-->
             <!--收藏地址-->
             <RelativeLayout
-                android:id="@+id/rly_helpmesendaddcontacter_tabbar_collectaddress"
+                android:id="@+id/rly_helpmesendadd_contacter_tabbar_collectaddress"
                 android:layout_width="@dimen/zero"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 >
                 <TextView
-                    android:id="@+id/tv_helpmesendaddcontacter_tabbar_collectaddress"
+                    android:id="@+id/tv_helpmesendadd_contacter_tabbar_collectaddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
@@ -247,19 +278,19 @@
                     android:text="@string/collectAddress"
                     android:textColor="@color/colorActivityMyOrderTabSwitchUnSelectedWordGrayBg" />
                 <ImageView
-                    android:id="@+id/iv_helpmesendaddcontacter_tabbar_collectaddress"
+                    android:id="@+id/iv_helpmesendadd_contacter_tabbar_collectaddress"
                     android:layout_width="@dimen/activity_helpmesendaddcontacter_tabbar_ico_collect_width"
                     android:layout_height="@dimen/activity_helpmesendaddcontacter_tabbar_ico_collect_height"
                     android:src="@drawable/collectaddressnormal"
                     android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@id/tv_helpmesendaddcontacter_tabbar_collectaddress"
+                    android:layout_toLeftOf="@id/tv_helpmesendadd_contacter_tabbar_collectaddress"
                     android:layout_marginRight="@dimen/activity_helpmesendaddcontacter_tabbar_ico_margin_left_right_size"
                     />
             </RelativeLayout>
             <!--收藏地址-->
         </LinearLayout>
         <ImageView
-            android:id="@+id/iv_helpmesendaddcontacter_tab_greenbottom"
+            android:id="@+id/iv_helpmesendadd_contacter_tab_greenbottom"
             android:layout_width="@dimen/activity_myorder_tabbar_bottom_green_width"
             android:layout_height="@dimen/activity_myorder_tabbar_bottom_green_height"
             android:scaleType="matrix"
@@ -273,7 +304,7 @@
             />
 
         <android.support.v4.view.ViewPager
-            android:id="@+id/vp_helpmesendaddcontacter_content"
+            android:id="@+id/vp_helpmesendadd_contacter_content"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_gravity="center"

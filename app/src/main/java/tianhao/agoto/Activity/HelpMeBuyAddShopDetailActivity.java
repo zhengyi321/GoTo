@@ -110,11 +110,12 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
     private double blat,blon;
     @BindView(R.id.rly_helpmebuyaddselleraddress_addresssearch)
     RelativeLayout rlyHelpMeBuyAddSellerAddressAddressSearch;
-
+    @BindView(R.id.lly_helpmebuyadd_shopdetail_searchaddress)
+    LinearLayout llyHelpMeBuyAddShopDetailSearchAddress;
 
     /*地名转换经纬度*/
-    @BindView(R.id.et_helpmebuyaddselleraddress_content_address)
-    EditText etHelpMeBuyAddSellerAddressContentAddress;
+    @BindView(R.id.tv_helpmebuyaddselleraddress_content_address)
+    TextView tvHelpMeBuyAddSellerAddressContentAddress;
     private GeoCoder search=null;
     private String city;
     /*地名转换经纬度*/
@@ -123,20 +124,22 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initBaiDuSDK();
+        /*initBaiDuSDK();*/
         setContentView(R.layout.activity_helpmebuyadd_shopdetail_lly);
-        /*init();*/
+        init();
     }
-
+    /*取消返回*/
     @OnClick(R.id.rly_helpmebuy_addselleraddress_topbar_leftmenu)
     public void rlyHelpMeBuyAddSellerAddressTopBarLeftMenuOnclick(){
         this.finish();
     }
+    /*取消返回*/
+    /*信息确认返回*/
     @OnClick(R.id.rly_helpmebuy_addselleraddress_topbar_rightmenu)
     public void rlyHelpMeBuyAddSellerAddressTopBarRightMenuOnclick(){
         Bundle bundle = new Bundle();
         bundle.putString("nameCall",etHelpMeBuyAddSellerAddressContentNameCall.getText().toString());
-        bundle.putString("address",etHelpMeBuyAddSellerAddressContentAddress.getText().toString());
+        bundle.putString("address",tvHelpMeBuyAddSellerAddressContentAddress.getText().toString());
         bundle.putString("blat", "" + blat);
         bundle.putString("blon", "" + blon);
         Intent intent = new Intent();
@@ -144,6 +147,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
         setResult(RESULT_OK, intent);
         finish();
     }
+    /*信息确认返回*/
     private void init(){
         ButterKnife.bind(this);
         initSwitchContent();
@@ -450,17 +454,21 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
     private void initLocation(){
         LocationClientOption option=new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-        option.setCoorType("bd09ll");
-        int span=1000;
-        option.setScanSpan(span);
-        option.setIsNeedAddress(true);
-        option.setNeedDeviceDirect(true);
-       /* option.setOpenGps(true);
+       /* int span=1000;
+        option.setScanSpan(span);*/
+      /*  option.setIsNeedAddress(true);
+        option.setNeedDeviceDirect(true);*/
+       /* option.setOpenGps(true);*/
         option.setLocationNotify(true);
         option.setIsNeedLocationDescribe(true);
-        option.setIsNeedLocationPoiList(true);
+        /*option.setIsNeedLocationPoiList(true);
         option.setIgnoreKillProcess(false);
         option.setEnableSimulateGps(false);*/
+
+        option.setCoorType("bd09ll");// 设置定位结果类型
+        option.setScanSpan(5000);// 设置发起定位请求的间隔时间,ms
+        option.setIsNeedAddress(true);// 返回的定位结果包含地址信息
+        option.setNeedDeviceDirect(true);// 设置返回结果包含手机的方向
         locationClient.setLocOption(option);
     }
 
@@ -609,7 +617,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
         LatLng latLng = result.getLocation();
         addressLocation = result.getAddress();
         /*if(isFirst) {*/
-        etHelpMeBuyAddSellerAddressContentAddress.setText(addressLocation+"  "+result.getSematicDescription());
+        tvHelpMeBuyAddSellerAddressContentAddress.setText(addressLocation+"  "+result.getSematicDescription());
         location(latLng.latitude,latLng.longitude);
         /*getLaLoFromCity();*/
        /* }else{
@@ -640,7 +648,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
     }
     /*获取手指在地图上的经纬度*/
 
-    @OnClick(R.id.rly_helpmebuyaddselleraddress_addresssearch)
+    @OnClick(R.id.lly_helpmebuyadd_shopdetail_searchaddress)
     public void rlyHelpMeBuyAddSellerAddressAddressSearchOnclick(){
         Intent intent = new Intent(this,BaiduAddressSearchSuggestActivity.class);
         startActivityForResult(intent,RESULT_OK);
@@ -657,7 +665,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
                      blat = Double.parseDouble(lat);
                      blon = Double.parseDouble(lon);
                     location(blat, blon);
-                    etHelpMeBuyAddSellerAddressContentAddress.setText(address);
+                    tvHelpMeBuyAddSellerAddressContentAddress.setText(address);
                 }
 
 
@@ -669,7 +677,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
 
     private void getLaLoFromCity(){
         /*getCity();*/
-        addressLocation = etHelpMeBuyAddSellerAddressContentAddress.getText().toString();
+        addressLocation = tvHelpMeBuyAddSellerAddressContentAddress.getText().toString();
         if(addressLocation!=null&&!addressLocation.equals("")){
             int indexProvince=addressLocation.indexOf("省");
             int indexCity=addressLocation.indexOf("市");
@@ -694,7 +702,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
 
     /**得到当前所在城市**/
     private void getCity(){
-        addressLocation = etHelpMeBuyAddSellerAddressContentAddress.getText().toString();
+        addressLocation = tvHelpMeBuyAddSellerAddressContentAddress.getText().toString();
         if(addressLocation!=null&&!addressLocation.equals("")){
             int indexProvince=addressLocation.indexOf("省");
             int indexCity=addressLocation.indexOf("市");
@@ -717,22 +725,27 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
     /*根据经纬度搜索地址*/
 
     protected void onDestroy(){
-        locationClient.unRegisterLocationListener(locationListener);
         mBaiduMap.clear();
         search.destroy();
         isFirst = true;
+        mMapView.onDestroy();
+        locationClient.unRegisterLocationListener(locationListener);
+        if(locationClient!=null){
+            locationClient.stop();
+        }
         super.onDestroy();
     }
 
     protected void onResume(){
+        /*init();*/
         super.onResume();
-        init();
+
     }
     protected void onPause(){
         super.onPause();
-        locationClient.unRegisterLocationListener(locationListener);
+/*        locationClient.unRegisterLocationListener(locationListener);
         mBaiduMap.clear();
-        search.destroy();
+        search.destroy();*/
         /*isFirst = true;*/
     }
 }

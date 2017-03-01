@@ -163,8 +163,8 @@ public class HelpMeBuyActivity extends Activity{
                 Bundle b=data.getExtras(); //data为B中回传的Intent
                 String nameCall=b.getString("nameCall");//str即为回传的值
                 String address=b.getString("address");//str即为回传的值
-                String lat = b.getString("blat");
-                String lon = b.getString("blon");
+                String lat = b.getString("lat");
+                String lon = b.getString("lon");
                 if((lat != null) && (lon != null)) {
                     blat = Double.parseDouble(lat);
                     blon = Double.parseDouble(lon);
@@ -173,7 +173,19 @@ public class HelpMeBuyActivity extends Activity{
                 tvHelpMeBuyContentAddressDetail.setText(address);
                 break;
             case RESULT_RECE:
-
+                Bundle r=data.getExtras(); //data为B中回传的Intent
+                String name=r.getString("nameCall");//str即为回传的值
+                String addr=r.getString("address");//str即为回传的值
+                String tel =r.getString("tel");
+                String latt = r.getString("lat");
+                String lonn = r.getString("lon");
+                if((latt != null) && (lonn != null)) {
+                    rlat = Double.parseDouble(latt);
+                    rlon = Double.parseDouble(lonn);
+                }
+                tvHelpMeBuyContentReceiveName.setText(name);
+                tvHelpMeBuyContentReceiveTel.setText(tel);
+                tvHelpMeBuyContentReceiveAddressDetail.setText(addr);
                 break;
             default:
                 break;
@@ -301,6 +313,11 @@ public class HelpMeBuyActivity extends Activity{
     /*手动输入*/
     @OnClick(R.id.cb_helpmebuy_content_manualinput)
     public void cbHelpMeBuyContentManualinputOnclick(){
+
+    }
+
+    protected void onPause(){
+        super.onPause();
 
     }
 }

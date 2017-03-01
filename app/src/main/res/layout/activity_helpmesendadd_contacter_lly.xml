@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-        <include layout="@layout/activity_helpmesendaddcontacter_topbar_lly"/>
+        <include layout="@layout/activity_helpmesendadd_contacter_topbar_lly"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/zero"
             android:layout_weight="1"
             >
-            <include layout="@layout/activity_helpmesendaddcontacter_content_lly"/>
+            <include layout="@layout/activity_helpmesendadd_contacter_content_lly"/>
 
         </LinearLayout>
 </LinearLayout>

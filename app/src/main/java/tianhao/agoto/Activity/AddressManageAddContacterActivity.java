@@ -120,7 +120,7 @@ public class AddressManageAddContacterActivity extends Activity  implements Baid
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initBaiDuSDK();
+      /*  initBaiDuSDK();*/
         setContentView(R.layout.activity_addressmanageaddcontacter_lly);
         init();
     }
@@ -431,9 +431,12 @@ public class AddressManageAddContacterActivity extends Activity  implements Baid
     protected void onDestroy(){
         super.onDestroy();
         mMapView.onDestroy();
+        locationClient.unRegisterLocationListener(locationListener);
         if(locationClient!=null){
             locationClient.stop();
         }
+
+
     }
 
 

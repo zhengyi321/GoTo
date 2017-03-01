@@ -190,4 +190,11 @@
     <string name="auth_complete">授权成功，正在跳转登录操作…</string>
 
     <!--友盟第三方登录 qq 微信-->
+    
+    <!--购物单-->
+    <string name="goodsName">商品名称</string>
+    <string name="num">数量</string>
+    <!--<string name="goodsTypes">商品种类</string>-->
+   <!-- <string name="price">价格</string>-->
+    <!--购物单-->
 </resources>

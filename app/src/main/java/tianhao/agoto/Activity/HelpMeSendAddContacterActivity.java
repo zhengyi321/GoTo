@@ -2,10 +2,14 @@ package tianhao.agoto.Activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.database.DataSetObserver;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.ContactsContract;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,9 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.Adapter;
-import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -51,8 +52,7 @@ import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.Inflater;
-import com.baidu.mapapi.map.BaiduMap;
+
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 
@@ -70,29 +70,31 @@ import tianhao.agoto.Utils.SystemUtils;
 public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap.OnMapStatusChangeListener,OnGetGeoCoderResultListener {
 
     /*viewpage recycleview 历史记录 收藏地址 功能 begin*/
-    @BindView(R.id.tv_helpmesendaddcontacter_tabbar_history)
+    @BindView(R.id.tv_helpmesendadd_contacter_tabbar_history)
     TextView tvHelpMeSendAddContacterTabBarHistory;
-    @BindView(R.id.iv_helpmesendaddcontacter_tabbar_history)
+    @BindView(R.id.iv_helpmesendadd_contacter_tabbar_history)
     ImageView ivHelpMeSendAddContacterTabBarHistory;
-    @BindView(R.id.tv_helpmesendaddcontacter_tabbar_collectaddress)
-    TextView tvHelpMeSendAddContacterTabBarCollectAddress;
-    @BindView(R.id.iv_helpmesendaddcontacter_tabbar_collectaddress)
-    ImageView ivHelpMeSendAddContacterTabBarCollectAddress;
-    @BindView(R.id.iv_helpmesendaddcontacter_tab_greenbottom)
-    ImageView ivHelpMeSendAddContacterTabGreenBottom;
-    @BindView(R.id.vp_helpmesendaddcontacter_content)
-    ViewPager vpHelpMeSendAddContacterContent;
-    @BindView(R.id.rly_helpmesendaddcontacter_tabbar_history)
+    @BindView(R.id.rly_helpmesendadd_contacter_tabbar_history)
     RelativeLayout rlyHelpMeSendAddContacterTabBarHistory;
-    @BindView(R.id.rly_helpmesendaddcontacter_tabbar_collectaddress)
+    @BindView(R.id.tv_helpmesendadd_contacter_tabbar_collectaddress)
+    TextView tvHelpMeSendAddContacterTabBarCollectAddress;
+    @BindView(R.id.iv_helpmesendadd_contacter_tabbar_collectaddress)
+    ImageView ivHelpMeSendAddContacterTabBarCollectAddress;
+    @BindView(R.id.rly_helpmesendadd_contacter_tabbar_collectaddress)
     RelativeLayout rlyHelpMeSendAddContacterTabBarCollectAddress;
+    @BindView(R.id.iv_helpmesendadd_contacter_tab_greenbottom)
+    ImageView ivHelpMeSendAddContacterTabGreenBottom;
+    @BindView(R.id.vp_helpmesendadd_contacter_content)
+    ViewPager vpHelpMeSendAddContacterContent;
+
+
     private int offset = 0;// 动画图片偏移量
     private int currIndex = 0;// 当前页卡编号
     private List<View> viewList; // Tab页面列表
     /*viewpage recycleview 历史记录 收藏地址 功能*/
 
     /*百度地图定位 begin2*/
-    @BindView(R.id.mv_helpmesendaddcontacter_content)
+    @BindView(R.id.mv_helpmesendadd_contacter_content)
     MapView mMapView;
     private BaiduMap mBaiduMap;
     private LocationClient locationClient=null;
@@ -102,37 +104,62 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
     private String addressLocation = "";
     private Boolean isFirst = true;
 
-    @BindView(R.id.rly_helpmesendaddcontacter_addresssearch)
+    @BindView(R.id.rly_helpmesendadd_contacter_addresssearch)
     RelativeLayout rlyHelpMeSendAddContacterAddressSearch;
+    private double lat,lon;
 
+    @BindView(R.id.tv_helpmesendadd_contacter_contentname)
+    TextView tvHelpMeSendAddContacterContentName;
+    @BindView(R.id.tv_helpmesendadd_contacter_contenttel)
+    TextView tvHelpMeSendAddContacterContentTel;
+    @BindView(R.id.rly_helpmesendadd_contacter_searchcontacter)
+    RelativeLayout rlyHelpMeSendAddContacterSearchContacter;
 
     /*地名转换经纬度*/
-    @BindView(R.id.et_helpmesendaddcontacter_content)
-    EditText etHelpMeSendAddContacterContent;
+    @BindView(R.id.tv_helpmesendadd_contacter_contentaddr)
+    TextView tvHelpMeSendAddContacterContentAddr;
     private GeoCoder search=null;
     private String city;
     /*地名转换经纬度*/
     /*百度地图定位 end2*/
+    private  int RESULT_TYPE = 0;
+    private final int RESULT_ADDRESS = 10;
+    private final int RESULT_CONTACTER = 11;
+    @BindView(R.id.lly_helpmesendadd_contacter_searchaddress)
+    LinearLayout llyHelpMeSendAddContacterSearchAddress;
 
+    @BindView(R.id.rly_helpmesendadd_contacter_topbar_leftmenu)
+    RelativeLayout rlyHelpMeSendAddContacterTopBarLeftMenu;
+    @BindView(R.id.rly_helpmesendadd_contacter_topbar_rightmenu)
+    RelativeLayout rlyHelpMeSendAddContacterTopBarRightMenu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initBaiDuSDK();
-        setContentView(R.layout.activity_helpmesendaddcontacter_lly);
+        /*initBaiDuSDK();*/
+        setContentView(R.layout.activity_helpmesendadd_contacter_lly);
         init();
     }
 
     private void init(){
         ButterKnife.bind(this);
         initSwitchContent();
-
         initBaiDuMap();
+        initResultType();
         /*initGlassBg();*/
         /*initTran();*/
-
+    }
+    private void initResultType(){
+        Bundle bundle = this.getIntent().getExtras();
+        String sender = bundle.getString("sender");
+        String receiver = bundle.getString("receiver");
+        if(sender != null) {
+            RESULT_TYPE = Integer.valueOf(sender);
+        }
+        if(receiver != null) {
+            RESULT_TYPE = Integer.valueOf(receiver);
+        }
 
     }
-
     /*viewpage recycleview 历史记录 收藏地址 功能*/
     private void initSwitchContent(){
         InitTabBg(true);
@@ -184,17 +211,14 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
     private void InitViewPager() {
         viewList = new ArrayList<View>();
         LayoutInflater mInflater = getLayoutInflater();
-        viewList.add(mInflater.inflate(R.layout.activity_helpmesendaddcontacter_content_vp_itemrv_lly, null));
-        viewList.add(mInflater.inflate(R.layout.activity_helpmesendaddcontacter_content_vp_itemrv_lly, null));
+        viewList.add(mInflater.inflate(R.layout.activity_helpmesendadd_contacter_content_vp_itemrv_lly, null));
+        viewList.add(mInflater.inflate(R.layout.activity_helpmesendadd_contacter_content_vp_itemrv_lly, null));
         vpHelpMeSendAddContacterContent.setAdapter(new MyPagerAdapter(viewList));
         vpHelpMeSendAddContacterContent.setCurrentItem(0);
         vpHelpMeSendAddContacterContent.setOnPageChangeListener(new MyOnPageChangeListener());
-        RecyclerView rv = null;
         List<String> dataList = new ArrayList<String>();
-        dataList.add("");
-        dataList.add("");
-        dataList.add("");
-        initRecycleView(rv,0,dataList);
+
+        initRecycleView(0,dataList);
     }
 
 
@@ -274,7 +298,7 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
 
         @Override
         public ItemContentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ItemContentViewHolder(inflater.inflate(R.layout.activity_helpmesendaddcontacter_content_vp_itemrv_item_lly, parent, false));
+            return new ItemContentViewHolder(inflater.inflate(R.layout.activity_helpmesendadd_contacter_content_vp_itemrv_item_lly, parent, false));
 
         }
 
@@ -336,13 +360,11 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
             animation.setFillAfter(true);// True:图片停在动画结束位置
             animation.setDuration(200);
             ivHelpMeSendAddContacterTabGreenBottom.startAnimation(animation);
-            RecyclerView rv = null;
+
             List<String> dataList = new ArrayList<String>();
             dataList.add("");
-            dataList.add("");
-            dataList.add("");
-            dataList.add("");
-            initRecycleView(rv,arg0,dataList);
+
+            initRecycleView(arg0,dataList);
             switch (arg0){
                 case 0:
                     InitTabBg(true);
@@ -363,26 +385,30 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
 
 
 
-    private void initRecycleView(RecyclerView rv,int pos,List<String> dataList){
-        /*多线程运行 行不通*/
-        MyRecycleViewAdapter adapter = new MyRecycleViewAdapter(viewList.get(pos).getContext(),dataList);
-        rv =(RecyclerView) viewList.get(pos).findViewById(R.id.rv_helpmesendaddcontacter_vp_item);
-        rv.setAdapter(adapter);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(viewList.get(pos).getContext());
-        //设置为垂直布局，这也是默认的
-        layoutManager.setOrientation(OrientationHelper. VERTICAL);
-        //设置布局管理器
-        rv.setLayoutManager(layoutManager);
+    private void initRecycleView(int pos,List<String> dataList){
+        int count = pos + 1;
+        if(count <= dataList.size()) {
+            RecyclerView rv = null;
+            /*多线程运行 行不通*/
+            MyRecycleViewAdapter adapter = new MyRecycleViewAdapter(viewList.get(pos).getContext(),dataList);
+            rv =(RecyclerView) viewList.get(pos).findViewById(R.id.rv_helpmesendadd_contacter_vp_item);
+            rv.setAdapter(adapter);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(viewList.get(pos).getContext());
+            //设置为垂直布局，这也是默认的
+            layoutManager.setOrientation(OrientationHelper. VERTICAL);
+            //设置布局管理器
+            rv.setLayoutManager(layoutManager);
+        }
 
     }
 
 
-    @OnClick(R.id.rly_helpmesendaddcontacter_tabbar_history)
+    @OnClick(R.id.rly_helpmesendadd_contacter_tabbar_history)
     public void rlyHelpMeSendAddContacterTabBarHistoryOnclick(){
         vpHelpMeSendAddContacterContent.setCurrentItem(0);
     }
 
-    @OnClick(R.id.rly_helpmesendaddcontacter_tabbar_collectaddress)
+    @OnClick(R.id.rly_helpmesendadd_contacter_tabbar_collectaddress)
     public void rlyHelpMeSendAddContacterTabBarCollectAddressOnclick(){
         vpHelpMeSendAddContacterContent.setCurrentItem(1);
 
@@ -411,91 +437,24 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
         search.setOnGetGeoCodeResultListener(this);
     }
 
-    /*根据经纬度搜索地址*/
-
-    @Override
-    public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
-        if (geoCodeResult.getLocation() != null) {
-            latitudeLocation = geoCodeResult.getLocation().latitude;
-            longitudeLocation = geoCodeResult.getLocation().longitude;
-            location(latitudeLocation, longitudeLocation);
-        }
-    }
-
-    @Override
-    public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
-        if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
-            Toast.makeText(HelpMeSendAddContacterActivity.this, "抱歉，未能找到结果", Toast.LENGTH_LONG).show();
-            return;
-        }
-     /*   mBaiduMap.clear();
-        mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(result.getLocation()));*/
-        addressLocation = result.getAddress();
-        etHelpMeSendAddContacterContent.setText(addressLocation);
-    }
-    /*根据经纬度搜索地址*/
-
-    /*获取手指在地图上的经纬度*/
-    @Override
-    public void onMapStatusChangeStart(MapStatus mapStatus) {
-
-    }
-
-    @Override
-    public void onMapStatusChange(MapStatus mapStatus) {
-
-    }
-
-    @Override
-    public void onMapStatusChangeFinish(MapStatus mapStatus) {
-        latitude = mapStatus.target.latitude;
-        longitude = mapStatus.target.longitude;
-        LatLng ptCenter = new LatLng(latitude, longitude);
-        search.reverseGeoCode(new ReverseGeoCodeOption().location(ptCenter));
-    }
-    /*获取手指在地图上的经纬度*/
-
-    @OnClick(R.id.rly_helpmesendaddcontacter_addresssearch)
-    public void rlyHelpMeSendAddContacterAddressSearchOnclick(){
-        getLaLoFromCity();
-    }
-
-
-    private void getLaLoFromCity(){
-        getCity();
-        /*location(latitudeLocation, longitudeLocation);*/
-        /*search=GeoCoder.newInstance();*/
-        search.geocode(new GeoCodeOption().city(city).address(addressLocation));
-      /*  *得到经纬度**/
-       /* search.setOnGetGeoCodeResultListener(this);*/
-    }
-
-    /**得到当前所在城市**/
-    private void getCity(){
-        addressLocation = etHelpMeSendAddContacterContent.getText().toString();
-        if(addressLocation!=null&&!addressLocation.equals("")){
-            int indexProvince=addressLocation.indexOf("省");
-            int indexCity=addressLocation.indexOf("市");
-            city = addressLocation.substring(indexProvince + 1, indexCity);
-
-        }
-    }
-
-
     /**配置定位SDK参数**/
     private void initLocation(){
         LocationClientOption option=new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-        option.setCoorType("bd09ll");
-//        int span=1000;
-//        option.setScanSpan(span);
-        option.setIsNeedAddress(true);
-        option.setOpenGps(true);
-        option.setLocationNotify(true);
-        option.setIsNeedLocationDescribe(true);
-        option.setIsNeedLocationPoiList(true);
+
+   /*int span=1000;
+        option.setScanSpan(span);*/
+/*        option.setIsNeedAddress(true);*/
+      /*  option.setOpenGps(true);*/
+    /*    option.setLocationNotify(true);
+        option.setIsNeedLocationDescribe(true);*/
+       /* option.setIsNeedLocationPoiList(true);
         option.setIgnoreKillProcess(false);
-        option.setEnableSimulateGps(false);
+        option.setEnableSimulateGps(false);*/
+        option.setCoorType("bd09ll");// 设置定位结果类型
+        option.setScanSpan(5000);// 设置发起定位请求的间隔时间,ms
+        option.setIsNeedAddress(true);// 返回的定位结果包含地址信息
+        option.setNeedDeviceDirect(true);// 设置返回结果包含手机的方向
         locationClient.setLocOption(option);
     }
 
@@ -573,10 +532,138 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
         }
     }
 
+    @OnClick(R.id.rly_helpmesendadd_contacter_searchcontacter)
+    public void rlyHelpMeSendAddContacterSearchContacterOnclick(){
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType(ContactsContract.Contacts.CONTENT_TYPE);//vnd.android.cursor.dir/contact
+        startActivityForResult(intent, RESULT_CONTACTER);
+    }
+
+
+    @OnClick(R.id.lly_helpmesendadd_contacter_searchaddress)
+    public void llyHelpMeSendAddContacterSearchAddressOnclick(){
+        Intent intent = new Intent(this,BaiduAddressSearchSuggestActivity.class);
+        startActivityForResult(intent,RESULT_ADDRESS);
+        /*getLaLoFromCity();*/
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) { //resultCode为回传的标记，我在B中回传的是RESULT_OK
+            case RESULT_ADDRESS:
+                getAddressData(data);
+                break;
+            case RESULT_CONTACTER :
+                if (resultCode == Activity.RESULT_OK) {
+                    getPhoneContracts(data);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    private void getAddressData(Intent data){
+        if(data != null) {
+            Bundle b=data.getExtras(); //data为B中回传的Intent
+            String address=b.getString("address");//str即为回传的值
+            String latt = b.getString("lat");
+            String lonn = b.getString("lon");
+            if((latt != null) && (lonn != null)) {
+                lat = Double.parseDouble(latt);
+                lon = Double.parseDouble(lonn);
+                location(lat, lon);
+                tvHelpMeSendAddContacterContentAddr.setText(address);
+            }
+        }
+    }
+    public void getPhoneContracts(Intent data){
+        if(data != null) {
+            Uri contactData = data.getData();
+            Cursor c = managedQuery(contactData, null, null, null, null);
+            if (c.moveToFirst()) {
+                String name = c.getString(c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                String hasPhone = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                String phoneNumber = null;
+                if (hasPhone.equalsIgnoreCase("1")) {
+                    hasPhone = "true";
+                } else {
+                    hasPhone = "false";
+                }
+                tvHelpMeSendAddContacterContentName.setText(name);
+                if (Boolean.parseBoolean(hasPhone)) {
+                    int contactId = c.getInt(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
+                    Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
+                    while (phones.moveToNext()) {
+                        phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        if (phoneNumber != null) {
+                            tvHelpMeSendAddContacterContentTel.setText(phoneNumber);
+                        }
+                    }
+                    phones.close();
+                }
+            }
+        }
+
+    }
+    /*返回上级菜单*/
+    @OnClick(R.id.rly_helpmesendadd_contacter_topbar_leftmenu)
+    public void rlyHelpMeSendAddContacterTopBarLeftMenuOnclick(){
+        finish();
+    }
+    /*返回上级菜单*/
+    /*信息确认*/
+    @OnClick(R.id.rly_helpmesendadd_contacter_topbar_rightmenu)
+    public void rlyHelpMeSendAddContacterTopBarRightMenuOnclick(){
+        Bundle bundle = new Bundle();
+        bundle.putString("nameCall",tvHelpMeSendAddContacterContentName.getText().toString());
+        bundle.putString("tel",tvHelpMeSendAddContacterContentTel.getText().toString());
+        bundle.putString("address",tvHelpMeSendAddContacterContentAddr.getText().toString());
+        bundle.putString("lat", "" + lat);
+        bundle.putString("lon", "" + lon);
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+        setResult(RESULT_TYPE, intent);
+        finish();
+    }
+    /*信息确认*/
+    private void getLaLoFromCity(){
+        addressLocation = tvHelpMeSendAddContacterContentAddr.getText().toString();
+        if(addressLocation!=null&&!addressLocation.equals("")){
+            int indexProvince=addressLocation.indexOf("省");
+            int indexCity=addressLocation.indexOf("市");
+            if(addressLocation.length() > 0) {
+                if(indexCity > 0){
+                    city = addressLocation.substring(0, indexCity);
+                    search.geocode(new GeoCodeOption().city(city).address(addressLocation));
+                    return;
+                }
+                search.geocode(new GeoCodeOption().city("温州市").address(addressLocation));
+            }
+        }
+    }
+
+    /**得到当前所在城市**/
+    private void getCity(){
+        addressLocation = tvHelpMeSendAddContacterContentAddr.getText().toString();
+        if(addressLocation!=null&&!addressLocation.equals("")){
+            int indexProvince=addressLocation.indexOf("省");
+            int indexCity=addressLocation.indexOf("市");
+            if(indexCity < 0) {
+                city = null;
+            }else{
+                city = addressLocation.substring(indexProvince + 1, indexCity);
+            }
+        }
+    }
+
+
+
+
+
+
 
     /**定位**/
     private void showCurrentPosition(BDLocation location){
-        mBaiduMap.setMyLocationEnabled(true);
+/*        mBaiduMap.setMyLocationEnabled(true);
         MyLocationData locationData=new MyLocationData.Builder()
                 .accuracy(location.getRadius())
                 .direction(100).latitude(location.getLatitude())
@@ -589,6 +676,18 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
         latitudeLocation=location.getLatitude();
         longitudeLocation=location.getLongitude();
         addressLocation=location.getAddrStr();
+        location(latitudeLocation, longitudeLocation);*/
+
+        mBaiduMap.setMyLocationEnabled(true);
+        /*etHelpMeBuyAddSellerAddressContentAddress.setText(location.getAddrStr() + location.getBuildingName() +location.getFloor()+location.getStreet()+location.getStreetNumber());*/
+        latitudeLocation=location.getLatitude();
+        longitudeLocation=location.getLongitude();
+        addressLocation=location.getAddrStr();
+        MyLocationData locationData=new MyLocationData.Builder()
+                /*.accuracy(location.getRadius())*/
+                /*.direction(100)*/.latitude(latitudeLocation)
+                .longitude(longitudeLocation).build();
+        mBaiduMap.setMyLocationData(locationData);
         location(latitudeLocation, longitudeLocation);
     }
 
@@ -599,25 +698,87 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
         //定义地图状态
         MapStatus mMapStatus = new MapStatus.Builder()
                 .target(ll)
-                /*.zoom(18)*/
+                /*.zoom(40)*/
                 .build();
         //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
         mBaiduMap.animateMapStatus(mMapStatusUpdate);
-        //准备 marker 的图片
-        BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(R.drawable.greenpoint);
+        //准备 marker   的图片  定位图标
+        /*BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.search_map);*/
+        TextView textView = new TextView(this);
+        Drawable drawable1 = getResources().getDrawable(R.drawable.search_map);
+        drawable1.setBounds(0, 0, 20, 25);//第一0是距左边距离，第二0是距上边距离，40分别是长宽
+        textView.setCompoundDrawables(drawable1,null,null,null);
+        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromView(textView);
         /*BitmapDescriptor bitmap = null;*/
 //准备 marker option 添加 marker 使用
-        MarkerOptions markerOptions = new MarkerOptions().icon(bitmap).position(ll);
+        MarkerOptions markerOptions = new MarkerOptions().icon(bitmapDescriptor).position(ll);
 //获取添加的 marker 这样便于后续的操作
 
         mBaiduMap.addOverlay(markerOptions);
-        /*LatLng ll = new LatLng(latitude, longitude);*/
-        /*MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(ll);*/
-        /*mBaiduMap.animateMapStatus(msu);*/
-        /*mBaiduMap.setBuildingsEnabled(true);*/
-        /*mBaiduMap.setMyLocationEnabled(true);*/
     }
 
+     /*根据经纬度搜索地址*/
+
+    @Override
+    public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
+        if (geoCodeResult.getLocation() != null) {
+            latitudeLocation = geoCodeResult.getLocation().latitude;
+            longitudeLocation = geoCodeResult.getLocation().longitude;
+            location(latitudeLocation, longitudeLocation);
+        }
+    }
+
+    @Override
+    public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
+        if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
+            Toast.makeText(HelpMeSendAddContacterActivity.this, "抱歉，未能找到结果", Toast.LENGTH_LONG).show();
+            return;
+        }
+     /*   mBaiduMap.clear();
+        mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(result.getLocation()));*/
+        LatLng latLng = result.getLocation();
+        addressLocation = result.getAddress();
+        tvHelpMeSendAddContacterContentAddr.setText(addressLocation+"  "+result.getSematicDescription());
+        location(latLng.latitude,latLng.longitude);
+    }
+    /*根据经纬度搜索地址*/
+
+    /*获取手指在地图上的经纬度*/
+    @Override
+    public void onMapStatusChangeStart(MapStatus mapStatus) {
+
+    }
+
+    @Override
+    public void onMapStatusChange(MapStatus mapStatus) {
+
+    }
+
+    @Override
+    public void onMapStatusChangeFinish(MapStatus mapStatus) {
+        latitude = mapStatus.target.latitude;
+        longitude = mapStatus.target.longitude;
+        LatLng ptCenter = new LatLng(latitude, longitude);
+        search.reverseGeoCode(new ReverseGeoCodeOption().location(ptCenter));
+    }
+    /*获取手指在地图上的经纬度*/
+
+
     /*百度地图 end*/
+
+
+
+    protected void onDestroy(){
+
+        mBaiduMap.clear();
+        search.destroy();
+        isFirst = true;
+        mMapView.onDestroy();
+        locationClient.unRegisterLocationListener(locationListener);
+        if(locationClient!=null){
+            locationClient.stop();
+        }
+        super.onDestroy();
+    }
 }
