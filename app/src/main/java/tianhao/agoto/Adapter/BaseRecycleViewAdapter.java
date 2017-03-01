@@ -33,13 +33,13 @@ public class BaseRecycleViewAdapter  extends RecyclerView.Adapter<BaseRecycleVie
 
 
     @Override
-    public BaseRecycleViewAdapter.ItemContentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new BaseRecycleViewAdapter.ItemContentViewHolder(inflater.inflate(R.layout.fragment_main_content_sv, parent, false));
+    public ItemContentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new ItemContentViewHolder(inflater.inflate(R.layout.fragment_main_content_sv, parent, false));
 
     }
 
     @Override
-    public void onBindViewHolder(BaseRecycleViewAdapter.ItemContentViewHolder holder, int position) {
+    public void onBindViewHolder(ItemContentViewHolder holder, int position) {
 
     }
 

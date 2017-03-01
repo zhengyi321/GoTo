@@ -1,6 +1,7 @@
 package tianhao.agoto.Adapter;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -15,14 +16,18 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.zip.Inflater;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import tianhao.agoto.Activity.ShoppingListActivity;
+import tianhao.agoto.Bean.GoodsBean;
 import tianhao.agoto.Bean.SwipFlingBean;
 import tianhao.agoto.Common.Widget.MyRecyclerView;
+import tianhao.agoto.Common.Widget.RecyclerView.EasyRecyclerView.EasyRecyclerView;
 import tianhao.agoto.Common.Widget.ScrollView.EmbedListViewScrollView;
 import tianhao.agoto.Common.Widget.ScrollView.InnerScrollView;
 import tianhao.agoto.Common.Widget.ScrollView.MultiScroll;
@@ -106,9 +111,7 @@ public class SwipFlingAdapter  extends BaseAdapter  {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
         //holder.jobView.setText(talent.jobName);
-
         return convertView;
     }
 
@@ -124,26 +127,43 @@ public class SwipFlingAdapter  extends BaseAdapter  {
 
     public class ViewHolder {
 
-        @BindView(R.id.rlv_shoppinglist_content_piper_card_item_goods)
-        RecyclerView rlvShoppingListContentPiperCardItemGoods;
-        @BindView(R.id.msv_shoppinglist_content_piper_card_item_goodstype)
-        SpringScrollView msvShoppingListContentPiperCardItemGoodsType;
-        @BindView(R.id.tv_shoppinglist_content_piper_card_item_goodstype)
-        TextView tvShoppingListContentPiperCardItemGoodsType;
+        @BindView(R.id.erv_shoppinglist_content_piper_card_item_goods)
+        EasyRecyclerView ervShoppingListContentPiperCardItemGoods;
         @BindView(R.id.lly_shoppinglist_content_piper_card_item_goodstype)
         LinearLayout llyShoppingListContentPiperCardItemGoodsType;
-        @BindView(R.id.lly_shoppinglist_content_piper_card_item_paperthree)
-        LinearLayout llyShoppingListContentPiperCardItemPaperthree;
      /*   @BindView(R.id.fly_shoppinglist_content_piper_card_item_addgoods)
         FrameLayout rlyShoppingListContentPiperCardItemAddGoods;*/
         /*添加商品*/
-        @OnClick(R.id.msv_shoppinglist_content_piper_card_item_goodstype)
+        @OnClick(R.id.lly_shoppinglist_content_piper_card_item_goodstype)
         public void llyShoppingListContentPiperCardItemPaperthreeOnclick(){
             Toast.makeText(context,"i'm addGoodsOnclick onclick",Toast.LENGTH_SHORT).show();
         }
         /*添加商品*/
         public ViewHolder(View v){
             ButterKnife.bind(this,v);
+            initRecyclerView(v);
+        }
+
+        private void initRecyclerView(View v){
+            List<GoodsBean> goodsBeanList = new ArrayList<>();
+            GoodsBean bean = new GoodsBean();
+            bean.setName("zz");
+            bean.setNum("2");
+            bean.setPrice("11");
+            goodsBeanList.add(bean);
+            goodsBeanList.add(bean);
+            goodsBeanList.add(bean);
+            SwipFlingRecyclerViewAdapter recyclerViewAdapter = new SwipFlingRecyclerViewAdapter(context,goodsBeanList);
+            /*HeaderAndFooterRecyclerViewAdapter headerAndFooterRecyclerViewAdapter = new HeaderAndFooterRecyclerViewAdapter(recyclerViewAdapter);*/
+            View view = LayoutInflater.from(context).inflate(R.layout.activity_shoppinglist_content_piper_card_item_rv_headview_lly,ervShoppingListContentPiperCardItemGoods,true);
+           /* headerAndFooterRecyclerViewAdapter.addHeaderView(view);*/
+            recyclerViewAdapter.setHeaderView(view);
+            recyclerViewAdapter.setDataList(goodsBeanList);
+           ervShoppingListContentPiperCardItemGoods.setAdapter(recyclerViewAdapter);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            ervShoppingListContentPiperCardItemGoods.setLayoutManager(linearLayoutManager);
+
         }
     }
 

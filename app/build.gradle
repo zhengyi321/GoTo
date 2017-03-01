@@ -149,4 +149,8 @@ dependencies {
     /*加载网络图片或者下载文件  http://blog.csdn.net/baiyuliang2013/article/details/25254937*/
     compile files('libs/afinal_0.5.1_bin.jar')
     /*加载网络图片或者下载文件*/
+
+    /*封装比较好的recyclerview*/
+    /*compile 'com.jude:easyrecyclerview:4.4.0'*/
+    /*封装比较好的recyclerview*/
 }

@@ -19,6 +19,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -135,6 +136,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
     private final int RESULT_ADDRESS = 11;
     private final int RESULT_CONTACTER = 12;
     private Double rlat,rlon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -521,11 +523,60 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
         SDKInitializer.initialize(getApplicationContext());
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //旋转，移动，缩放
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_1:
+                //放大地图缩放级别，每次放大一个级别
+
+                mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomIn());
+                break;
+            case KeyEvent.KEYCODE_2:
+                //每次缩小一个级别
+                mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomOut());
+
+                break;
+            case KeyEvent.KEYCODE_3:
+                //以一个点为中心旋转
+                //获取地图当前的状态
+                MapStatus mapStatus = mBaiduMap.getMapStatus();
+                float rotate = mapStatus.rotate;
+                /*Log.d(TAG,  "rotate:" + rotate);*/
+
+                //旋转范围 0-360
+                MapStatus newRotate = new MapStatus.Builder().rotate(rotate+30).build();
+
+                mBaiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(newRotate));
+                break;
+            case KeyEvent.KEYCODE_4:
+                //以一条直线为轴，旋转 调整俯仰角 overlook
+                //范围 0-45
+                float overlook = mBaiduMap.getMapStatus().overlook;
+                MapStatus overStatus = new MapStatus.Builder().overlook(overlook-5).build();
+                mBaiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(overStatus));
+                break;
+            case KeyEvent.KEYCODE_5:
+                //移动
+                MapStatusUpdate moveStatusUpdate = MapStatusUpdateFactory.newLatLng(new LatLng(40.065796,116.349868));
+                //带动画的更新地图状态，还是300毫秒
+                mBaiduMap.animateMapStatus(moveStatusUpdate);
+                break;
+            default:
+                break;
+        }
+
+
+        return super.onKeyDown(keyCode, event);
+    }
 
 
     private void initBaiDuMap(){
 
         mBaiduMap = mMapView.getMap();
+        //设置缩放级别，默认级别为12
+        MapStatusUpdate mapstatusUpdate = MapStatusUpdateFactory.zoomTo(19);;
+        mBaiduMap.setMapStatus(mapstatusUpdate);
         locationClient=new LocationClient(getApplicationContext());
         locationClient.registerLocationListener(locationListener);
         initLocation();
@@ -734,18 +785,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
 
 
     /*百度地图 end*/
-    protected void onResume(){
-   /*     init();*/
-        super.onResume();
 
-    }
-    protected void onPause(){
-        super.onPause();
-      /*  locationClient.unRegisterLocationListener(locationListener);
-        mBaiduMap.clear();
-        search.destroy();*/
-
-    }
 
     protected void onDestroy(){
         mBaiduMap.clear();
@@ -757,5 +797,18 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
             locationClient.stop();
         }
         super.onDestroy();
+    }
+    @Override
+    protected void onResume() {
+        mMapView.onResume();
+        super.onResume();
+    }
+
+
+    @Override
+    protected void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+        mMapView.onPause();
     }
 }

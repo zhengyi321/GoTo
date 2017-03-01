@@ -39,7 +39,7 @@ import tianhao.agoto.Common.Widget.SwipeCardView.SwipeFlingAdapterView;
  * Created by zhyan on 2017/2/17.
  */
 
-public class ShoppingListActivity extends Activity implements SwipeFlingAdapterView.onFlingListener,SwipeFlingAdapterView.OnClickListener{
+public class ShoppingListActivity extends Activity implements SwipeFlingAdapterView.onFlingListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,16 +126,6 @@ public class ShoppingListActivity extends Activity implements SwipeFlingAdapterV
 
     }
 
-
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.msv_shoppinglist_content_piper_card_item_goodstype:
-                Toast.makeText(this,"i'm onClick child onclick",Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
 
   /*  @Override
     public void onItemClicked(MotionEvent event, View v, Object dataObject) {

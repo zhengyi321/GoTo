@@ -122,7 +122,7 @@
         </service>
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="UtVGhCXf7eFlAAPEG6gMr8Vw1DjGH6El" />  <!--http://lbsyun.baidu.com/apiconsole/key-->
+            android:value="dWh1jhZmAPojyyNKrhD4anUjlqtEZyxU" />  <!--http://lbsyun.baidu.com/apiconsole/key-->
         <!-- meta-data需要写在application中 -->
         <activity android:name=".Activity.SplashActivity"
             android:screenOrientation="portrait"
