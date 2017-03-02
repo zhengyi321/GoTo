@@ -18,10 +18,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 
 import java.util.ArrayList;
 
+import butterknife.OnClick;
 import tianhao.agoto.Common.Widget.RecyclerView.EasyRecyclerView.adapter.RecyclerArrayAdapter;
 import tianhao.agoto.Common.Widget.RecyclerView.EasyRecyclerView.swipe.SwipeRefreshLayout;
 import tianhao.agoto.R;
@@ -115,6 +117,7 @@ public class EasyRecyclerView extends FrameLayout {
         mErrorView = (ViewGroup) v.findViewById(R.id.error);
         if (mErrorId!=0)LayoutInflater.from(getContext()).inflate(mErrorId,mErrorView);
         initRecyclerView(v);
+
     }
 
     @Override
@@ -141,7 +144,16 @@ public class EasyRecyclerView extends FrameLayout {
         mRecycler.setClipToPadding(isClip);
     }
 
+   /* public void setHeadView(View headView){
+        if(mEmptyView.getChildCount() > 0){
 
+            for(int i = 1;i < mEmptyView.getChildCount();i++){
+                mEmptyView.addView(mEmptyView.getChildAt(i));
+                mEmptyView.removeView(mEmptyView.getChildAt(i));
+            }
+        }
+        mEmptyView.addView(headView);
+    }*/
     public void setEmptyView(View emptyView){
         mEmptyView.removeAllViews();
         mEmptyView.addView(emptyView);
@@ -154,6 +166,18 @@ public class EasyRecyclerView extends FrameLayout {
         mErrorView.removeAllViews();
         mErrorView.addView(errorView);
     }
+   /* public void setHeadView(int headView){
+        if(mEmptyView.getChildCount() > 0){
+            Toast.makeText(getContext(),"i'm setHeadView",Toast.LENGTH_SHORT).show();
+            LayoutInflater.from(getContext()).inflate(headView, mEmptyView);
+            for(int i = 1;i < mEmptyView.getChildCount();i++){
+                mEmptyView.addView(mEmptyView.getChildAt(i));
+                mEmptyView.removeView(mEmptyView.getChildAt(i));
+            }
+        }
+        Toast.makeText(getContext(),"i'm setHeadView",Toast.LENGTH_SHORT).show();
+        LayoutInflater.from(getContext()).inflate(headView, mEmptyView);
+    }*/
     public void setEmptyView(int emptyView){
         mEmptyView.removeAllViews();
         LayoutInflater.from(getContext()).inflate(emptyView, mEmptyView);
@@ -509,4 +533,14 @@ public class EasyRecyclerView extends FrameLayout {
         }
     }
 
+/*    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                Toast.makeText(getContext(),"easyrv",Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return false;
+    }*/
 }

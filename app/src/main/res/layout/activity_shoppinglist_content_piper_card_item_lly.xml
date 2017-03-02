@@ -150,15 +150,27 @@
 
    <!-- android:layout_height="0dp"
     android:layout_weight="4"-->
-
-        <LinearLayout
-            android:id="@+id/lly_shoppinglist_content_piper_card_item_goodstype"
+  <!--  <LinearLayout
+        android:id="@+id/lly_shoppinglist_content_piper_card_item_goodstype"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:orientation="vertical"
+        >-->
+        <tianhao.agoto.Common.Widget.ScrollView.SpringScrollView
+            android:id="@+id/srv_shoppinglist_content_piper_card_item_goodstype"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="4"
+            android:fillViewport="true"
+            >
+        <LinearLayout
+            android:id="@+id/lly_shoppinglist_content_piper_card_item_parent_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             >
-
+            <include layout="@layout/activity_shoppinglist_content_piper_card_item_rv_headview_lly"/>
         <tianhao.agoto.Common.Widget.RecyclerView.EasyRecyclerView.EasyRecyclerView
             android:id="@+id/erv_shoppinglist_content_piper_card_item_goods"
             android:layout_width="match_parent"
@@ -173,13 +185,13 @@
             app:scrollbarStyle="insideOverlay"
             app:scrollbars="vertical"
             >
-
         </tianhao.agoto.Common.Widget.RecyclerView.EasyRecyclerView.EasyRecyclerView>
             <!--//none or vertical or horizontal app:layout_empty="@layout/e"  app:layout_progress="@layout/view_progress"-->
             <!--//insideOverlay or insideInset or outsideOverlay or outsideInset-->
-
         </LinearLayout>
 
+        </tianhao.agoto.Common.Widget.ScrollView.SpringScrollView>
+    <!--</LinearLayout>-->
         <!--我是分割线-->
         <FrameLayout
             android:layout_width="match_parent"

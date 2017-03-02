@@ -263,7 +263,7 @@
     <dimen name="activity_shoppinglist_splitline_point_black_width">7dp</dimen>
     <dimen name="activity_shoppinglist_splitline_point_black_height">14dp</dimen>
     <dimen name="activity_shoppinglist_content_item_height">45dp</dimen>
-    <dimen name="activity_shoppinglist_content_item_margin_left_right_size">25dp</dimen>
+    <dimen name="activity_shoppinglist_content_item_margin_left_right_size">15dp</dimen>
     <!--购物清单-->
 
      <!--地址管理 新建联系人-->

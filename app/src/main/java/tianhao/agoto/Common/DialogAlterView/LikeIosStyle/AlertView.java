@@ -320,16 +320,16 @@ public class AlertView {
     public Animation getInAnimation() {
         Context context = contextWeak.get();
         if(context == null) return null;
-
-        int res = AlertAnimateUtil.getAnimationResource(this.gravity, true);
+        AlertAnimateUtil alertAnimateUtil = new AlertAnimateUtil();
+        int res = alertAnimateUtil.getAnimationResource(this.gravity, true);
         return AnimationUtils.loadAnimation(context, res);
     }
 
     public Animation getOutAnimation() {
         Context context = contextWeak.get();
         if(context == null) return null;
-
-        int res = AlertAnimateUtil.getAnimationResource(this.gravity, false);
+        AlertAnimateUtil alertAnimateUtil = new AlertAnimateUtil();
+        int res = alertAnimateUtil.getAnimationResource(this.gravity, false);
         return AnimationUtils.loadAnimation(context, res);
     }
 

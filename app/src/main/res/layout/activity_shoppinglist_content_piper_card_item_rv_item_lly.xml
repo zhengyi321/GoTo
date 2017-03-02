@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/lly_shoppinglist_content_piper_card_item_paperthree"
+    android:id="@+id/lly_shoppinglist_content_piper_card_item_rv_item_total"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/activity_shoppinglist_content_item_height"
+    android:layout_height="30dp"
     android:background="@color/white"
+    android:orientation="vertical"
     >
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/the_split_line_height"
+        android:background="@color/gray"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -58,4 +64,5 @@
         </RelativeLayout>
 
     </LinearLayout>
+
 </LinearLayout>

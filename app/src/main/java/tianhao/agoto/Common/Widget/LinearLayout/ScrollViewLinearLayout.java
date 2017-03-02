@@ -1,7 +1,7 @@
 package tianhao.agoto.Common.Widget.LinearLayout;
 
 /**
- *
+ *    arg0.getParent().requestDisallowInterceptTouchEvent(true);//通知父控件勿拦截本控件touch事件
  * http://blog.csdn.net/gf771115/article/details/41279317
  * Created by admin on 2017/2/22.
  */

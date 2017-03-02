@@ -17,7 +17,7 @@ public class AlertAnimateUtil {
      * @param isInAnimation determine if is in or out animation. true when is is
      * @return the id of the animation resource
      */
-    static int getAnimationResource(int gravity, boolean isInAnimation) {
+     int getAnimationResource(int gravity, boolean isInAnimation) {
         switch (gravity) {
             case Gravity.BOTTOM:
                 return isInAnimation ? R.anim.slide_in_bottom : R.anim.slide_out_bottom;
