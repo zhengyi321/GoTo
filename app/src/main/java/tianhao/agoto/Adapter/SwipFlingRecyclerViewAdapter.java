@@ -1,10 +1,17 @@
 package tianhao.agoto.Adapter;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,8 +20,12 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTouch;
 import tianhao.agoto.Bean.GoodsBean;
+import tianhao.agoto.Common.DialogAlterView.LikeIosStyle.DialogUtil;
 import tianhao.agoto.R;
+import tianhao.agoto.Utils.TimeUtil;
 
 /**
  * http://www.tuicool.com/articles/qMnAfen
@@ -34,7 +45,10 @@ public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFling
         this.goodsBeanList = dataList;
         this.notifyDataSetChanged();
     }
-
+    public void addPos(GoodsBean bean, int position) {
+        goodsBeanList.add(position, bean);
+        notifyItemInserted(position);
+    }
     public void addData(GoodsBean bean){
         this.goodsBeanList.add(bean);
         this.notifyDataSetChanged();
@@ -46,6 +60,7 @@ public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFling
 
     @Override
     public ItemContentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         return new ItemContentViewHolder(inflater.inflate(R.layout.activity_shoppinglist_content_piper_card_item_rv_item_lly, parent, false));
     }
 
@@ -124,4 +139,7 @@ public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFling
             ButterKnife.bind(this,view);
         }
     }
+
+
+
 }

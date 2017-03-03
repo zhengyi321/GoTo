@@ -19,6 +19,9 @@ import tianhao.agoto.R;
  *
  * http://www.cnblogs.com/shen-hua/p/5709663.html
  * Created by admin on 2017/3/2.
+ *
+ *
+ * http://blog.csdn.net/qwm8777411/article/details/45420451
  */
 
 public class DialogUtil {
@@ -35,7 +38,7 @@ public class DialogUtil {
     }
 
     /*添加商品*/
-    public View createDialogAddGoods(int layout){
+    public View createDialogAddGoods(int layout ){
 
         // 获取布局
         View view2 = View.inflate(context, layout, null);

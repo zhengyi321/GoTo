@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/lly_shoppinglist_content_piper_card_item_paperthree"
+
     android:layout_width="fill_parent"
     android:layout_height="30dp"
     android:orientation="vertical"
     android:background="@color/transparent"
     >
-
+    <!--android:id="@+id/lly_shoppinglist_content_piper_card_item_paperthree"-->
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="@dimen/activity_shoppinglist_content_item_height"

@@ -1,10 +1,12 @@
 package tianhao.agoto.Activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,14 +27,20 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.OnTouch;
 import tianhao.agoto.Adapter.SwipFlingAdapter;
+import tianhao.agoto.Adapter.SwipFlingRecyclerViewAdapter;
+import tianhao.agoto.Bean.GoodsBean;
 import tianhao.agoto.Bean.SwipFlingBean;
+import tianhao.agoto.Common.DialogAlterView.LikeIosStyle.DialogUtil;
+import tianhao.agoto.Common.Widget.RecyclerView.EasyRecyclerView.EasyRecyclerView;
 import tianhao.agoto.Common.Widget.ScrollView.MyScrollView;
 import tianhao.agoto.R;
 import tianhao.agoto.Utils.BlurUtil;
 import tianhao.agoto.Utils.ImageUtils;
 import tianhao.agoto.Utils.SystemUtils;
 import tianhao.agoto.Common.Widget.SwipeCardView.SwipeFlingAdapterView;
+import tianhao.agoto.Utils.TimeUtil;
 
 /**
  *
@@ -40,6 +49,9 @@ import tianhao.agoto.Common.Widget.SwipeCardView.SwipeFlingAdapterView;
  */
 
 public class ShoppingListActivity extends Activity implements SwipeFlingAdapterView.onFlingListener{
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +73,9 @@ public class ShoppingListActivity extends Activity implements SwipeFlingAdapterV
 
     @BindView(R.id.sfav_shoppinglist_content)
     SwipeFlingAdapterView sfavShoppingListContent;
+
+    @BindView(R.id.lly_shoppinglist_total)
+    LinearLayout llyShoppingListTotal;
     private SwipFlingAdapter adapter;
 
 
@@ -140,6 +155,9 @@ public class ShoppingListActivity extends Activity implements SwipeFlingAdapterV
 
 
 
-
+    protected void onResume(){
+        super.onResume();
+        /*recyclerViewAdapter.setDataList(goodsBeanList);*/
+    }
 
 }
