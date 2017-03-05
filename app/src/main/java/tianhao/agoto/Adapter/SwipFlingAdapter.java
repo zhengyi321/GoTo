@@ -2,9 +2,18 @@ package tianhao.agoto.Adapter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
+import android.content.Loader;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.Time;
@@ -13,10 +22,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +38,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.zip.Inflater;
 
 import butterknife.BindView;
@@ -40,15 +52,23 @@ import tianhao.agoto.Activity.ShoppingListActivity;
 import tianhao.agoto.Bean.GoodsBean;
 import tianhao.agoto.Bean.SwipFlingBean;
 import tianhao.agoto.Common.DialogAlterView.LikeIosStyle.AlertView;
+import tianhao.agoto.Common.DialogAlterView.LikeIosStyle.CustomDialog;
 import tianhao.agoto.Common.DialogAlterView.LikeIosStyle.DialogUtil;
 import tianhao.agoto.Common.DialogAlterView.LikeIosStyle.OnDismissListener;
 import tianhao.agoto.Common.DialogAlterView.LikeIosStyle.OnItemClickListener;
 import tianhao.agoto.Common.Widget.LinearLayout.BouncyLinearLayout;
 import tianhao.agoto.Common.Widget.LinearLayout.OverScrollView;
 import tianhao.agoto.Common.Widget.LinearLayout.ScrollViewLinearLayout;
+import tianhao.agoto.Common.Widget.LinearLayoutManager.CustomLinearLayoutManager;
+import tianhao.agoto.Common.Widget.LinearLayoutManager.FullyLinearLayoutManager;
+import tianhao.agoto.Common.Widget.LinearLayoutManager.MyLinearLayoutManager;
 import tianhao.agoto.Common.Widget.MyRecyclerView;
 import tianhao.agoto.Common.Widget.RecyclerView.EasyRecyclerView.EasyRecyclerView;
 import tianhao.agoto.Common.Widget.RecyclerView.EasyRecyclerView.adapter.RecyclerArrayAdapter;
+import tianhao.agoto.Common.Widget.RecyclerView.EasyRecyclerView.swipe.SwipeRefreshLayout;
+import tianhao.agoto.Common.Widget.RecyclerView.LoadMoreRecyclerView.adapter.BookAdapter;
+import tianhao.agoto.Common.Widget.RecyclerView.LoadMoreRecyclerView.db.BookDBHelper;
+import tianhao.agoto.Common.Widget.RecyclerView.LoadMoreRecyclerView.provider.BookProvider;
 import tianhao.agoto.Common.Widget.ScrollView.EmbedListViewScrollView;
 import tianhao.agoto.Common.Widget.ScrollView.InnerScrollView;
 import tianhao.agoto.Common.Widget.ScrollView.MultiScroll;
@@ -68,42 +88,57 @@ import tianhao.agoto.Utils.TimeUtil;
  *
  * http://blog.csdn.net/qwm8777411/article/details/45420451
  * Created by admin on 2017/3/1.
+ *
+ * http://www.tuicool.com/articles/iYJZFbR
  */
 
-public class SwipFlingAdapter  extends BaseAdapter  {
+public class SwipFlingAdapter  extends BaseAdapter {
 
-    private ArrayList<SwipFlingBean> objs;
-    private Context context;
-    private LayoutInflater inflater;
-    private  List<GoodsBean> goodsBeanList = new ArrayList<>();
-    private SwipFlingRecyclerViewAdapter recyclerViewAdapter;
+    private List<SwipFlingBean> objs;
+    private Activity activity;
+  /*  private LayoutInflater inflater;*/
     private AlertDialog alertDialog;
-    public SwipFlingAdapter(Context context) {
-        objs = new ArrayList<SwipFlingBean>();
-        this.context = context;
-        inflater = LayoutInflater.from(context);
+    private ViewHolder holder;
+    public SwipFlingAdapter(Activity activity,List<SwipFlingBean> objs) {
+        this.objs = objs;
+        this.activity = activity;
+        /*inflater = LayoutInflater.from(activity);*/
+        System.out.println("SwipFlingAdapter");
 
     }
 
     public void addAll(Collection<SwipFlingBean> collection) {
+        System.out.println("addAll");
         if (isEmpty()) {
             objs.addAll(collection);
             notifyDataSetChanged();
         } else {
             objs.addAll(collection);
         }
+    /*    objs.addAll(collection);
+        notifyDataSetChanged();*/
     }
 
     public void clear() {
+        System.out.println("clear");
         objs.clear();
         notifyDataSetChanged();
     }
 
+    public void setObjs(Collection<SwipFlingBean> collection) {
+        System.out.println("setObjs");
+        objs.clear();
+        objs = (ArrayList<SwipFlingBean>) collection;
+        notifyDataSetChanged();
+    }
+
     public boolean isEmpty() {
+        System.out.println("isEmpty");
         return objs.isEmpty();
     }
 
     public void remove(int index) {
+        System.out.println("remove");
         if (index > -1 && index < objs.size()) {
             objs.remove(index);
             notifyDataSetChanged();
@@ -113,44 +148,44 @@ public class SwipFlingAdapter  extends BaseAdapter  {
 
     @Override
     public int getCount() {
+        System.out.println("getCount");
         return objs.size();
     }
 
     @Override
     public SwipFlingBean getItem(int position) {
+        System.out.println("getItem");
         if(objs==null ||objs.size()==0) return null;
         return objs.get(position);
     }
 
     @Override
     public long getItemId(int position) {
+        System.out.println("getItemId");
         return position;
     }
 
     // TODO: getView
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        System.out.println("this is getView:pos"+ position+"convert:"+convertView+"parent:"+parent);
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.activity_shoppinglist_content_piper_card_item_lly,parent, false);
-            holder = new ViewHolder(convertView);
-            //holder.portraitView.getLayoutParams().width = cardWidth;
+            System.out.println("this is getView:111111111,pos:"+position);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_shoppinglist_content_piper_card_item_lly, parent, false);
+            holder = new ViewHolder(convertView, parent.getContext());
+            convertView.setTag(holder);
         } else {
+            System.out.println("this is getView:222222222222,pos:"+position);
             holder = (ViewHolder) convertView.getTag();
         }
-
-        //holder.jobView.setText(talent.jobName);
 
         return convertView;
     }
 
 
 
-
-
     /*添加商品dialog*/
     public class AlterViewDialogForGoods{
-
         @BindView(R.id.et_dialog_add_goods_goodsname)
         EditText etDialogAddGoodsGoodName;
         @BindView(R.id.et_dialog_add_goods_goodsnum)
@@ -175,41 +210,205 @@ public class SwipFlingAdapter  extends BaseAdapter  {
         public void rlyDialogAddGoodsCancelOnclick(){
             alertDialog.dismiss();
         }
-
         public AlterViewDialogForGoods(){
-            DialogUtil dialogUtil = new DialogUtil(context);
+            DialogUtil dialogUtil = new DialogUtil(activity);
             View v =dialogUtil.createDialogAddGoods(R.layout.dialog_add_goods_lly);
             alertDialog = dialogUtil.getAlertDialog();
             ButterKnife.bind(this,alertDialog);
 
         }
 
-        /*public GoodsBean getBean(){
-            return bean;
-        }*/
     }
      /*添加商品dialog*/
 
     public class ViewHolder {
+
+        @BindView(R.id.erv_shoppinglist_content_piper_card_item_goods)
+        EasyRecyclerView recyclerView ;
+        @BindView(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
+        LinearLayout testly;
+        private BookAdapter adapter;
+        /*List<String> goodsBeanList= new ArrayList<String>();*/
+        List<GoodsBean> goodsBeanList ;
+        SwipFlingRecyclerViewAdapter recyclerViewAdapter ;
+        Context context;
+        @OnClick(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
+        public void testOnclick(){
+            System.out.println("this is onclick");
+            recyclerViewAdapter.addData(new GoodsBean());
+
+            /*goodsBeanList.add(new GoodsBean());
+            goodsBeanList.add(new GoodsBean());
+            goodsBeanList.add(new GoodsBean());
+            goodsBeanList.add(new GoodsBean());
+            recyclerViewAdapter.setDataList(goodsBeanList);*//*
+            recyclerViewAdapter.notifyItemChanged(goodsBeanList.size()-1,goodsBeanList.size());*/
+          /*  showDialog();*/
+        }
+
+        private void showDialog() {
+
+            final AlertDialog dialog = new AlertDialog.Builder(context).create();
+            /*View v = activity.getLayoutInflater().inflate(R.layout.dialog, null);*/
+            View v = LayoutInflater.from(context).inflate(R.layout.dialog, null);
+            dialog.setView(v);
+            dialog.setCancelable(false);
+            dialog.show();
+
+            final EditText name = (EditText) v.findViewById(R.id.edit_name);
+            final EditText price = (EditText) v.findViewById(R.id.edit_price);
+
+            Button cancel = (Button) v.findViewById(R.id.btn_cancel);
+            Button save = (Button) v.findViewById(R.id.btn_save);
+
+            save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    String mName = name.getText().toString();
+                    String mPrice = price.getText().toString();
+
+                    ContentValues values = new ContentValues();
+                    values.put(BookDBHelper.NAME, mName);
+                    values.put(BookDBHelper.PRICE, Integer.valueOf(mPrice));
+
+                    context.getContentResolver().insert(BookProvider.URI_BOOK_ALL, values);
+                    dialog.dismiss();
+                }
+            });
+
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+        }
+
+
+        private void initLoader() {
+
+           activity.getLoaderManager().initLoader(1, null, new LoaderManager.LoaderCallbacks<Cursor>() {
+                @Override
+                public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+                    CursorLoader loader = new CursorLoader(context, BookProvider.URI_BOOK_ALL, null, null, null, null);
+
+                    return loader;
+                }
+
+                @Override
+                public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+                    adapter.swapCursor(data);
+                    System.out.println("onLoadFinished");
+                }
+
+                @Override
+                public void onLoaderReset(Loader<Cursor> loader) {
+                    adapter.swapCursor(null);
+                }
+            });
+
+        }
+
+        private void initViews() {
+
+
+            if (adapter == null) {
+
+                Cursor c = context.getContentResolver().query(BookProvider.URI_BOOK_ALL, null, null, null, null);
+                adapter = new BookAdapter(context, c, 1);
+            }
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            /*recyclerView.setHasFixedSize(true);*/
+            recyclerView.setAdapter(adapter);
+
+        }
+
+
+
+        public ViewHolder( View convertView,Context context1){
+            goodsBeanList = new ArrayList<GoodsBean>();
+            this.context = context1;
+            ButterKnife.bind(this,convertView);
+            goodsBeanList.add(new GoodsBean());
+            recyclerViewAdapter = new SwipFlingRecyclerViewAdapter(context1,goodsBeanList);
+            recyclerView.setAdapter(recyclerViewAdapter);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context1,LinearLayoutManager.VERTICAL,false);
+            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            recyclerView.setLayoutManager(linearLayoutManager);
+            recyclerView.setRefreshListener(new android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    System.out.println("this is onrefresh");
+                }
+            });
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    System.out.println("this is onScrollStateChanged");
+                }
+            });
+         /*   goodsBeanList= new ArrayList<String>();*/
+         /*   recyclerViewAdapter  = new SwipFlingRecyclerViewAdapter(activity,goodsBeanList);
+*/
+           /* initViews();
+            initLoader();
+*/
+           /* testrv.setLayoutManager(linearLayoutManager);*/
+/*
+            recyclerViewAdapter.addPos(new GoodsBean(),0);*/
+        }
+
+    }
+
+/*
+
+    public class ViewHolder {
         TimeUtil timeUtil = new TimeUtil();
         String timeBegin = "";
-        /*List<GoodsBean> goodsBeanList = new ArrayList<>();*/
-      /*  SwipFlingRecyclerViewAdapter recyclerViewAdapter ;*/
+        CustomDialog mDialog;
+     */
+/*   private  List<GoodsBean> goodsBeanList = new ArrayList<>();*//*
+
+        */
+/*SwipFlingRecyclerViewAdapter recyclerViewAdapter;*//*
+
+        */
+/*List<GoodsBean> goodsBeanList = new ArrayList<>();*//*
+
+      */
+/*  SwipFlingRecyclerViewAdapter recyclerViewAdapter ;*//*
+
         @BindView(R.id.erv_shoppinglist_content_piper_card_item_goods)
         EasyRecyclerView ervShoppingListContentPiperCardItemGoods;
         @BindView(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
         LinearLayout llyShoppingListContentPiperCardItemParentRV;
 
-        /*  判断是点击事件 不是滑动事件的解决方法http://www.cnblogs.com/wader2011/archive/2011/12/02/2271981.html*/
-        @OnClick(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
-        public void llyShoppingListContentPiperCardItemParentRVOnclick(){
-            /*Toast.makeText(context,"dis:OnClick:",Toast.LENGTH_SHORT).show();*/
-            clickOnce();
-        }
+        */
+/*  判断是点击事件 不是滑动事件的解决方法http://www.cnblogs.com/wader2011/archive/2011/12/02/2271981.html*//*
 
-        @OnTouch(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
+     */
+/*   @OnClick(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
+        public void llyShoppingListContentPiperCardItemParentRVOnclick(){
+            *//*
+*/
+/*Toast.makeText(context,"dis:OnClick:",Toast.LENGTH_SHORT).show();*//*
+*/
+/*
+            clickOnce();
+        }*//*
+
+
+    */
+/*
+    @OnTouch(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
         public boolean llyShoppingListContentPiperCardItemParentRVOnclick(View v,MotionEvent event){
-            /*Toast.makeText(context,"dis:OnTouch:",Toast.LENGTH_SHORT).show();*/
+
+Toast.makeText(context,"dis:OnTouch:",Toast.LENGTH_SHORT).show();
             switch (event.getAction()){
                 case MotionEvent.ACTION_DOWN:
                     timeBegin = timeUtil.getCurrentDateTime();
@@ -220,44 +419,73 @@ public class SwipFlingAdapter  extends BaseAdapter  {
             }
             return false;
         }
-        private void clickOnce(){
-            //这个设置为全局
-            String currentTime = timeUtil.getCurrentDateTime();;
-            long timeGap = timeUtil.getSubTwoTimeBySeconds(currentTime,timeBegin);// 与现在时间相差秒数
-            /*Toast.makeText(context,"dis:timeGap:"+timeGap,Toast.LENGTH_SHORT).show();*/
-            /*触摸时间小于3秒则判断为点击事件*/
-            if(Math.abs(timeGap) <1){
 
-                GoodsBean bean = new GoodsBean();
 
-                /*recyclerViewAdapter.addPos(bean,0);*/
-                /*recyclerViewAdapter.addData(bean);*/
-                recyclerViewAdapter.addData(bean);
-                /*new AlterViewDialogForGoods();*/
-            }
+*/
+/* 判断是点击事件 不是滑动事件的解决方法http://www.cnblogs.com/wader2011/archive/2011/12/02/2271981.html
+         添加商品*//*
 
-        }
-        /* 判断是点击事件 不是滑动事件的解决方法http://www.cnblogs.com/wader2011/archive/2011/12/02/2271981.html
-         添加商品*/
         public ViewHolder(View v){
             ButterKnife.bind(this,v);
-            initRecycleView();
         }
 
-        /*初始化列表*/
-        private void initRecycleView(){
+        */
+/*初始化列表*//*
+
+      */
+/*  public void initRecycleView(){
             GoodsBean bean = new GoodsBean();
             goodsBeanList.add(bean);
-            goodsBeanList.add(bean);
-            goodsBeanList.add(bean);
+          *//*
+*/
+/*  goodsBeanList.add(bean);
+            goodsBeanList.add(bean);*//*
+*/
+/*
             recyclerViewAdapter = new SwipFlingRecyclerViewAdapter(context,goodsBeanList);
             ervShoppingListContentPiperCardItemGoods.setAdapter(recyclerViewAdapter);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             ervShoppingListContentPiperCardItemGoods.setLayoutManager(linearLayoutManager);
+
+        }*//*
+
+        */
+/*初始化列表*//*
+
+        public void clickOnce(SwipFlingRecyclerViewAdapter adapter){
+            //这个设置为全局
+            String currentTime = timeUtil.getCurrentDateTime();;
+            long timeGap = timeUtil.getSubTwoTimeBySeconds(currentTime,timeBegin);// 与现在时间相差秒数
+            Toast.makeText(context,"dis:timeGap:"+timeGap,Toast.LENGTH_SHORT).show();
+            */
+/*触摸时间小于3秒则判断为点击事件*//*
+
+            if(Math.abs(timeGap) <1){
+
+                GoodsBean bean = new GoodsBean();
+
+                */
+/*recyclerViewAdapter.addPos(bean,0);*//*
+
+                */
+/*recyclerViewAdapter.addData(bean);*//*
+
+                */
+/*recyclerViewAdapter.addData(bean);*//*
+
+                */
+/*new AlterViewDialogForGoods();*//*
+
+            }
+
         }
-        /*初始化列表*/
+
     }
+*/
+
+
+
 
  /*添加商品dialog*/
 

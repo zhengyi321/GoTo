@@ -1,6 +1,9 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
+    <!--loadmore-->
 
+    <dimen name="fab_margin">16dp</dimen>
+    <!--loadmore-->
     <!--我是分割线-->
     <dimen name="the_split_line_height">0.5dip</dimen>
     <dimen name="zero">0dp</dimen>

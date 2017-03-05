@@ -1,4 +1,13 @@
 <resources>
+
+  <!--  <string name="app_name">LRecyclerview</string>-->
+    <!--loadmore-->
+    <string name="action_settings">Settings</string>
+    <!--loadmore-->
+
+
+
+
     <string name="app_name">GoTo</string>
     <string name="app_name_chinese">走兔同城</string>
     <string name="main_activity_topbar_title">走兔同城</string>

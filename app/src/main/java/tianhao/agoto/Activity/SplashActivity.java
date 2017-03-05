@@ -74,5 +74,11 @@ public class SplashActivity extends Activity{
         super.onPause();
         finish();
     }
-
+    protected void onDestroy(){
+        super.onDestroy();
+        if(null != handler) {
+            handler = null;
+            /*DebugLog.d(TAG, "release Handler success");*/
+        }
+    }
 }

@@ -78,7 +78,7 @@ public class ShoppingListActivity extends Activity implements SwipeFlingAdapterV
     LinearLayout llyShoppingListTotal;
     private SwipFlingAdapter adapter;
 
-
+    List<SwipFlingBean> list = new ArrayList<SwipFlingBean>();
     private void initCardSwitch(){
 
 
@@ -86,19 +86,20 @@ public class ShoppingListActivity extends Activity implements SwipeFlingAdapterV
             sfavShoppingListContent.setIsNeedSwipe(true);
             sfavShoppingListContent.setFlingListener(this);
            /* sfavShoppingListContent.setOnItemClickListener(this);*/
-
-            adapter = new SwipFlingAdapter(this);
+            adapter = new SwipFlingAdapter(this,list);
             sfavShoppingListContent.setAdapter(adapter);
         }
         loadData();
     }
     private void loadData(){
         new AsyncTask<Void, Void, List<SwipFlingBean>>() {
+
             @Override
             protected List<SwipFlingBean> doInBackground(Void... params) {
-                ArrayList<SwipFlingBean> list = new ArrayList<SwipFlingBean>();
+
+                list.clear();
                 SwipFlingBean talent;
-                for (int i = 0; i < 15; i++) {
+                for (int i = 0; i < 6; i++) {
                     talent = new SwipFlingBean();
                     list.add(talent);
                 }
@@ -109,7 +110,7 @@ public class ShoppingListActivity extends Activity implements SwipeFlingAdapterV
             protected void onPostExecute(List<SwipFlingBean> list) {
                 super.onPostExecute(list);
                 adapter.addAll(list);
-
+                adapter.remove(0);
             }
         }.execute();
     }
@@ -117,7 +118,9 @@ public class ShoppingListActivity extends Activity implements SwipeFlingAdapterV
 
     @Override
     public void removeFirstObjectInAdapter() {
-        adapter.remove(0);
+        if(list != null) {
+            adapter.remove(0);
+        }
     }
 
     @Override
@@ -132,7 +135,7 @@ public class ShoppingListActivity extends Activity implements SwipeFlingAdapterV
 
     @Override
     public void onAdapterAboutToEmpty(int itemsInAdapter) {
-        if (itemsInAdapter == 2) {
+        if (itemsInAdapter == 3) {
             loadData();
         }
     }

@@ -13,6 +13,7 @@
 
 
     <LinearLayout
+        android:id="@+id/lly_shoppinglist_content_piper_card_item_parent_rv"
         android:layout_width="match_parent"
         android:layout_height="@dimen/zero"
         android:orientation="horizontal"
@@ -71,6 +72,7 @@
                     >
 
                     <TextView
+                        android:id="@+id/tv_shoppinglist_content_piper_card_item_test"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -157,46 +159,72 @@
         android:layout_weight="4"
         android:orientation="vertical"
         >-->
-        <tianhao.agoto.Common.Widget.ScrollView.SpringScrollView
+
+
+            <include layout="@layout/activity_shoppinglist_content_piper_card_item_rv_headview_lly"/>
+            <!--<include layout="@layout/content_main"/>-->
+
+            <tianhao.agoto.Common.Widget.RecyclerView.EasyRecyclerView.EasyRecyclerView
+                android:id="@+id/erv_shoppinglist_content_piper_card_item_goods"
+                android:layout_width="match_parent"
+                android:layout_height="223dp"
+                android:scrollbars="vertical"
+                app:layout_error="@layout/view_error"
+                app:recyclerClipToPadding="true"
+                app:recyclerPadding="8dp"
+                app:recyclerPaddingTop="8dp"
+                app:recyclerPaddingBottom="8dp"
+                app:recyclerPaddingLeft="8dp"
+                app:recyclerPaddingRight="8dp"
+                app:scrollbarStyle="insideOverlay"
+                app:scrollbars="vertical"
+                >
+
+            </tianhao.agoto.Common.Widget.RecyclerView.EasyRecyclerView.EasyRecyclerView>
+
+
+
+        <!--<tianhao.agoto.Common.Widget.ScrollView.SpringScrollView
             android:id="@+id/srv_shoppinglist_content_piper_card_item_goodstype"
             android:layout_width="match_parent"
             android:layout_height="@dimen/zero"
             android:layout_weight="4"
             android:fillViewport="true"
-            >
+            ><LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            <!--购物清单-->
+                android:layout_height="wrap_content">
+            &lt;!&ndash;购物清单&ndash;&gt;
             <LinearLayout
-
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:splitMotionEvents="true"
-                android:clickable="true"
-                android:longClickable="false"
                 >
                 <include layout="@layout/activity_shoppinglist_content_piper_card_item_rv_headview_lly"/>
-                <tianhao.agoto.Common.Widget.RecyclerView.EasyRecyclerView.EasyRecyclerView
+                <ListView
                     android:id="@+id/erv_shoppinglist_content_piper_card_item_goods"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_error="@layout/view_error"
-                    app:recyclerClipToPadding="true"
-                    app:recyclerPadding="8dp"
-                    app:recyclerPaddingTop="8dp"
-                    app:recyclerPaddingBottom="8dp"
-                    app:recyclerPaddingLeft="8dp"
-                    app:recyclerPaddingRight="8dp"
-                    app:scrollbarStyle="insideOverlay"
-                    app:scrollbars="vertical"
+                    android:layout_height="match_parent"
                     >
-                </tianhao.agoto.Common.Widget.RecyclerView.EasyRecyclerView.EasyRecyclerView>
-            <!--//none or vertical or horizontal app:layout_empty="@layout/e"  app:layout_progress="@layout/view_progress"-->
-            <!--//insideOverlay or insideInset or outsideOverlay or outsideInset-->
+                </ListView>
+               &lt;!&ndash; app:layout_error="@layout/view_error"
+                app:recyclerClipToPadding="true"
+                app:recyclerPadding="8dp"
+                app:recyclerPaddingTop="8dp"
+                app:recyclerPaddingBottom="8dp"
+                app:recyclerPaddingLeft="8dp"
+                app:recyclerPaddingRight="8dp"
+                app:scrollbarStyle="insideOverlay"
+                app:scrollbars="vertical"&ndash;&gt;
+
+
+            &lt;!&ndash;//none or vertical or horizontal app:layout_empty="@layout/e"  app:layout_progress="@layout/view_progress"&ndash;&gt;
+            &lt;!&ndash;//insideOverlay or insideInset or outsideOverlay or outsideInset&ndash;&gt;
             </LinearLayout>
-            <!--购物清单-->
+            &lt;!&ndash;购物清单&ndash;&gt;
                 <LinearLayout
                     android:id="@+id/lly_shoppinglist_content_piper_card_item_parent_rv"
                     android:layout_width="match_parent"
@@ -205,7 +233,8 @@
                     >
                 </LinearLayout>
             </FrameLayout>
-        </tianhao.agoto.Common.Widget.ScrollView.SpringScrollView>
+        </LinearLayout>
+        </tianhao.agoto.Common.Widget.ScrollView.SpringScrollView>-->
     <!--</LinearLayout>-->
         <!--我是分割线-->
         <FrameLayout

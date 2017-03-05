@@ -30,14 +30,32 @@ public class MainFragment extends Fragment {
     @BindView(R.id.rly_main_content_helpmesend)
     RelativeLayout rlyMainContentHelpMeSend;
     private View view ;
+    InitLoop initLoop;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_main_content_sv,container,false);
+        view = inflater.inflate(R.layout.fragment_main_content_sv,container,false);
         init(view);
         return view;
     }
+    public void onResume(){
+        super.onResume();
+        tvMainAd.startScroll();
+        initLoop.setStart();
+    }
+    public void onStop(){
+        super.onStop();
+        tvMainAd.stopScroll();
+        initLoop.setStop();
+        tvMainAd.destroyDrawingCache();
+    }
+    public void onPause(){
+        super.onPause();
+        tvMainAd.stopScroll();
+        initLoop.setStop();
+        tvMainAd.destroyDrawingCache();
 
+    }
     /*各种初始化*/
     private void init(View view){
         this.view = view;
@@ -47,7 +65,7 @@ public class MainFragment extends Fragment {
 
     }
     private void cicleWheelInit(View view){
-        InitLoop initLoop = new InitLoop(view);
+        initLoop = new InitLoop(view);
         initLoop.init();
     }
 

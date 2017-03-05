@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,44 +31,73 @@ import tianhao.agoto.Utils.TimeUtil;
 /**
  * http://www.tuicool.com/articles/qMnAfen
  * Created by zhyan on 2017/3/1.
+ *
+ * http://www.jianshu.com/p/c090ec158fc5
  */
 
 public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFlingRecyclerViewAdapter.ItemContentViewHolder> {
-    private List<GoodsBean> goodsBeanList;
+    private List<GoodsBean> goodsBeanList ;
     private Context context;
     private LayoutInflater inflater;
+    private ItemContentViewHolder itemContentViewHolder;
     public SwipFlingRecyclerViewAdapter(Context context,List<GoodsBean> goodsBeanList){
         this.context = context;
-        this.goodsBeanList = goodsBeanList;
+        this.goodsBeanList=goodsBeanList ;
         inflater = LayoutInflater.from(context);
+        System.out.println(" SwipFlingRecyclerViewAdapter");
     }
-    public void setDataList(List<GoodsBean> dataList){
-        this.goodsBeanList = dataList;
-        this.notifyDataSetChanged();
+    public void setDataList(Collection<GoodsBean> dataList){
+        this.goodsBeanList.clear();
+        this.goodsBeanList.addAll(dataList);
+        /*notifyItemInserted(goodsBeanList.size());*/
+        /*notifyDataSetChanged();*/
+        notifyItemRangeChanged(0,goodsBeanList.size(),goodsBeanList);
+        /*notifyItemRangeChanged(goodsBeanList.size()-1,goodsBeanList.size());*/
+        System.out.println(" setDataList");
     }
     public void addPos(GoodsBean bean, int position) {
         goodsBeanList.add(position, bean);
-        notifyItemInserted(position);
+        this.notifyItemInserted(position);
+        System.out.println(" addPos");
     }
     public void addData(GoodsBean bean){
         this.goodsBeanList.add(bean);
-        this.notifyDataSetChanged();
+        notifyItemRangeChanged(0,1,bean);
+        /*notifyDataSetChanged();*/
+        /*notifyDataSetChanged();*/
+       /* notifyItemRangeChanged(0,1);*/
+        /*notifyItemChanged(0);*/
+        /*notifyItemInserted(goodsBeanList.size() -1);*/
+       /* notifyDataSetChanged();*/
+      /*  this.notifyItemRangeChanged(0,1,bean);*/
+      /*  notifyItemRangeChanged(goodsBeanList.size() -1,1);*/
+      /*  notifyDataSetChanged();*/
+       /* notifyItemInserted(1);*/
+        System.out.println("addData ");
     }
     public List<GoodsBean> getAllData(){
+        System.out.println(" getAllData");
         return goodsBeanList;
     }
 
 
     @Override
     public ItemContentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        return new ItemContentViewHolder(inflater.inflate(R.layout.activity_shoppinglist_content_piper_card_item_rv_item_lly, parent, false));
+        System.out.println("onCreateViewHolder parent:"+parent +" viewtype:  "+viewType);
+        if(viewType==-1){
+            View v=inflater.inflate(R.layout.activity_shoppinglist_content_piper_card_item_rv_item_lly,parent,false);
+            return new ItemContentViewHolder(v);
+        }
+        View v=LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_shoppinglist_content_piper_card_item_rv_item_lly,parent,false);
+        itemContentViewHolder=new ItemContentViewHolder(v);
+        return itemContentViewHolder;
+        /*return new ItemContentViewHolder(inflater.inflate(R.layout.activity_shoppinglist_content_piper_card_item_rv_item_lly, parent, false));*/
     }
 
     @Override
     public void onBindViewHolder(ItemContentViewHolder holder, int position) {
-
-        if(goodsBeanList.get(position) != null){
+        System.out.println(" onBindViewHolder");
+       /* if(goodsBeanList.get(position) != null){
             GoodsBean goodsBean = goodsBeanList.get(position);
             if(goodsBean.getName() != null){
                 holder.tvShoppingListContentPiperCardItemRVItemGoodsName.setText(goodsBean.getName());
@@ -75,21 +105,56 @@ public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFling
             if(goodsBean.getNum() != null){
                 holder.tvShoppingListContentPiperCardItemRVItemGoodsNum.setText(goodsBean.getNum());
             }
-            /*if(goodsBean.getPrice() != null){
+
+            *//*if(goodsBean.getPrice() != null){
                 holder.tvShoppingListContentPiperCardItemRVItemGoodsPrice.setText(goodsBean.getPrice());
-            }*/
-            /*this.notifyItemChanged(position);*/
+            }*//*
+            *//*this.notifyItemChanged(position);*//*
+        }*/
+    }
+
+    @Override
+    public void onBindViewHolder(ItemContentViewHolder holder, int position,List<Object> payloads){
+        System.out.println(" onBindViewHolder22");
+        if(payloads.isEmpty()){
+            onBindViewHolder(holder,position);
         }
+
+        if(payloads == null){
+            onBindViewHolder(holder,position);
+        }/*else{
+            if(position == 0){
+                return;
+            }
+            int adjPosition = position - getItemCount();
+            int adapterCount;
+            if(SwipFlingRecyclerViewAdapter.this != null){
+                adapterCount = this.getItemCount();
+                if(adjPosition < getItemCount()){
+                    this.onBindViewHolder(holder,adjPosition,payloads);
+                }
+            }
+        }*/
+    }
+    @Override
+    public int getItemViewType(int position) {
+        if(goodsBeanList.size()<=0){
+            return -1;
+        }
+        return super.getItemViewType(position);
     }
 
     @Override
     public int getItemCount() {
-        return goodsBeanList.size();
+
+        System.out.println("getItemCount "+goodsBeanList.size());
+        return goodsBeanList.size()>0?goodsBeanList.size():1;
+        /*return goodsBeanList.size();*/
     }
 
 
 
-    public void setHeaderView(GoodsBean bean) {
+    public void setHeaderItem(GoodsBean bean) {
        /* goodsBeanList.add(bean);
         int size = goodsBeanList.size();
         if(goodsBeanList != null){

@@ -12,7 +12,7 @@ import cn.sharesdk.framework.ShareSDK;
  */
 public class MyApplication extends Application {
 
-    private static MyApplication instance;
+    private  MyApplication instance;
 
     @Override
     public void onCreate() {
@@ -25,17 +25,17 @@ public class MyApplication extends Application {
        /*极光推送*/
 
         /*友盟第三方登录*/
-     /*   ShareSDK.initSDK(this);*/
+       /* ShareSDK.initSDK(this);*/
         /*友盟第三方登录*/
     }
 
 
 
-    public static   MyApplication getInstance() {
+    public  MyApplication getInstance() {
         return instance;
     }
 
-    public static   MyApplication getContext() {
+    public  MyApplication getContext() {
         instance = getContext();
         return instance;
     }

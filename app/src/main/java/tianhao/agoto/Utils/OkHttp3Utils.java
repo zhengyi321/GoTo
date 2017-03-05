@@ -28,9 +28,9 @@ import tianhao.agoto.Application.MyApplication;
 
 public class OkHttp3Utils {
     private  OkHttpClient mOkHttpClient;
-
+    MyApplication myApplication = new MyApplication();
     //设置缓存目录
-    private  File cacheDirectory = new File(MyApplication.getInstance().getApplicationContext().getCacheDir().getAbsolutePath(), "MyCache");
+    private  File cacheDirectory = new File(myApplication.getInstance().getApplicationContext().getCacheDir().getAbsolutePath(), "MyCache");
 /*
     private static File cacheDirectory = new File(MyApplication.getInstance().getApplicationContext().getCacheDir().getAbsolutePath(), "MyCache");
 */
@@ -73,15 +73,16 @@ public class OkHttp3Utils {
         @Override
         public Response intercept(Chain chain) throws IOException {
             Request request = chain.request();
-            if (!isNetworkReachable(MyApplication.getInstance().getApplicationContext())) {
-                Toast.makeText(MyApplication.getInstance().getApplicationContext(), "暂无网络", Toast.LENGTH_SHORT).show();
+
+            if (!isNetworkReachable(myApplication.getInstance().getApplicationContext())) {
+                Toast.makeText(myApplication.getInstance().getApplicationContext(), "暂无网络", Toast.LENGTH_SHORT).show();
                 request = request.newBuilder()
                         .cacheControl(CacheControl.FORCE_CACHE)//无网络时只从缓存中读取
                         .build();
             }
 
             Response response = chain.proceed(request);
-            if (isNetworkReachable(MyApplication.getInstance().getApplicationContext())) {
+            if (isNetworkReachable(myApplication.getInstance().getApplicationContext())) {
                 int maxAge = 60 * 60; // 有网络时 设置缓存超时时间1个小时
                 response.newBuilder()
                         .removeHeader("Pragma")
@@ -103,7 +104,7 @@ public class OkHttp3Utils {
      * 自动管理Cookies
      */
     private  class CookiesManager implements CookieJar {
-        private final PersistentCookieStore cookieStore = new PersistentCookieStore(MyApplication.getInstance().getApplicationContext());
+        private final PersistentCookieStore cookieStore = new PersistentCookieStore(myApplication.getInstance().getApplicationContext());
 
         @Override
         public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {

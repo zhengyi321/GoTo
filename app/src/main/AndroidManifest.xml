@@ -361,6 +361,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </receiver>
+
+
+
+        <provider
+            android:authorities="com.sonnyzoom.loaderdemo.provider.bookprovider"
+            android:name=".Common.Widget.RecyclerView.LoadMoreRecyclerView.provider.BookProvider"/>
     </application>
 
 </manifest>

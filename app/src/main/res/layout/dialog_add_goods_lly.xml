@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="250dp"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/transparent"
     android:paddingLeft="30dp"
     android:paddingRight="30dp"
     >
     <!--android:src="@drawable/activity_main_ad_bg_white_radius"-->
-    <LinearLayout
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="260dp"
         android:layout_height="190dp"
         android:background="@drawable/activity_main_ad_bg_white_radius"
-        android:orientation="vertical"
-
         android:layout_centerInParent="true"
         >
         <LinearLayout
@@ -138,5 +136,5 @@
             </LinearLayout>
         </LinearLayout>
     <!--确定 取消-->
-    </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>

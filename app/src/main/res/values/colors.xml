@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+
+
     <!--主页面背景色-->
     <color name="colorMainActivityTopBarBg">#2c2d37</color>
     <color name="colorMainActivityContentBg">#2c2d37</color>

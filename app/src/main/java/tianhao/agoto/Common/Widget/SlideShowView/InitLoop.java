@@ -40,9 +40,14 @@ public class InitLoop {
     public void init(){
         ButterKnife.bind(this,view);
         cicleWheelInit();
+
     }
-
-
+    public void setStop(){
+        mLoopViewPager.setAutoChange(false);
+    }
+    public void setStart(){
+        mLoopViewPager.setAutoChange(true);
+    }
 
     /* 轮播初始化*/
     private void cicleWheelInit(){
