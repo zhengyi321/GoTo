@@ -62,7 +62,10 @@ public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFling
     }
     public void addData(GoodsBean bean){
         this.goodsBeanList.add(bean);
-        notifyItemRangeChanged(0,1,bean);
+        notifyItemInserted(0);
+       /* notifyDataSetChanged();*/
+
+        /*notifyItemRangeChanged(0,1,bean);*/
         /*notifyDataSetChanged();*/
         /*notifyDataSetChanged();*/
        /* notifyItemRangeChanged(0,1);*/
@@ -136,19 +139,23 @@ public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFling
             }
         }*/
     }
-    @Override
+/*    @Override
     public int getItemViewType(int position) {
         if(goodsBeanList.size()<=0){
             return -1;
         }
         return super.getItemViewType(position);
-    }
+    }*/
 
     @Override
     public int getItemCount() {
-
-        System.out.println("getItemCount "+goodsBeanList.size());
-        return goodsBeanList.size()>0?goodsBeanList.size():1;
+        if(goodsBeanList != null){
+            System.out.println("getItemCount "+goodsBeanList.size());
+            return goodsBeanList.size()>0?goodsBeanList.size():1;
+        }else{
+            return 1;
+        }
+        /*return goodsBeanList.size()>0?goodsBeanList.size():1;*/
         /*return goodsBeanList.size();*/
     }
 
