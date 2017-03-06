@@ -59,9 +59,10 @@
         </RelativeLayout>
         <!--提醒客户仔细订阅外卖-->
         <tianhao.agoto.Common.Widget.SwipeCardView.SwipePostCard.SwipePostcard
-            android:id="@+id/sp_test"
+            android:id="@+id/sp_shoppinglist_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="30dp"
             app:maxCount="5"
             app:minDistance="0"
             app:offsetY="24dp"

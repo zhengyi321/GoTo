@@ -1,26 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/transparent"
-    android:paddingLeft="30dp"
-    android:paddingRight="30dp"
+    android:paddingLeft="40dp"
+    android:paddingRight="40dp"
     >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zero"
+        android:layout_weight="2.6"
+        >
+
+
+    </RelativeLayout>
     <!--android:src="@drawable/activity_main_ad_bg_white_radius"-->
     <RelativeLayout
-        android:layout_width="260dp"
-        android:layout_height="190dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zero"
+        android:layout_weight="4"
         android:background="@drawable/activity_main_ad_bg_white_radius"
         android:layout_centerInParent="true"
         >
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="131dp"
+            android:layout_height="180dp"
             android:orientation="vertical"
             >
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="60dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -33,7 +42,7 @@
         </RelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="81dp"
+            android:layout_height="92dp"
             android:orientation="vertical"
             android:background="@drawable/dialog_gray_border_white_bg"
             android:layout_marginLeft="15dp"
@@ -41,8 +50,8 @@
             >
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp">
-            <EditText
+            android:layout_height="45dp">
+            <tianhao.agoto.Common.Widget.EditText.EditTextWithDel
                 android:id="@+id/et_dialog_add_goods_goodsname"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -62,8 +71,9 @@
             />
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp">
-            <EditText
+            android:layout_height="45dp">
+
+            <tianhao.agoto.Common.Widget.EditText.EditTextWithDel
                 android:id="@+id/et_dialog_add_goods_goodsnum"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -71,8 +81,9 @@
                 android:textColor="@color/black"
                 android:textSize="12sp"
                 android:background="@null"
-                android:layout_centerVertical="true"
                 android:textColorHint="@color/gray"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 />
         </RelativeLayout>
@@ -82,7 +93,7 @@
         <!--确定 取消-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:layout_alignParentBottom="true"
             android:orientation="vertical"
             >
@@ -137,4 +148,11 @@
         </LinearLayout>
     <!--确定 取消-->
     </RelativeLayout>
-</RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zero"
+        android:layout_weight="2.6"
+        >
+    </RelativeLayout>
+</LinearLayout>

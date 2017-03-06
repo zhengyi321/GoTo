@@ -3,6 +3,7 @@ package tianhao.agoto.Common.DialogAlterView.LikeIosStyle;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import tianhao.agoto.Common.Widget.EditText.EditTextWithDel;
 import tianhao.agoto.R;
 
 /**
@@ -22,7 +24,7 @@ import tianhao.agoto.R;
  */
 public class CustomDialog extends Dialog {
 
-
+    Context context;
    /* public interface DialogCallBackListener{//通过该接口回调Dialog需要传递的值
         public void callBack(String msg);//具体方法
     }*/
@@ -33,20 +35,25 @@ public class CustomDialog extends Dialog {
 
     public CustomDialog(Context context) {
         super(context);
+        this.context = context;
     }
 
     public CustomDialog(Context context, int themeResId) {
         super(context, themeResId);
+        this.context = context;
     }
 
     protected CustomDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
+        this.context = context;
     }
 
     @Override
     public void dismiss() {
         super.dismiss();
     }
+
+    public Builder Build = new Builder(context);
     //用Builder模式来构造Dialog
     public  class Builder {
         private Context mContext;
@@ -101,13 +108,14 @@ public class CustomDialog extends Dialog {
          */
         public CustomDialog build() {
             LayoutInflater mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            /*LayoutInflater mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);*/
             /*final CustomDialog mCustomDialog = new CustomDialog(mContext, R.style.CustomDialog);//默认调用带style的构造*/
             final CustomDialog mCustomDialog = new CustomDialog(mContext, R.style.AppTheme_NoActionBar);//默认调用带style的构造
             mCustomDialog.setCanceledOnTouchOutside(false);//默认点击布局外不能取消dialog
             View view = mInflater.inflate(R.layout.dialog_add_goods_lly, null);
             mCustomDialog.addContentView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            final EditText messageViewName = (EditText) view.findViewById(R.id.et_dialog_add_goods_goodsname);
-            final EditText messageViewNum = (EditText) view.findViewById(R.id.et_dialog_add_goods_goodsnum);
+            final EditTextWithDel messageViewName = (EditTextWithDel) view.findViewById(R.id.et_dialog_add_goods_goodsname);
+            final EditTextWithDel messageViewNum = (EditTextWithDel) view.findViewById(R.id.et_dialog_add_goods_goodsnum);
          /*   if (!TextUtils.isEmpty(title)) {
                 TextView titleView = (TextView) view.findViewById(R.id.tv_title);
                 titleView.setText(title);

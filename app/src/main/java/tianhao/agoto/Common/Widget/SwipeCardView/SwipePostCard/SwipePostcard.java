@@ -30,7 +30,8 @@ public class SwipePostcard extends FrameLayout {
     private int mMaxPostcardNum = 3;
     private boolean mIsBacked = true;
     private int mDropDirection;
-    private int mOffsetY = 40;
+    private int mOffsetY = 10;
+    /*private int mOffsetY = 40;*/
 
     public static final int DIRECTION_LEFT = 1 << 1;
     public static final int DIRECTION_RIGHT = 1 << 2;
@@ -131,7 +132,13 @@ public class SwipePostcard extends FrameLayout {
         if (second != null)
             second.animate().scaleX(1f).scaleY(1f).translationYBy(-mOffsetY).setDuration(100).start();
         if (third != null)
+            third.animate().scaleX(1f).scaleY(1f).translationYBy(-mOffsetY).setDuration(100).start();
+/*
+ if (second != null)
+            second.animate().scaleX(1f).scaleY(1f).translationYBy(-mOffsetY).setDuration(100).start();
+        if (third != null)
             third.animate().scaleX(0.95f).scaleY(0.95f).translationYBy(-mOffsetY).setDuration(100).start();
+*/
 
         if (mCurrentPosition < mItemCount) {
             addPostcards(mCurrentPosition);
@@ -160,7 +167,7 @@ public class SwipePostcard extends FrameLayout {
     }
 
     public void setMaxPostcardNum(int maxPostcardNum) {
-        if (maxPostcardNum < 3)
+        if (maxPostcardNum < 1)
             throw new IllegalArgumentException("the maxPostcardNum can not smaller than 3");
         mMaxPostcardNum = maxPostcardNum;
 
@@ -214,12 +221,16 @@ public class SwipePostcard extends FrameLayout {
             postCard.setScaleY(1);
             postCard.setTranslationY(0);
         } else if (position == 1) {
+            postCard.setScaleX(1);
+            postCard.setScaleY(1);/*
             postCard.setScaleX(0.95f);
-            postCard.setScaleY(0.95f);
+            postCard.setScaleY(0.95f);*/
             postCard.setTranslationY(mOffsetY);
         } else {
+            postCard.setScaleX(1);
+            postCard.setScaleY(1);/*
             postCard.setScaleX(0.5f);
-            postCard.setScaleY(0.5f);
+            postCard.setScaleY(0.5f);*/
             postCard.setTranslationY(2 * mOffsetY);
             postCard.animate().scaleX(0.9f).scaleY(0.9f).setDuration(100).start();
         }
