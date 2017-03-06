@@ -39,12 +39,15 @@ public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFling
     private List<GoodsBean> goodsBeanList ;
     private Context context;
     private LayoutInflater inflater;
-    private ItemContentViewHolder itemContentViewHolder;
+
     public SwipFlingRecyclerViewAdapter(Context context,List<GoodsBean> goodsBeanList){
         this.context = context;
         this.goodsBeanList=goodsBeanList ;
-        inflater = LayoutInflater.from(context);
+        /*inflater = LayoutInflater.from(context);*/
+      /*  inflater = (LayoutInflater) activity
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);*/
         System.out.println(" SwipFlingRecyclerViewAdapter");
+
     }
     public void setDataList(Collection<GoodsBean> dataList){
         this.goodsBeanList.clear();
@@ -62,10 +65,10 @@ public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFling
     }
     public void addData(GoodsBean bean){
         this.goodsBeanList.add(bean);
-        notifyItemInserted(0);
-       /* notifyDataSetChanged();*/
+        /*notifyItemInserted(0);*/
+  /*      notifyDataSetChanged();*/
 
-        /*notifyItemRangeChanged(0,1,bean);*/
+        notifyItemRangeChanged(0,1,bean);
         /*notifyDataSetChanged();*/
         /*notifyDataSetChanged();*/
        /* notifyItemRangeChanged(0,1);*/
@@ -91,8 +94,11 @@ public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFling
             View v=inflater.inflate(R.layout.activity_shoppinglist_content_piper_card_item_rv_item_lly,parent,false);
             return new ItemContentViewHolder(v);
         }
+
         View v=LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_shoppinglist_content_piper_card_item_rv_item_lly,parent,false);
-        itemContentViewHolder=new ItemContentViewHolder(v);
+        v.setFocusable(true);
+        parent.setFocusable(true);
+        ItemContentViewHolder itemContentViewHolder=new ItemContentViewHolder(v);
         return itemContentViewHolder;
         /*return new ItemContentViewHolder(inflater.inflate(R.layout.activity_shoppinglist_content_piper_card_item_rv_item_lly, parent, false));*/
     }
@@ -119,13 +125,13 @@ public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFling
     @Override
     public void onBindViewHolder(ItemContentViewHolder holder, int position,List<Object> payloads){
         System.out.println(" onBindViewHolder22");
-        if(payloads.isEmpty()){
+      /*  if(payloads.isEmpty()){
             onBindViewHolder(holder,position);
         }
 
         if(payloads == null){
             onBindViewHolder(holder,position);
-        }/*else{
+        }*//*else{
             if(position == 0){
                 return;
             }

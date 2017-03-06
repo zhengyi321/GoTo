@@ -9,11 +9,14 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Loader;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.Time;
@@ -96,18 +99,19 @@ public class SwipFlingAdapter  extends BaseAdapter {
 
     private List<SwipFlingBean> objs;
     private Activity activity;
-  /*  private LayoutInflater inflater;*/
+    private LayoutInflater inflater;
     private AlertDialog alertDialog;
-    private ViewHolder holder;
+
     public SwipFlingAdapter(Activity activity,List<SwipFlingBean> objs) {
         this.objs = objs;
         this.activity = activity;
-        /*inflater = LayoutInflater.from(activity);*/
+        inflater = LayoutInflater.from(activity);
         System.out.println("SwipFlingAdapter");
 
     }
 
     public void addAll(Collection<SwipFlingBean> collection) {
+
         System.out.println("addAll");
         if (isEmpty()) {
             objs.addAll(collection);
@@ -115,6 +119,7 @@ public class SwipFlingAdapter  extends BaseAdapter {
         } else {
             objs.addAll(collection);
         }
+
     /*    objs.addAll(collection);
         notifyDataSetChanged();*/
     }
@@ -149,7 +154,8 @@ public class SwipFlingAdapter  extends BaseAdapter {
     @Override
     public int getCount() {
         System.out.println("getCount");
-        return objs.size();
+        return objs.size()>0?objs.size():1;
+        /*return objs.size();*/
     }
 
     @Override
@@ -169,12 +175,22 @@ public class SwipFlingAdapter  extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         System.out.println("this is getView:pos"+ position+"convert:"+convertView+"parent:"+parent);
+        ViewHolder holder;
         if (convertView == null) {
             System.out.println("this is getView:111111111,pos:"+position);
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_shoppinglist_content_piper_card_item_lly, parent, false);
-            holder = new ViewHolder(convertView, activity);
+            /*parent.getChildCount();*/
+            /*convertView.setFocusable(true);*/
+            System.out.println("this is getView: parent.getChildCount():"+ parent.getChildCount()+position);
+            convertView =LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_shoppinglist_content_piper_card_item_lly, parent, false);
+            holder = new ViewHolder( convertView,activity);
             convertView.setTag(holder);
+
         } else {
+           /* if(parent.getChildAt(0) != null){
+                parent.removeViews(0,1);
+            }*/
+            /*convertView.setFocusable(true);*/
+            System.out.println("this is getView: parent.getChildCount2():"+ parent.getChildCount()+position);
             System.out.println("this is getView:222222222222,pos:"+position);
             holder = (ViewHolder) convertView.getTag();
         }
@@ -224,19 +240,21 @@ public class SwipFlingAdapter  extends BaseAdapter {
     public class ViewHolder {
 
         @BindView(R.id.erv_shoppinglist_content_piper_card_item_goods)
-        EasyRecyclerView recyclerView ;
+        RecyclerView recyclerView ;
         @BindView(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
         LinearLayout testly;
         private BookAdapter adapter;
         /*List<String> goodsBeanList= new ArrayList<String>();*/
         List<GoodsBean> goodsBeanList = new ArrayList<GoodsBean>();
-        SwipFlingRecyclerViewAdapter recyclerViewAdapter = new SwipFlingRecyclerViewAdapter(activity,goodsBeanList);
+        SwipFlingRecyclerViewAdapter recyclerViewAdapter /*= new SwipFlingRecyclerViewAdapter(activity,goodsBeanList)*/;
         Context context;
         @OnClick(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
         public void testOnclick(){
             System.out.println("this is onclick");
 
             recyclerViewAdapter.addData(new GoodsBean());
+
+          /*  notifyDataSetChanged();*/
            /* recyclerViewAdapter.setDataList(goodsBeanList);*/
             /*goodsBeanList.add(new GoodsBean());
             goodsBeanList.add(new GoodsBean());
@@ -246,7 +264,11 @@ public class SwipFlingAdapter  extends BaseAdapter {
             recyclerViewAdapter.notifyItemChanged(goodsBeanList.size()-1,goodsBeanList.size());*/
           /*  showDialog();*/
         }
-
+     /*   @OnTouch(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
+        public boolean toucheTest(View v ,MotionEvent evt ){
+            System.out.println("this is toucheTest");
+            return  false;
+        }*/
         private void showDialog() {
 
             final AlertDialog dialog = new AlertDialog.Builder(context).create();
@@ -333,16 +355,17 @@ public class SwipFlingAdapter  extends BaseAdapter {
         public ViewHolder( View convertView,Context context1){
             /*goodsBeanList = new ArrayList<GoodsBean>();*/
             this.context = context1;
+
             ButterKnife.bind(this,convertView);
             goodsBeanList.add(new GoodsBean());
-            /*recyclerViewAdapter = new SwipFlingRecyclerViewAdapter(context1,goodsBeanList);*/
-
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context1,LinearLayoutManager.VERTICAL,false);
-            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-
+            recyclerViewAdapter = new SwipFlingRecyclerViewAdapter(context1,goodsBeanList);
+            recyclerView.setHasFixedSize(true);
             /*位置不一样会导致刷新不了的bug*/
-            recyclerView.setLayoutManager(linearLayoutManager);
+            recyclerView.setLayoutManager(new LinearLayoutManager(context1,LinearLayoutManager.VERTICAL,false));
             recyclerView.setAdapter(recyclerViewAdapter);
+            recyclerView.addItemDecoration(new DividerItemDecoration(context1,
+                    DividerItemDecoration.VERTICAL));
+
          /*   goodsBeanList= new ArrayList<String>();*/
          /*   recyclerViewAdapter  = new SwipFlingRecyclerViewAdapter(activity,goodsBeanList);
 */

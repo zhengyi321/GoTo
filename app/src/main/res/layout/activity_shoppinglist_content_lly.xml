@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:swipe="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorActivityShoppingListContentBlackBg"
-    >
+    android:background="@color/colorActivityShoppingListContentBlackBg">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -58,14 +58,43 @@
 
         </RelativeLayout>
         <!--提醒客户仔细订阅外卖-->
-        <tianhao.agoto.Common.Widget.SwipeCardView.SwipeFlingAdapterView
+        <tianhao.agoto.Common.Widget.SwipeCardView.SwipePostCard.SwipePostcard
+            android:id="@+id/sp_test"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:maxCount="5"
+            app:minDistance="0"
+            app:offsetY="24dp"
+            >
+
+
+        </tianhao.agoto.Common.Widget.SwipeCardView.SwipePostCard.SwipePostcard>
+<!--        <tianhao.agoto.Common.Widget.SwipeCardView.SwipecardRecycleRView.SwipeCardRecyclerView
+            android:id="@+id/scrv_shoppinglist_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            >
+        </tianhao.agoto.Common.Widget.SwipeCardView.SwipecardRecycleRView.SwipeCardRecyclerView>-->
+       <!-- <tianhao.agoto.Common.Widget.RecyclerView.CardStack.cardstack.CardStack
+            android:id="@+id/cs_shoppinglist_content"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_horizontal|bottom"
+            app:card_stack_size="4"
+            swipe:min_adapter_stack="4"
+            swipe:max_visible="4"
+            >
+
+        </tianhao.agoto.Common.Widget.RecyclerView.CardStack.cardstack.CardStack>-->
+        <!--<tianhao.agoto.Common.Widget.SwipeCardView.SwipeFlingAdapterView
             android:id="@+id/sfav_shoppinglist_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal|bottom"
             swipe:min_adapter_stack="4"
             swipe:max_visible="4"
-            />
+            />-->
 
     </FrameLayout>
 

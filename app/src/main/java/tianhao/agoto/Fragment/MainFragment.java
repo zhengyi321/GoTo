@@ -38,6 +38,10 @@ public class MainFragment extends Fragment {
         init(view);
         return view;
     }
+
+    public int getTheView(){
+        return R.layout.fragment_main_content_sv;
+    }
     public void onResume(){
         super.onResume();
         tvMainAd.startScroll();

@@ -45,17 +45,17 @@ public class SwipFlingBean {
 
     @BindView(R.id.erv_shoppinglist_content_piper_card_item_goods)
     RecyclerView recyclerView ;
-    @BindView(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
-    LinearLayout testly;
+   /* @BindView(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
+    LinearLayout testly;*/
     private BookAdapter adapter;
         /*List<String> goodsBeanList= new ArrayList<String>();*/
 
-    @OnClick(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
+/*    @OnClick(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
     public void testOnclick(){
         System.out.println("this is onclick");
 
         showDialog();
-    }
+    }*/
 
     private void showDialog() {
 
