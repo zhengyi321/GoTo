@@ -67,10 +67,13 @@ public class ShoppingListActivity extends Activity {
     RelativeLayout rlyShoppingListTopBarRightMenu;
     PostcardAdapter adapter;
     private final int RESULT_FOODSMENU = 12;//菜单
+    private List<GoodsBean> goodsBeanList = new ArrayList<GoodsBean>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shoppinglist_lly);
+        Bundle foodsMenu = getIntent().getExtras();
+        goodsBeanList = foodsMenu.getParcelableArrayList("foodsList");
         init();
     }
     private void init(){
@@ -91,6 +94,8 @@ public class ShoppingListActivity extends Activity {
         }
 
         adapter = new PostcardAdapter(this, data);
+        System.out.println("this is initCard:"+goodsBeanList.size());
+        adapter.recyclerViewAdapter.setDataList(goodsBeanList);
         if (spShoppingContent != null) {
 
 

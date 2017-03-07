@@ -52,7 +52,7 @@ public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFling
     public void setDataList(Collection<GoodsBean> dataList){
         this.goodsBeanList.clear();
         this.goodsBeanList.addAll(dataList);
-        this.notifyItemRangeChanged(0,goodsBeanList.size(),goodsBeanList);
+        this.notifyItemRangeChanged(0,goodsBeanList.size());
         System.out.println(" setDataList");
     }
     public void addPos(GoodsBean bean, int position) {

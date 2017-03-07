@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:swipe="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorActivityShoppingListContentBlackBg">
@@ -60,15 +59,13 @@
         <!--提醒客户仔细订阅外卖-->
         <tianhao.agoto.Common.Widget.SwipeCardView.SwipePostCard.SwipePostcard
             android:id="@+id/sp_shoppinglist_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:layout_marginBottom="30dp"
             app:maxCount="5"
             app:minDistance="0"
             app:offsetY="24dp"
             >
-
-
         </tianhao.agoto.Common.Widget.SwipeCardView.SwipePostCard.SwipePostcard>
 <!--        <tianhao.agoto.Common.Widget.SwipeCardView.SwipecardRecycleRView.SwipeCardRecyclerView
             android:id="@+id/scrv_shoppinglist_content"

@@ -48,7 +48,7 @@ public class PostcardAdapter extends SwipePostcard.Adapter {
     private LayoutInflater inflater;
     public ViewHolder viewHold;
     private List<GoodsBean> goodsBeanList ;
-    private SwipFlingRecyclerViewAdapter recyclerViewAdapter/* = new SwipFlingRecyclerViewAdapter(mContext,goodsBeanList)*/;
+    public SwipFlingRecyclerViewAdapter recyclerViewAdapter/* = new SwipFlingRecyclerViewAdapter(mContext,goodsBeanList)*/;
     public PostcardAdapter(Context context, List<Bean> data) {
         mContext = context;
         mData = data;

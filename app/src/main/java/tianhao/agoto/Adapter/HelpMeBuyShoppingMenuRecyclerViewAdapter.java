@@ -30,7 +30,7 @@ public class HelpMeBuyShoppingMenuRecyclerViewAdapter extends RecyclerView.Adapt
         this.goodsBeanList.addAll(goodsBeanList);
     }
     public List<GoodsBean> getGoodsBeanList(){
-        return this.getGoodsBeanList();
+        return this.goodsBeanList;
     }
 
     @Override

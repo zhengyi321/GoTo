@@ -216,8 +216,12 @@ public class HelpMeBuyActivity extends Activity{
             /*时间为小于1秒则判断为点击事件不然就判断为触摸事件*/
         if (Math.abs(timeGap) < 1) {
             Bundle bundle = new Bundle();
-            List<GoodsBean> goodsBeanList = helpMeBuyShoppingMenuRecyclerViewAdapter.getGoodsBeanList();
+            goodsBeanList = helpMeBuyShoppingMenuRecyclerViewAdapter.getGoodsBeanList();
+            System.out.println("this is helpmebuy:"+goodsBeanList.size());
+            Log.i("HelpMeBuySize",goodsBeanList.size()+"");
+            bundle.putParcelableArrayList("foodsList",(ArrayList<GoodsBean>)goodsBeanList);
             Intent intent = new Intent(this,ShoppingListActivity.class);
+            intent.putExtras(bundle);
             startActivityForResult(intent,RESULT_BUY);
         }
     }
@@ -282,9 +286,9 @@ public class HelpMeBuyActivity extends Activity{
     }
 
     /*初始化购物清单*/
-    private void initShoppingMenu(List<GoodsBean> goodsBeanList){
+    private void initShoppingMenu(List<GoodsBean> goodsBeanLists){
         goodsBeanList.clear();
-        goodsBeanList.addAll(goodsBeanList);
+        goodsBeanList.addAll(goodsBeanLists);
         /*helpMeBuyShoppingMenuRecyclerViewAdapter = new HelpMeBuyShoppingMenuRecyclerViewAdapter(this,goodsBeanList);*/
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,6);
         rvHelpMeBuyContentShoppingMenu.setLayoutManager(gridLayoutManager);

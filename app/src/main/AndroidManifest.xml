@@ -300,11 +300,16 @@
             android:screenOrientation="portrait"
             android:hardwareAccelerated="false"
             />
+       <!-- 如果希望输入法键盘弹出时不自动向上挤压activity，在activty中设置属性android:windowSoftInputMode="adjustPan"即可，如下：
+        https://zhidao.baidu.com/question/1368022941103155979.html-->
         <activity
             android:name=".Activity.ShoppingListActivity"
             android:screenOrientation="portrait"
             android:hardwareAccelerated="false"
+            android:windowSoftInputMode="stateVisible|adjustPan"
             />
+        <!-- 如果希望输入法键盘弹出时不自动向上挤压activity，在activty中设置属性android:windowSoftInputMode="adjustPan"即可，如下：
+        https://zhidao.baidu.com/question/1368022941103155979.html-->
         <activity
             android:name=".Activity.AddressManageAddContacterActivity"
             android:screenOrientation="portrait"
