@@ -8,7 +8,7 @@
     android:id="@+id/activity_activity_topbar_lly"
     >
     <RelativeLayout
-        android:id="@+id/rly_activity_activity_topbar_leftmenu"
+        android:id="@+id/rly_shoppinglist_topbar_leftmenu"
         android:layout_width="@dimen/zero"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
@@ -43,6 +43,7 @@
     </RelativeLayout>
     <!--标题-->
     <RelativeLayout
+        android:id="@+id/rly_shoppinglist_topbar_rightmenu"
         android:layout_width="@dimen/zero"
         android:layout_height="match_parent"
         android:layout_weight="1"

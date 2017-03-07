@@ -30,8 +30,8 @@ import tianhao.agoto.R;
 
 
 public class EasyRecyclerView extends FrameLayout {
-    public static final String TAG = "EasyRecyclerView";
-    public static boolean DEBUG = false;
+    public  final String TAG = "EasyRecyclerView";
+    public  boolean DEBUG = false;
     protected RecyclerView mRecycler;
     protected ViewGroup mProgressView;
     protected ViewGroup mEmptyView;
@@ -120,10 +120,25 @@ public class EasyRecyclerView extends FrameLayout {
 
     }
 
+
+    public boolean onInterceptTouchEvent(MotionEvent ev){
+        int action  = ev.getAction();
+        switch(action){
+            case MotionEvent.ACTION_DOWN:
+                Toast.makeText(getContext(), TAG+"intercept触发", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "interceptTouch ActionDown");
+                break;
+        }
+        return false;
+    }
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         return mPtrLayout.dispatchTouchEvent(ev);
+        /*return true*/
     }
+
+
+
 
     /**
      *
@@ -429,6 +444,7 @@ public class EasyRecyclerView extends FrameLayout {
         mExternalOnScrollListener = listener;
     }
 
+
     /**
      * Add scroll listener to the recycler
      *
@@ -472,6 +488,8 @@ public class EasyRecyclerView extends FrameLayout {
     public void removeOnItemTouchListener(RecyclerView.OnItemTouchListener listener) {
         mRecycler.removeOnItemTouchListener(listener);
     }
+
+
 
     /**
      * @return the recycler adapter
@@ -528,8 +546,11 @@ public class EasyRecyclerView extends FrameLayout {
     }
 
     private static void log(String content){
-        if (DEBUG){
+       /* if (DEBUG){
             Log.i(TAG,content);
+        }*/
+        if(false){
+            Log.i("EasyRecyclerView",content);
         }
     }
 

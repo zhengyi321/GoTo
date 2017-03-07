@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="@dimen/activity_shoppinglist_content_margin_left_right_size"
     android:layout_marginRight="@dimen/activity_shoppinglist_content_margin_left_right_size"
-    android:layout_marginBottom="@dimen/activity_shoppinglist_content_margin_top_bottom_size"
+
     android:layout_marginTop="29dp"
     android:orientation="vertical"
     android:background="@drawable/activity_shoppinglist_white_bg_shadow">
@@ -161,45 +161,45 @@
         >-->
 
     <!--android:id="@+id/lly_shoppinglist_content_piper_card_item_parent_rv"-->
-    <tianhao.agoto.Common.Widget.ScrollView.SpringScrollView
+<!--    <tianhao.agoto.Common.Widget.ScrollView.MyScrollView
+        android:id="@+id/ssv_shoppinglist_content_piper_card_item_rv_scroll"
         android:layout_width="match_parent"
         android:layout_height="@dimen/zero"
-        android:layout_weight="4"
+        android:layout_weight="5"
         android:fillViewport="true"
-        >
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <LinearLayout
+        >-->
+            <tianhao.agoto.Common.Widget.ScrollView.SpringScrollView
+                android:id="@+id/ssv_shoppinglist_content_piper_card_item_scrol"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
+                android:layout_height="@dimen/zero"
+                android:layout_weight="5"
+                android:fillViewport="true"
                 >
-                <include layout="@layout/activity_shoppinglist_content_piper_card_item_rv_headview_lly"/>
 
 
-                <android.support.v7.widget.RecyclerView
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    android:orientation="vertical"
+                    >
+                <include layout="@layout/activity_shoppinglist_content_piper_card_item_rv_headview_lly"
+                    />
+                <tianhao.agoto.Common.Widget.RecyclerView.EasyRecyclerView.EasyRecyclerView
                     android:id="@+id/erv_shoppinglist_content_piper_card_item_goods"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
 
                     >
 
-                </android.support.v7.widget.RecyclerView>
-
+                </tianhao.agoto.Common.Widget.RecyclerView.EasyRecyclerView.EasyRecyclerView>
             </LinearLayout>
-            <LinearLayout
-                android:id="@+id/lly_shoppinglist_content_piper_card_item_parent_rv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                >
-
-            </LinearLayout>
-        </FrameLayout>
+            </tianhao.agoto.Common.Widget.ScrollView.SpringScrollView>
 
 
-    </tianhao.agoto.Common.Widget.ScrollView.SpringScrollView>
+
+   <!-- </tianhao.agoto.Common.Widget.ScrollView.MyScrollView>-->
 
 
 
@@ -351,7 +351,7 @@
                     android:layout_marginBottom="5dp"
                     />
                 <TextView
-                    android:id="@+id/tv_shoppinglist_content_piper_card_item_goodstype"
+                    android:id="@+id/tv_shoppinglist_content_piper_card_item_goodstypenum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorActivityShoppingListContentRedWordBg"

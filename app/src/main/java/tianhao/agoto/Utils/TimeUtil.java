@@ -58,7 +58,9 @@ public class TimeUtil {
      * @return
      */
     public  long getSubTwoTimeBySeconds(String endTime,String startTime){
-
+            if(endTime.isEmpty() || startTime.isEmpty()){
+                return 0;
+            }
             Date d1 = parseDateTime(startTime);
             Date d2 = parseDateTime(endTime);
             long diff = d1.getTime() - d2.getTime();//这样得到的差值是微秒级别

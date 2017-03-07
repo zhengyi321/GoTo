@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import tianhao.agoto.Adapter.SwipFlingRecyclerViewAdapter;
 import tianhao.agoto.Bean.GoodsBean;
+import tianhao.agoto.Common.Widget.ScrollView.SpringScrollView;
 import tianhao.agoto.R;
 
 /**
@@ -28,8 +29,7 @@ public class ShoppingListSwipFlingItemFragment extends Fragment {
 
     @BindView(R.id.erv_shoppinglist_content_piper_card_item_goods)
     RecyclerView ervShoppingListContentPiperCardItemGoods ;
-    @BindView(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
-    LinearLayout llyShoppingListContentPiperCardItemParentRV;
+
     List<GoodsBean> goodsBeanList = new ArrayList<GoodsBean>();
     SwipFlingRecyclerViewAdapter recyclerViewAdapter;
     View view;
@@ -74,10 +74,5 @@ public class ShoppingListSwipFlingItemFragment extends Fragment {
 
 
 
-    @OnClick(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
-    public void testOnclick(){
-        System.out.println("this is onclick");
-        recyclerViewAdapter.addData(new GoodsBean());
 
-    }
 }

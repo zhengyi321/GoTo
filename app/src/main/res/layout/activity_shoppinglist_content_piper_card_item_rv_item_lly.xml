@@ -1,68 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/lly_shoppinglist_content_piper_card_item_rv_item_total"
     android:layout_width="match_parent"
-    android:layout_height="30dp"
+    android:layout_height="40dp"
     android:background="@color/white"
     android:orientation="vertical"
+
     >
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/the_split_line_height"
-        android:background="@color/gray"
-        />
-    <LinearLayout
+    <tianhao.agoto.Common.Widget.SwipeLayout.SwipeLayout.SwipeLayout
+        android:id="@+id/as_shoppinglist_content_piper_card_item_rv_item_cehua"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_marginLeft="@dimen/activity_shoppinglist_content_item_margin_left_right_size"
-        android:layout_marginRight="@dimen/activity_shoppinglist_content_item_margin_left_right_size"
+        app:clickToClose="true"
         >
-        <RelativeLayout
-            android:layout_width="@dimen/zero"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            >
-            <TextView
-                android:id="@+id/tv_shoppinglist_content_piper_card_item_rv_item_goodsname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
-                />
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="@dimen/zero"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            >
-            <TextView
-                android:id="@+id/tv_shoppinglist_content_piper_card_item_rv_item_goodsnum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
 
-                android:textColor="@color/black"
-                android:textSize="13sp"
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="@dimen/activity_shoppinglist_content_item_margin_left_right_size"
+                    android:layout_marginRight="@dimen/activity_shoppinglist_content_item_margin_left_right_size"
+                    >
+                    <RelativeLayout
+                        android:layout_width="@dimen/zero"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+
+                        >
+                        <TextView
+                            android:id="@+id/tv_shoppinglist_content_piper_card_item_rv_item_goodsname"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="13sp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"
+                            />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="@dimen/zero"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        >
+                        <TextView
+                            android:id="@+id/tv_shoppinglist_content_piper_card_item_rv_item_goodsnum"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="13sp"
+                            android:layout_centerInParent="true"
+                            />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="@dimen/zero"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        >
+                        <TextView
+                            android:id="@+id/tv_shoppinglist_content_piper_card_item_rv_item_goodsprice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="13sp"
+                            android:layout_centerInParent="true"
+                            />
+                    </RelativeLayout>
+
+                </LinearLayout>
+            </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rly_shoppinglist_content_piper_card_item_rv_item_delete"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/activity_addressmanage_red_delete_bg_radius"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/delete"
+                android:textColor="@color/colorActivityAddressManageContentWhiteBg"
+                android:textSize="15sp"
                 android:layout_centerInParent="true"
                 />
         </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="@dimen/zero"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            >
-            <TextView
-                android:id="@+id/tv_shoppinglist_content_piper_card_item_rv_item_goodsprice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="13sp"
-                android:layout_centerInParent="true"
-                />
-        </RelativeLayout>
 
-    </LinearLayout>
-
+</tianhao.agoto.Common.Widget.SwipeLayout.SwipeLayout.SwipeLayout>
 </LinearLayout>

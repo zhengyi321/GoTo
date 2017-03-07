@@ -2,6 +2,7 @@ package tianhao.agoto.Activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -59,6 +60,13 @@ public class ShoppingListActivity extends Activity {
 
     @BindView(R.id.sp_shoppinglist_content)
     SwipePostcard spShoppingContent;
+
+    @BindView(R.id.rly_shoppinglist_topbar_leftmenu)
+    RelativeLayout rlyShoppingListTopBarLeftMenu;
+    @BindView(R.id.rly_shoppinglist_topbar_rightmenu)
+    RelativeLayout rlyShoppingListTopBarRightMenu;
+    PostcardAdapter adapter;
+    private final int RESULT_FOODSMENU = 12;//菜单
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +81,7 @@ public class ShoppingListActivity extends Activity {
         /*initCardSwitch();*/
     }
     /*初始化卡片*/
+        /*卡片效果*/
     private void initCard(){
 
         List<Bean> data = new ArrayList<>();
@@ -81,8 +90,11 @@ public class ShoppingListActivity extends Activity {
             data.add(bean);
         }
 
-        PostcardAdapter adapter = new PostcardAdapter(this, data);
+        adapter = new PostcardAdapter(this, data);
         if (spShoppingContent != null) {
+
+
+            /*卡片数据填充*/
             spShoppingContent.setAdapter(adapter);
             spShoppingContent.setMaxPostcardNum(3);
 //            postcard.setOffsetY(67);
@@ -108,97 +120,31 @@ public class ShoppingListActivity extends Activity {
         }
 
     }
+
+
+        /*卡片效果*/
     /*初始化卡片*/
 
-    /*卡片效果*/
-  /*  @BindView(R.id.rly_shoppinglist_content_paperone)
-    RelativeLayout rlyShoppingListContentPaperone;
-    @BindView(R.id.rly_shoppinglist_content_papertwo)
-    RelativeLayout rlyShoppingListContentPaperTwo;
-
-    @BindView(R.id.sfav_shoppinglist_content)
-    SwipeFlingAdapterView sfavShoppingListContent;
-
-    @BindView(R.id.lly_shoppinglist_total)
-    LinearLayout llyShoppingListTotal;
-    private SwipFlingAdapter adapter;
-
-    List<SwipFlingBean> list = new ArrayList<SwipFlingBean>();
-    private void initCardSwitch(){
-
-
-        if (sfavShoppingListContent != null) {
-            sfavShoppingListContent.setIsNeedSwipe(true);
-            sfavShoppingListContent.setFlingListener(this);
-           *//* sfavShoppingListContent.setOnItemClickListener(this);*//*
-            adapter = new SwipFlingAdapter(this,list);
-            sfavShoppingListContent.setAdapter(adapter);
-        }
-        loadData();
+    /*返回*/
+    @OnClick(R.id.rly_shoppinglist_topbar_leftmenu)
+    public void rlyShoppingListTopBarLeftMenuOnclick(){
+        finish();
     }
-    private void loadData(){
-        new AsyncTask<Void, Void, List<SwipFlingBean>>() {
-
-            @Override
-            protected List<SwipFlingBean> doInBackground(Void... params) {
-
-                list.clear();
-                SwipFlingBean talent;
-                for (int i = 0; i < 6; i++) {
-                    talent = new SwipFlingBean();
-                    list.add(talent);
-                }
-                return list;
-            }
-
-            @Override
-            protected void onPostExecute(List<SwipFlingBean> list) {
-                super.onPostExecute(list);
-                adapter.addAll(list);
-                adapter.remove(0);
-            }
-        }.execute();
+    /*返回*/
+    /*确认订单*/
+    @OnClick(R.id.rly_shoppinglist_topbar_rightmenu)
+    public void rlyShoppingListTopBarRightMenuOnclick(){
+        ArrayList<GoodsBean> goodsBeanList =(ArrayList<GoodsBean>) adapter.getGoodsBeanList();
+        System.out.println("this is rlyShoppingListTopBarRightMenuOnclick:"+goodsBeanList.size()+"goodsbean"+goodsBeanList.get(0).getName());
+        Bundle b = new Bundle();
+        b.putParcelableArrayList("foodsList", goodsBeanList);
+        Intent intent = new Intent();
+        intent.putExtras(b);
+        setResult(RESULT_FOODSMENU,intent);
+        finish();
     }
 
-
-    @Override
-    public void removeFirstObjectInAdapter() {
-        if(list != null) {
-            adapter.remove(0);
-        }
-    }
-
-    @Override
-    public void onLeftCardExit(Object dataObject) {
-
-    }
-
-    @Override
-    public void onRightCardExit(Object dataObject) {
-
-    }
-
-    @Override
-    public void onAdapterAboutToEmpty(int itemsInAdapter) {
-        if (itemsInAdapter == 3) {
-            loadData();
-        }
-    }
-    @Override
-    public void onScroll(float progress, float scrollXProgress) {
-
-    }
-*/
-
-  /*  @Override
-    public void onItemClicked(MotionEvent event, View v, Object dataObject) {
-        Toast.makeText(this,"i'm item onclick",Toast.LENGTH_SHORT).show();
-    }*/
-
-
-
-/*卡片数据填充*/
-    /*卡片效果*/
+    /*确认订单*/
 
 
 

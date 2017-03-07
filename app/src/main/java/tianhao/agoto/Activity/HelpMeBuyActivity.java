@@ -8,8 +8,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -19,16 +22,21 @@ import android.widget.Toast;
 import com.alipay.sdk.app.AuthTask;
 import com.alipay.sdk.app.PayTask;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.OnTouch;
+import tianhao.agoto.Adapter.HelpMeBuyShoppingMenuRecyclerViewAdapter;
+import tianhao.agoto.Bean.GoodsBean;
 import tianhao.agoto.Common.DialogPopupWindow.PopupOnClickEvents;
 import tianhao.agoto.R;
 import tianhao.agoto.ThirdPay.ZhiFuBao.AuthResult;
 import tianhao.agoto.ThirdPay.ZhiFuBao.OrderInfoUtil2_0;
 import tianhao.agoto.ThirdPay.ZhiFuBao.PayResult;
+import tianhao.agoto.Utils.TimeUtil;
 
 /**
  *
@@ -72,6 +80,14 @@ public class HelpMeBuyActivity extends Activity{
     /*收件人地址*/
     @BindView(R.id.tv_helpmebuy_content_receiveaddressdetail)
     TextView tvHelpMeBuyContentReceiveAddressDetail;
+
+    /*购物清单*/
+    @BindView(R.id.rv_helpmebuy_content_shoppingmenu)
+    RecyclerView rvHelpMeBuyContentShoppingMenu;
+    List<GoodsBean> goodsBeanList = new ArrayList<GoodsBean>();
+    private HelpMeBuyShoppingMenuRecyclerViewAdapter helpMeBuyShoppingMenuRecyclerViewAdapter = new HelpMeBuyShoppingMenuRecyclerViewAdapter(this,goodsBeanList);
+
+    /*购物清单*/
 
 
     /*不辣*/
@@ -117,6 +133,7 @@ public class HelpMeBuyActivity extends Activity{
     private final int RESULT_BUY = 10;//购买地址
     private double blat,rlat,blon,rlon;
     private final int RESULT_RECE = 11;//收件人信息
+    private final int RESULT_FOODSMENU = 12;//菜单
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,10 +153,73 @@ public class HelpMeBuyActivity extends Activity{
     /*后退到主界面*/
 
     /*帮我买购物清单*/
+           /* 判断是点击事件 不是滑动事件的解决方法http://www.cnblogs.com/wader2011/archive/2011/12/02/2271981.html
+    添加商品*/
+    TimeUtil timeUtil = new TimeUtil();
+    String timeBegin = "";
+    float xBegin = 0;
+    float yBegin = 0;
+    float xEnd = 0;
+    float yEnd = 0;
+
     @OnClick(R.id.lly_helpmebuy_shoppinglist)
     public void llyHelpMeBuyShoppingListOnclick(){
-        Intent intent = new Intent(this,ShoppingListActivity.class);
-        startActivityForResult(intent,RESULT_BUY);
+       /* Intent intent = new Intent(this,ShoppingListActivity.class);
+        startActivityForResult(intent,RESULT_BUY);*/
+        isOnclick();
+    }
+
+    /*购物清单再次点击*/
+    @OnTouch(R.id.rv_helpmebuy_content_shoppingmenu)
+    public boolean llyHelpMeBuyShoppingListOnTouch(View view, MotionEvent event){
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                timeBegin = timeUtil.getCurrentDateTime();
+                xBegin = event.getRawX();
+                yBegin = event.getRawY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+
+                break;
+            case MotionEvent.ACTION_UP: {
+                xEnd = event.getRawX();
+                yEnd = event.getRawY();
+                int absXBegin = (int) Math.abs(xBegin);
+                int absYBegin = (int) Math.abs(yBegin);
+                int absXEnd = (int) Math.abs(xEnd);
+                int absYEnd = (int) Math.abs(yEnd);
+                int disX = (absXEnd - absXBegin);
+                int disY = (absYEnd - absYBegin);
+                System.out.println("this is llyShoppingListContentPiperCardItemPaperThree down xBegin:" + xBegin + ",y:" + yBegin);
+                System.out.println("this is llyShoppingListContentPiperCardItemPaperThree down xEnd:" + absXEnd + ",y:" + absYEnd);
+                System.out.println("this is llyShoppingListContentPiperCardItemPaperThree disX:" + disX + ",disY:" + disY);
+                if((disX == 0)&&(disY == 0)){
+                    isOnclick();
+                    return true;
+                }
+
+                break;
+                            /*isOnclick();*/
+                            /*return true;*/
+
+            }
+        }
+        return false;
+    }
+
+    private void isOnclick() {
+        System.out.println("this is onclick");
+            /*recyclerViewAdapter.addData(new GoodsBean());*/
+        String currentTime = timeUtil.getCurrentDateTime();
+        long timeGap = timeUtil.getSubTwoTimeBySeconds(currentTime, timeBegin);// 与现在时间相差秒数
+            /*Toast.makeText(mContext,"dis:timeGap:"+timeGap,Toast.LENGTH_SHORT).show();*/
+            /*时间为小于1秒则判断为点击事件不然就判断为触摸事件*/
+        if (Math.abs(timeGap) < 1) {
+            Bundle bundle = new Bundle();
+            List<GoodsBean> goodsBeanList = helpMeBuyShoppingMenuRecyclerViewAdapter.getGoodsBeanList();
+            Intent intent = new Intent(this,ShoppingListActivity.class);
+            startActivityForResult(intent,RESULT_BUY);
+        }
     }
     /*帮我买购物清单*/
  /*购买地址*/
@@ -156,6 +236,9 @@ public class HelpMeBuyActivity extends Activity{
         startActivityForResult(intent,RESULT_RECE);
     }
     /*收件人信息*/
+
+
+
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (resultCode) { //resultCode为回传的标记，我在B中回传的是RESULT_OK
@@ -187,11 +270,30 @@ public class HelpMeBuyActivity extends Activity{
                 tvHelpMeBuyContentReceiveTel.setText(tel);
                 tvHelpMeBuyContentReceiveAddressDetail.setText(addr);
                 break;
+
+            case RESULT_FOODSMENU:
+                Bundle foodsb = data.getExtras();
+                List<GoodsBean> goodsBeanArrayList =  foodsb.getParcelableArrayList("foodsList");
+                initShoppingMenu(goodsBeanArrayList);
+                break;
             default:
                 break;
         }
     }
 
+    /*初始化购物清单*/
+    private void initShoppingMenu(List<GoodsBean> goodsBeanList){
+        goodsBeanList.clear();
+        goodsBeanList.addAll(goodsBeanList);
+        /*helpMeBuyShoppingMenuRecyclerViewAdapter = new HelpMeBuyShoppingMenuRecyclerViewAdapter(this,goodsBeanList);*/
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,6);
+        rvHelpMeBuyContentShoppingMenu.setLayoutManager(gridLayoutManager);
+        rvHelpMeBuyContentShoppingMenu.setAdapter(helpMeBuyShoppingMenuRecyclerViewAdapter);
+
+    }
+
+
+    /*初始化购物清单*/
 
 
 

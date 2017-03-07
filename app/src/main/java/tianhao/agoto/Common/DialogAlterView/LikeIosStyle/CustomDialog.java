@@ -106,14 +106,15 @@ public class CustomDialog extends Dialog {
          * 3，基本逻辑处理
          * 4，显示dialog的布局
          */
-        public CustomDialog build() {
-            LayoutInflater mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        public CustomDialog build(Context context) {
+            LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             /*LayoutInflater mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);*/
             /*final CustomDialog mCustomDialog = new CustomDialog(mContext, R.style.CustomDialog);//默认调用带style的构造*/
-            final CustomDialog mCustomDialog = new CustomDialog(mContext, R.style.AppTheme_NoActionBar);//默认调用带style的构造
+            final CustomDialog mCustomDialog = new CustomDialog(context, R.style.MyDialogStyle);//默认调用带style的构造
             mCustomDialog.setCanceledOnTouchOutside(false);//默认点击布局外不能取消dialog
             View view = mInflater.inflate(R.layout.dialog_add_goods_lly, null);
             mCustomDialog.addContentView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            /*mCustomDialog.addContentView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));*/
             final EditTextWithDel messageViewName = (EditTextWithDel) view.findViewById(R.id.et_dialog_add_goods_goodsname);
             final EditTextWithDel messageViewNum = (EditTextWithDel) view.findViewById(R.id.et_dialog_add_goods_goodsnum);
          /*   if (!TextUtils.isEmpty(title)) {

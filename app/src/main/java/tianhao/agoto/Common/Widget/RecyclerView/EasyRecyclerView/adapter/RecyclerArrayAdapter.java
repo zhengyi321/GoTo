@@ -698,8 +698,11 @@ abstract public class RecyclerArrayAdapter<T> extends RecyclerView.Adapter<BaseV
     }
 
     private static void log(String content){
-        if (EasyRecyclerView.DEBUG){
+
+        if (false){
+            Log.i("EasyRecyclerView",content);
+        }/*if (EasyRecyclerView.DEBUG){
             Log.i(EasyRecyclerView.TAG,content);
-        }
+        }*/
     }
 }

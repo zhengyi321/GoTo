@@ -133,6 +133,9 @@ public class LoopViewPager extends FrameLayout{
 
         int pagerLength=0;
         if(horizontal){pagerLength=pagerWidth;}else{pagerLength=pagerHeight;}
+        if(pagerLength == 0){
+            pagerLength = 1;
+        }
         if(distence>0){
              next_position=distence/ pagerLength +1;
              nextItem =Math.abs(next_position% viewList.size());

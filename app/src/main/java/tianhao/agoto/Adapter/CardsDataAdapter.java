@@ -47,17 +47,17 @@ public class CardsDataAdapter extends ArrayAdapter<String> {
     public class ViewHold{
         @BindView(R.id.erv_shoppinglist_content_piper_card_item_goods)
         RecyclerView recyclerView ;
-        @BindView(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
-        LinearLayout testly;
+    /*    @BindView(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
+        LinearLayout testly;*/
         List<GoodsBean> goodsBeanList = new ArrayList<GoodsBean>();
         SwipFlingRecyclerViewAdapter recyclerViewAdapter;
-        @OnClick(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
+      /*  @OnClick(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
         public void testOnclick(){
             System.out.println("this is onclick");
 
             recyclerViewAdapter.addData(new GoodsBean());
 
-        }
+        }*/
         public ViewHold(View view){
             ButterKnife.bind(this,view);
             goodsBeanList.add(new GoodsBean());

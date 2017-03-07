@@ -10,13 +10,17 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import tianhao.agoto.R;
-
+/*
+* https://github.com/wuapnjie/SwipePostcard
+* 卡片滑动滚出效果
+* */
 public class SwipePostcard extends FrameLayout {
 
     private ViewDragHelper mViewDragHelper;
@@ -262,25 +266,27 @@ public class SwipePostcard extends FrameLayout {
         int type = position % mMaxPostcardNum;
         View view = null;
         if (mAdapter.mViewList.size() < mMaxPostcardNum) {
-            view = mAdapter.createView(this);
+            view = mAdapter.getView(position,null,this);
             mAdapter.mViewList.add(view);
         } else {
             view = mAdapter.mViewList.get(type);
             if (view == null) {
-                view = mAdapter.createView(this);
+                view = mAdapter.getView(position,null,this);
                 mAdapter.mViewList.add(view);
             }
         }
-        mAdapter.bindView(view, position);
+        mAdapter.getView(position,view, this);
         return view;
     }
 
-    public static abstract class Adapter {
+    public static abstract class Adapter extends BaseAdapter{
         List<View> mViewList = new ArrayList<>();
 
-        public abstract View createView(ViewGroup parent);
+        /*public abstract View CreateView(ViewGroup parent);*/
 
-        public abstract void bindView(View view, int position);
+        public abstract View getView(int position, View convertView, ViewGroup parent);
+
+       /* public abstract void bindView(View view, int position);*/
 
         public abstract int getItemCount();
 

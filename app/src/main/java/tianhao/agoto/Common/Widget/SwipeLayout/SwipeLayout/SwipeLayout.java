@@ -1,4 +1,4 @@
-package tianhao.agoto.Common.Widget.SwipeLayout;
+package tianhao.agoto.Common.Widget.SwipeLayout.SwipeLayout;
 
 import android.content.Context;
 import android.support.v4.view.ViewCompat;

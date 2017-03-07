@@ -241,29 +241,29 @@ public class SwipFlingAdapter  extends BaseAdapter {
 
         @BindView(R.id.erv_shoppinglist_content_piper_card_item_goods)
         RecyclerView recyclerView ;
-        @BindView(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
-        LinearLayout testly;
+       /* @BindView(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
+        LinearLayout testly;*/
         private BookAdapter adapter;
         /*List<String> goodsBeanList= new ArrayList<String>();*/
         List<GoodsBean> goodsBeanList = new ArrayList<GoodsBean>();
         SwipFlingRecyclerViewAdapter recyclerViewAdapter /*= new SwipFlingRecyclerViewAdapter(activity,goodsBeanList)*/;
         Context context;
-        @OnClick(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
+/*        @OnClick(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
         public void testOnclick(){
             System.out.println("this is onclick");
 
             recyclerViewAdapter.addData(new GoodsBean());
 
-          /*  notifyDataSetChanged();*/
-           /* recyclerViewAdapter.setDataList(goodsBeanList);*/
-            /*goodsBeanList.add(new GoodsBean());
+          *//*  notifyDataSetChanged();*//*
+           *//* recyclerViewAdapter.setDataList(goodsBeanList);*//*
+            *//*goodsBeanList.add(new GoodsBean());
             goodsBeanList.add(new GoodsBean());
             goodsBeanList.add(new GoodsBean());
             goodsBeanList.add(new GoodsBean());
-            recyclerViewAdapter.setDataList(goodsBeanList);*//*
-            recyclerViewAdapter.notifyItemChanged(goodsBeanList.size()-1,goodsBeanList.size());*/
-          /*  showDialog();*/
-        }
+            recyclerViewAdapter.setDataList(goodsBeanList);*//**//*
+            recyclerViewAdapter.notifyItemChanged(goodsBeanList.size()-1,goodsBeanList.size());*//*
+          *//*  showDialog();*//*
+        }*/
      /*   @OnTouch(R.id.lly_shoppinglist_content_piper_card_item_parent_rv)
         public boolean toucheTest(View v ,MotionEvent evt ){
             System.out.println("this is toucheTest");

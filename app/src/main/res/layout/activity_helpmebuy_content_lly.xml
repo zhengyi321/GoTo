@@ -320,6 +320,7 @@
                             >
 
                                 <android.support.v7.widget.RecyclerView
+                                    android:id="@+id/rv_helpmebuy_content_shoppingmenu"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_marginRight="@dimen/activity_helpmebuy_content_shoppingorder_edittext_margin_right_size"
