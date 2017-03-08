@@ -152,12 +152,21 @@ public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFling
                         goodsBeanList.clear();
                         goodsBeanList = arryDeleteSort(pos, tempList);*/
                         /*notifyItemRemoved(pos);*/
-                    if(pos != goodsBeanList.size()) {
+                    if((pos != goodsBeanList.size())&&(pos != (goodsBeanList.size() -1))) {
                         Log.i("sfrvaitemPos:", "" + pos);
                         goodsBeanList.remove(pos);
                         notifyItemRangeRemoved(pos, 1);
-                        notifyItemRangeChanged(pos, 1);
-                    }else if(goodsBeanList.size() > 0){
+                        notifyItemRangeChanged(pos, goodsBeanList.size()-pos);
+                        return;
+                    }else if(pos == (goodsBeanList.size() -1)){
+                        goodsBeanList.remove(pos);
+                        notifyItemRangeRemoved(pos,1);
+                        notifyItemRangeChanged(pos,1);
+                    }
+
+
+
+                    /*else if(goodsBeanList.size() > 0){
                         goodsBeanList.remove(pos-1);
                         notifyItemRangeRemoved(pos-1, 1);
                         notifyItemRangeChanged(pos-1, 1);
@@ -167,7 +176,7 @@ public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFling
                         goodsBeanList.remove(pos);
                         notifyItemRangeRemoved(pos, 1);
                         notifyItemRangeChanged(pos, 1);
-                    }/*
+                    }*//*
                         if((pos == 1)&&(goodsBeanList.size() ==1)){
                             goodsBeanList.remove(0);
                             notifyItemRangeRemoved(0,1);
