@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,13 +19,16 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 import butterknife.OnTouch;
 import tianhao.agoto.Bean.GoodsBean;
 import tianhao.agoto.Common.DialogAlterView.LikeIosStyle.DialogUtil;
+import tianhao.agoto.Common.Widget.SwipeCardView.SwipePostCard.PostcardAdapter;
 import tianhao.agoto.Common.Widget.SwipeLayout.AndroidSwipeLayout.AndroidSwipeLayout;
 import tianhao.agoto.R;
 import tianhao.agoto.Utils.TimeUtil;
@@ -38,13 +42,16 @@ import tianhao.agoto.Utils.TimeUtil;
 
 public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFlingRecyclerViewAdapter.ItemContentViewHolder> {
     private List<GoodsBean> goodsBeanList /*= new ArrayList<GoodsBean>()*/;
-    private Context context;
+    private Activity context;
     private LayoutInflater inflater;
-
-    public SwipFlingRecyclerViewAdapter(Context mContext,List<GoodsBean> goodsBeanList){
-        this.goodsBeanList = new ArrayList<GoodsBean>();
+    private PostcardAdapter.ViewHolder viewHold;
+ /*   private TextView textViewGoodsType;*/
+    public SwipFlingRecyclerViewAdapter(Activity mContext,List<GoodsBean> goodsBeanList1,PostcardAdapter.ViewHolder viewHold1){
+        /*this.goodsBeanList = new ArrayList<GoodsBean>();*/
         this.context = mContext;
-        this.goodsBeanList.addAll(goodsBeanList);
+        this.viewHold = viewHold1;
+        /*textViewGoodsType = textView;*/
+        this.goodsBeanList = goodsBeanList1;
         inflater = LayoutInflater.from(context);
         System.out.println(" SwipFlingRecyclerViewAdapter");
 
@@ -61,9 +68,17 @@ public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFling
         System.out.println(" addPos");
     }
     public void addData(GoodsBean bean){
-        this.goodsBeanList.add(bean);
-        /*notifyItemInserted(0);*/
-        this.notifyItemRangeChanged(0,1,bean);
+
+        if(goodsBeanList.size() == 0) {
+            this.goodsBeanList.add(bean);
+            notifyItemInserted(0);
+            this.notifyItemRangeChanged(0,1,bean);
+        }else{
+            this.goodsBeanList.add(bean);
+            this.notifyItemRangeChanged(0,1,bean);
+        }
+
+
 
         System.out.println("addData ");
     }
@@ -88,7 +103,7 @@ public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFling
 
     @Override
     public void onBindViewHolder(ItemContentViewHolder holder, int position) {
-        System.out.println(" onBindViewHolder size:"+goodsBeanList.size());
+        System.out.println(" onBindViewHolder size:"+goodsBeanList.size()+"pos:"+position);
         if(goodsBeanList.size() == 0){
             return;
         }
@@ -106,7 +121,9 @@ public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFling
             }else{
                 holder.llyShoppingListContentPiperCardItemRVItemTotal.setBackgroundColor(context.getResources().getColor(R.color.white));
             }
+
             holder.rlyShoppingListContentPiperCardItemRVItemDelete.setOnClickListener(new MyOnclickListener(position));
+
         }
 
 
@@ -124,16 +141,91 @@ public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFling
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.rly_shoppinglist_content_piper_card_item_rv_item_delete:
-                    if(goodsBeanList.size() > 0){
-                        goodsBeanList.remove(pos);
+                  /*  if(goodsBeanList.size() == 0){
+                        goodsBeanList.clear();
+                    }*/
+
+                        /*goodsBeanList.remove(goodsBeanList.get(pos));*/
+                        /*goodsBeanList = arryDeleteSort(pos, goodsBeanList);*/
+                        /*List<GoodsBean> tempList = new ArrayList<GoodsBean>();
+                        tempList.addAll(goodsBeanList);
+                        goodsBeanList.clear();
+                        goodsBeanList = arryDeleteSort(pos, tempList);*/
                         /*notifyItemRemoved(pos);*/
-                        notifyItemRangeRemoved(pos,1);
-                        notifyItemRangeChanged(pos,1);
-                    }
+                    if(pos != goodsBeanList.size()) {
+                        Log.i("sfrvaitemPos:", "" + pos);
+                        goodsBeanList.remove(pos);
+                        notifyItemRangeRemoved(pos, 1);
+                        notifyItemRangeChanged(pos, 1);
+                    }else if(goodsBeanList.size() > 0){
+                        goodsBeanList.remove(pos-1);
+                        notifyItemRangeRemoved(pos-1, 1);
+                        notifyItemRangeChanged(pos-1, 1);
+                    }else{
+
+                        Log.i("sfrvaitemPos111:", "" + pos);
+                        goodsBeanList.remove(pos);
+                        notifyItemRangeRemoved(pos, 1);
+                        notifyItemRangeChanged(pos, 1);
+                    }/*
+                        if((pos == 1)&&(goodsBeanList.size() ==1)){
+                            goodsBeanList.remove(0);
+                            notifyItemRangeRemoved(0,1);
+                            notifyItemRangeChanged(0 , 1);
+                        }else {
+                            goodsBeanList = arryDeleteSort(pos,goodsBeanList);
+                            notifyItemRangeRemoved(pos,1);
+                            notifyItemRangeChanged(pos , 1);
+                        }*/
+                        Log.i("sfrvaPos:",""+pos);
+                        Log.i("sfrvaSize:",""+goodsBeanList.size());
+
+
+                       /* notifyItemRangeChanged(pos , 1);*/
+
+                        /*notifyItemMoved(pos + 1,pos);*/
+                       /* if(viewHold != null){
+                            viewHold.tvShoppingListContentPiperCardItemGoodsTypeNum.setText(goodsBeanList.size()+"");
+                        }*/
 
                     break;
             }
         }
+    }
+
+    private List<GoodsBean> arryDeleteSort(int pos, List<GoodsBean> objectsList){
+        if(objectsList.size() == 0){
+            return objectsList;
+        }
+       /* objectsList.remove(pos);
+        List<GoodsBean> lastObjs = new ArrayList<GoodsBean>();
+        for(int i = 0;i < objectsList.size();i++){
+            lastObjs.add(objectsList.get(i));
+        }*/
+        List<GoodsBean> lastObjs = new ArrayList<GoodsBean>();
+        List<GoodsBean> beginList = new ArrayList<GoodsBean>();
+        List<GoodsBean> endList = new ArrayList<GoodsBean>();
+        for(int i=0;i<objectsList.size();i++){
+            if(i < pos){
+                beginList.add(objectsList.get(i));
+
+            }else if(i > pos){
+                endList.add(objectsList.get(i));
+            }else{
+                continue;
+            }
+
+        }
+
+        for(int i=0;i<beginList.size();i++){
+            lastObjs.add(beginList.get(i));
+        }
+        for(int i=0;i<endList.size();i++){
+            lastObjs.add(endList.get(i));
+        }
+        return lastObjs;
+
+
     }
     @Override
     public void onBindViewHolder(ItemContentViewHolder holder, int position,List<Object> payloads){
@@ -169,14 +261,14 @@ public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFling
 
     @Override
     public int getItemCount() {
-        if(goodsBeanList != null){
+        /*if(goodsBeanList != null){
             System.out.println("getItemCount "+goodsBeanList.size());
             return goodsBeanList.size()>0?goodsBeanList.size():1;
         }else{
             return 1;
-        }
+        }*/
         /*return goodsBeanList.size()>0?goodsBeanList.size():1;*/
-        /*return goodsBeanList.size();*/
+        return goodsBeanList.size();
     }
 
 
@@ -189,7 +281,18 @@ public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFling
         @BindView(R.id.tv_shoppinglist_content_piper_card_item_rv_item_goodsprice)
         TextView tvShoppingListContentPiperCardItemRVItemGoodsPrice;
         @BindView(R.id.lly_shoppinglist_content_piper_card_item_rv_item_total)
-        LinearLayout llyShoppingListContentPiperCardItemRVItemTotal;/*
+        LinearLayout llyShoppingListContentPiperCardItemRVItemTotal;
+        @OnClick(R.id.lly_shoppinglist_content_piper_card_item_rv_item_total)
+        public void llyShoppingListContentPiperCardItemRVItemTotalOnclick(){
+            Toast.makeText(context,"this is item",Toast.LENGTH_SHORT).show();
+        }
+        @OnTouch(R.id.lly_shoppinglist_content_piper_card_item_rv_item_total)
+        public boolean llyShoppingListContentPiperCardItemRVItemTotalOnTouch(View v,MotionEvent event){
+            Toast.makeText(context,"this is OnTouch item",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        /*
         @BindView(R.id.as_shoppinglist_content_piper_card_item_rv_item_cehua)
         AndroidSwipeLayout asShoppingListContentPiperCardItemRVItem;*/
         @BindView(R.id.rly_shoppinglist_content_piper_card_item_rv_item_delete)

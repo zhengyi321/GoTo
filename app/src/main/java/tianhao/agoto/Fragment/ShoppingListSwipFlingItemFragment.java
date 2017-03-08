@@ -47,13 +47,13 @@ public class ShoppingListSwipFlingItemFragment extends Fragment {
     }
     private void initRecyclerView(){
         goodsBeanList.add(new GoodsBean());
-        recyclerViewAdapter = new SwipFlingRecyclerViewAdapter(getActivity(),goodsBeanList);
+/*        recyclerViewAdapter = new SwipFlingRecyclerViewAdapter(getActivity(),goodsBeanList);
         ervShoppingListContentPiperCardItemGoods.setHasFixedSize(true);
-            /*位置不一样会导致刷新不了的bug*/
+            *//*位置不一样会导致刷新不了的bug*//*
         ervShoppingListContentPiperCardItemGoods.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
         ervShoppingListContentPiperCardItemGoods.setAdapter(recyclerViewAdapter);
         ervShoppingListContentPiperCardItemGoods.addItemDecoration(new DividerItemDecoration(getActivity(),
-                DividerItemDecoration.VERTICAL));
+                DividerItemDecoration.VERTICAL));*/
     }
 
 

@@ -357,14 +357,14 @@ public class SwipFlingAdapter  extends BaseAdapter {
             this.context = context1;
 
             ButterKnife.bind(this,convertView);
-            goodsBeanList.add(new GoodsBean());
+ /*           goodsBeanList.add(new GoodsBean());
             recyclerViewAdapter = new SwipFlingRecyclerViewAdapter(context1,goodsBeanList);
             recyclerView.setHasFixedSize(true);
-            /*位置不一样会导致刷新不了的bug*/
+            *//*位置不一样会导致刷新不了的bug*//*
             recyclerView.setLayoutManager(new LinearLayoutManager(context1,LinearLayoutManager.VERTICAL,false));
             recyclerView.setAdapter(recyclerViewAdapter);
             recyclerView.addItemDecoration(new DividerItemDecoration(context1,
-                    DividerItemDecoration.VERTICAL));
+                    DividerItemDecoration.VERTICAL));*/
 
          /*   goodsBeanList= new ArrayList<String>();*/
          /*   recyclerViewAdapter  = new SwipFlingRecyclerViewAdapter(activity,goodsBeanList);

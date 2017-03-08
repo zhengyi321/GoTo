@@ -22,15 +22,39 @@ import tianhao.agoto.R;
 public class HelpMeBuyShoppingMenuRecyclerViewAdapter extends RecyclerView.Adapter<HelpMeBuyShoppingMenuRecyclerViewAdapter.ItemContentViewHolder>{
 
     public Context context;
-    public List<GoodsBean> goodsBeanList/* = new ArrayList<GoodsBean>()*/;
+    public List<GoodsBean> goodsBeanList ;
 
-    public HelpMeBuyShoppingMenuRecyclerViewAdapter(Context mcontext, List<GoodsBean> goodsBeanList){
+    public HelpMeBuyShoppingMenuRecyclerViewAdapter(Context mcontext, List<GoodsBean> goodsBeanList1){
         context = mcontext;
-        this.goodsBeanList = new ArrayList<GoodsBean>();
-        this.goodsBeanList.addAll(goodsBeanList);
+        /*this.goodsBeanList = goodsBeanList;*/
+        this.goodsBeanList= goodsBeanList1;
     }
     public List<GoodsBean> getGoodsBeanList(){
         return this.goodsBeanList;
+    }
+
+    public void setGoodsBeanList(List<GoodsBean> goodsBeanList1){
+
+        if((goodsBeanList1 != null)) {
+
+            /*notifyItemRangeChanged(0,goodsBeanList.size());*/
+            if(goodsBeanList1.size() == 0){
+                int count = goodsBeanList.size();
+                this.goodsBeanList.clear();
+                notifyItemRangeRemoved(0,count);
+                notifyItemRangeRemoved(0,count);
+
+
+            }else {
+                this.goodsBeanList.clear();
+                this.goodsBeanList.addAll(goodsBeanList1);
+                notifyItemRangeInserted(goodsBeanList1.size(), goodsBeanList1.size());
+                notifyItemChanged(goodsBeanList1.size());
+            }
+            /*notifyItemRangeChanged(0,goodsBeanList1.size());*/
+            /*notifyItemRangeChanged(0,goodsBeanList.size());*/
+
+        }
     }
 
     @Override
@@ -41,11 +65,17 @@ public class HelpMeBuyShoppingMenuRecyclerViewAdapter extends RecyclerView.Adapt
 
     @Override
     public void onBindViewHolder(ItemContentViewHolder holder, int position) {
+        String content = "";
         if(goodsBeanList.size()>0) {
             if(goodsBeanList.get(position)!= null){
                 if(!goodsBeanList.get(position).getName().isEmpty()) {
-                    holder.tvHelpMeBuyContentShoppingMenuRVItem.setText("" + goodsBeanList.get(position).getName() + " X " + goodsBeanList.get(position).getNum());
+                    content += goodsBeanList.get(position).getName().toString();
+                   /* holder.tvHelpMeBuyContentShoppingMenuRVItem.setText("" + goodsBeanList.get(position).getName() + " X " + goodsBeanList.get(position).getNum());*/
                 }
+                if(!goodsBeanList.get(position).getNum().isEmpty()){
+                    content += ("x"+goodsBeanList.get(position).getNum().toString());
+                }
+                holder.tvHelpMeBuyContentShoppingMenuRVItem.setText(content);
             }
 
         }
@@ -53,7 +83,8 @@ public class HelpMeBuyShoppingMenuRecyclerViewAdapter extends RecyclerView.Adapt
 
     @Override
     public int getItemCount() {
-        return goodsBeanList.size()>0?goodsBeanList.size():1;
+        return goodsBeanList.size();
+        /*return goodsBeanList.size()>0?goodsBeanList.size():1;*/
     }
 
 

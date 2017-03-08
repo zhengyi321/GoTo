@@ -8,6 +8,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,18 +44,18 @@ import tianhao.agoto.Utils.TimeUtil;
  */
 public class PostcardAdapter extends SwipePostcard.Adapter {
     private final String TAG = PostcardAdapter.class.getSimpleName();
-    private Context mContext;
+    private Activity mContext;
     private List<Bean> mData;
     private LayoutInflater inflater;
     public ViewHolder viewHold;
     private List<GoodsBean> goodsBeanList ;
-    public SwipFlingRecyclerViewAdapter recyclerViewAdapter/* = new SwipFlingRecyclerViewAdapter(mContext,goodsBeanList)*/;
-    public PostcardAdapter(Context context, List<Bean> data) {
+    public SwipFlingRecyclerViewAdapter recyclerViewAdapter;/* = new SwipFlingRecyclerViewAdapter(mContext,goodsBeanList)*/;
+    public PostcardAdapter(Activity context, List<Bean> data,List<GoodsBean> goodsBeanList1) {
         mContext = context;
         mData = data;
         inflater = LayoutInflater.from(context);
-        goodsBeanList = new ArrayList<GoodsBean>();
-        recyclerViewAdapter = new SwipFlingRecyclerViewAdapter(mContext,goodsBeanList);
+        goodsBeanList = goodsBeanList1;
+        recyclerViewAdapter = new SwipFlingRecyclerViewAdapter(mContext,goodsBeanList,viewHold);
     }
     public void addAll(List<Bean> beanList){
 
@@ -99,21 +100,46 @@ public class PostcardAdapter extends SwipePostcard.Adapter {
 
         if(convertView == null){
             convertView = LayoutInflater.from(mContext).inflate(R.layout.activity_shoppinglist_content_piper_card_item_lly, parent, false);
+          /*  TextView textView =(TextView) convertView.findViewById(R.id.tv_shoppinglist_content_piper_card_item_goodstypenum);*/
             viewHold = new ViewHolder(convertView);
+            /*viewHold.tvShoppingListContentPiperCardItemGoodsTypeNum.setText(""+ recyclerViewAdapter.getItemCount());*/
             convertView.setTag(viewHold);
         }else{
+            /*TextView textView =(TextView) convertView.findViewById(R.id.tv_shoppinglist_content_piper_card_item_goodstypenum);*/
+            /*recyclerViewAdapter = new SwipFlingRecyclerViewAdapter(mContext,goodsBeanList,textView);*/
             viewHold = (ViewHolder) convertView.getTag();
+
         }
+
+        viewHold.tvShoppingListContentPiperCardItemGoodsTypeNum.setText(""+ recyclerViewAdapter.getItemCount());
+
         /*convertView = LayoutInflater.from(mContext).inflate(R.layout.activity_shoppinglist_content_piper_card_item_lly, parent, false);*/
         return convertView;
     }
     public List<GoodsBean> getGoodsBeanList(){
-        return goodsBeanList;
+
+        return this.goodsBeanList;
     }
     public class ViewHolder {
+
+        /*商品种类*/
+        @BindView(R.id.tv_shoppinglist_content_piper_card_item_goodstypenum)
+        public TextView tvShoppingListContentPiperCardItemGoodsTypeNum;
+        /*商品种类*/
+
+        @BindView(R.id.erv_shoppinglist_content_piper_card_item_goods)
+        EasyRecyclerView ervShoppingListContentPiperCardItemGoods ;
+        @BindView(R.id.ssv_shoppinglist_content_piper_card_item_scrol)
+        SpringScrollView ssvShoppingListContentPiperCardItemPaperThree;
+
+        CustomDialog customDialog;
+        View view;
+
+
         public ViewHolder(View view) {
             ButterKnife.bind(this,view);
             this.view = view;
+
             initRecyclerView();
 
         }
@@ -130,20 +156,8 @@ public class PostcardAdapter extends SwipePostcard.Adapter {
             ervShoppingListContentPiperCardItemGoods.setAdapter(recyclerViewAdapter);
         }
 
-        /*商品种类*/
-        @BindView(R.id.tv_shoppinglist_content_piper_card_item_goodstypenum)
-        TextView tvShoppingListContentPiperCardItemGoodsTypeNum;
-        /*商品种类*/
 
 
-        @BindView(R.id.erv_shoppinglist_content_piper_card_item_goods)
-        EasyRecyclerView ervShoppingListContentPiperCardItemGoods ;
-        @BindView(R.id.ssv_shoppinglist_content_piper_card_item_scrol)
-        SpringScrollView ssvShoppingListContentPiperCardItemPaperThree;
-
-
-        CustomDialog customDialog;
-        View view;
         /* 判断是点击事件 不是滑动事件的解决方法http://www.cnblogs.com/wader2011/archive/2011/12/02/2271981.html
     添加商品*/
         TimeUtil timeUtil = new TimeUtil();
@@ -255,11 +269,14 @@ public class PostcardAdapter extends SwipePostcard.Adapter {
                         GoodsBean goodsBean = new GoodsBean();
                         goodsBean.setName(msgName);
                         goodsBean.setNum(msgNum);
-                        recyclerViewAdapter.addData(goodsBean);
-                        goodsBeanList.clear();
-                        getGoodsBeanList().addAll(recyclerViewAdapter.getAllData());
-                        tvShoppingListContentPiperCardItemGoodsTypeNum.setText(""+recyclerViewAdapter.getItemCount());
-                        /*Toast.makeText(mContext, "name:" + goodsBean.getName() + ",num:" + goodsBean.getNum(), Toast.LENGTH_SHORT).show();*/
+                        if(!msgName.isEmpty()) {
+                            recyclerViewAdapter.addData(goodsBean);
+                       /* goodsBeanList.clear();
+                        goodsBeanList.addAll(recyclerViewAdapter.getAllData());*/
+                            tvShoppingListContentPiperCardItemGoodsTypeNum.setText("" + recyclerViewAdapter.getItemCount());
+                            /*Toast.makeText(mContext, "name:" + goodsBean.getName() + ",num:" + goodsBean.getNum(), Toast.LENGTH_SHORT).show();*/
+                        }
+
                     }
                 }).build(mContext);
                 showDialog(view);

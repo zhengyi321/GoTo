@@ -18,14 +18,14 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         this.instance = this;
-       /* initBaiDuSDK();*/
+        initBaiDuSDK();
         /*极光推送*/
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
        /*极光推送*/
 
         /*友盟第三方登录*/
-       /* ShareSDK.initSDK(this);*/
+        ShareSDK.initSDK(this);
         /*友盟第三方登录*/
     }
 

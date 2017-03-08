@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -67,21 +68,37 @@ public class ShoppingListActivity extends Activity {
     RelativeLayout rlyShoppingListTopBarRightMenu;
     PostcardAdapter adapter;
     private final int RESULT_FOODSMENU = 12;//菜单
-    private List<GoodsBean> goodsBeanList = new ArrayList<GoodsBean>();
+    private List<GoodsBean> goodsBeanList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shoppinglist_lly);
-        Bundle foodsMenu = getIntent().getExtras();
-        goodsBeanList = foodsMenu.getParcelableArrayList("foodsList");
+
         init();
     }
     private void init(){
         ButterKnife.bind(this);
+        initGetFoodsMenu();
         initCard();
+
+
   /*      newCard();*/
        /* initCardHeightByDif();*/
         /*initCardSwitch();*/
+    }
+    private void initGetFoodsMenu(){
+        Bundle foodsMenu = getIntent().getExtras();
+        if(foodsMenu != null) {
+            goodsBeanList = foodsMenu.getParcelableArrayList("foodsList");
+            System.out.println("this is ShoppingListActivity:"+goodsBeanList.size());
+            if(goodsBeanList == null){
+                goodsBeanList = new ArrayList<GoodsBean>();
+            }
+        }else
+        {
+            goodsBeanList = new ArrayList<GoodsBean>();
+        }
+
     }
     /*初始化卡片*/
         /*卡片效果*/
@@ -93,9 +110,9 @@ public class ShoppingListActivity extends Activity {
             data.add(bean);
         }
 
-        adapter = new PostcardAdapter(this, data);
+        adapter = new PostcardAdapter(this, data,goodsBeanList);
         System.out.println("this is initCard:"+goodsBeanList.size());
-        adapter.recyclerViewAdapter.setDataList(goodsBeanList);
+        /*adapter.recyclerViewAdapter.setDataList(goodsBeanList);*/
         if (spShoppingContent != null) {
 
 
@@ -139,13 +156,25 @@ public class ShoppingListActivity extends Activity {
     /*确认订单*/
     @OnClick(R.id.rly_shoppinglist_topbar_rightmenu)
     public void rlyShoppingListTopBarRightMenuOnclick(){
-        ArrayList<GoodsBean> goodsBeanList =(ArrayList<GoodsBean>) adapter.getGoodsBeanList();
-        System.out.println("this is rlyShoppingListTopBarRightMenuOnclick:"+goodsBeanList.size()+"goodsbean"+goodsBeanList.get(0).getName());
-        Bundle b = new Bundle();
-        b.putParcelableArrayList("foodsList", goodsBeanList);
-        Intent intent = new Intent();
-        intent.putExtras(b);
-        setResult(RESULT_FOODSMENU,intent);
+        try {
+            Intent intent = new Intent();
+            System.out.println("this is rlyShoppingListTopBarRightMenuBegin:" + goodsBeanList.size() + "goodsbean");
+            if (adapter.getGoodsBeanList() != null) {
+            /*ArrayList<GoodsBean> goodsBeanList = (ArrayList<GoodsBean>) adapter.getGoodsBeanList();*/
+             /*goodsBeanList = (ArrayList<GoodsBean>) adapter.getGoodsBeanList();
+*/  System.out.println("this is rlyShoppingListTopBarRightMenumiddle:" + goodsBeanList.size() + "goodsbean");
+                if ((adapter.getGoodsBeanList() != null)) {
+                    System.out.println("this is rlyShoppingListTopBarRightMenuEnd:" + goodsBeanList.size() + "goodsbean");
+                    Bundle b = new Bundle();
+                    b.putParcelableArrayList("foodsMenu", (ArrayList<GoodsBean>) adapter.getGoodsBeanList());
+                /*b.putParcelableArrayList("foodsList", goodsBeanList);*/
+                    intent.putExtras(b);
+                }
+            }
+            setResult(RESULT_FOODSMENU, intent);
+        }catch (Exception e){
+            Log.i("shoppinglistact:",e+"");
+        }
         finish();
     }
 

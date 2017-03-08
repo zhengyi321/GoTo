@@ -85,7 +85,7 @@ public class HelpMeBuyActivity extends Activity{
     @BindView(R.id.rv_helpmebuy_content_shoppingmenu)
     RecyclerView rvHelpMeBuyContentShoppingMenu;
     List<GoodsBean> goodsBeanList = new ArrayList<GoodsBean>();
-    private HelpMeBuyShoppingMenuRecyclerViewAdapter helpMeBuyShoppingMenuRecyclerViewAdapter = new HelpMeBuyShoppingMenuRecyclerViewAdapter(this,goodsBeanList);
+     HelpMeBuyShoppingMenuRecyclerViewAdapter helpMeBuyShoppingMenuRecyclerViewAdapter /*= new HelpMeBuyShoppingMenuRecyclerViewAdapter(this,goodsBeanList)*/;
 
     /*购物清单*/
 
@@ -143,7 +143,17 @@ public class HelpMeBuyActivity extends Activity{
     }
     private void init(){
         ButterKnife.bind(this);
+        initShoppingMenu(goodsBeanList);
     }
+
+    /*百度骑行导航初始化http://lbsyun.baidu.com/index.php?title=androidsdk/guide/bikenavi   http://wiki.lbsyun.baidu.com/cms/androidsdk/doc/v4_2_1/index.html*/
+    private void baiduBikeInit(){
+        
+    }
+
+
+    /*百度骑行导航初始化http://lbsyun.baidu.com/index.php?title=androidsdk/guide/bikenavi   http://wiki.lbsyun.baidu.com/cms/androidsdk/doc/v4_2_1/index.html*/
+
     /*后退到主界面*/
     @OnClick(R.id.rly_helpmebuy_topbar_leftmenu)
     public void rlyHelpMeBuyTopBarLeftMenuOnclick(){
@@ -215,14 +225,20 @@ public class HelpMeBuyActivity extends Activity{
             /*Toast.makeText(mContext,"dis:timeGap:"+timeGap,Toast.LENGTH_SHORT).show();*/
             /*时间为小于1秒则判断为点击事件不然就判断为触摸事件*/
         if (Math.abs(timeGap) < 1) {
-            Bundle bundle = new Bundle();
-            goodsBeanList = helpMeBuyShoppingMenuRecyclerViewAdapter.getGoodsBeanList();
-            System.out.println("this is helpmebuy:"+goodsBeanList.size());
-            Log.i("HelpMeBuySize",goodsBeanList.size()+"");
-            bundle.putParcelableArrayList("foodsList",(ArrayList<GoodsBean>)goodsBeanList);
+
             Intent intent = new Intent(this,ShoppingListActivity.class);
-            intent.putExtras(bundle);
-            startActivityForResult(intent,RESULT_BUY);
+            if((goodsBeanList.size() > 0)){
+              /*  goodsBeanList.clear();*/
+
+                Log.i("helpmebuyActivGoodSize:",""+goodsBeanList.size());
+                /*Log.i("HelpMeBuySize",helpMeBuyShoppingMenuRecyclerViewAdapter.getItemCount()+"");*/
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("foodsList",(ArrayList<GoodsBean>)helpMeBuyShoppingMenuRecyclerViewAdapter.getGoodsBeanList());
+                intent.putExtras(bundle);
+            }
+
+
+            startActivityForResult(intent,RESULT_FOODSMENU);
         }
     }
     /*帮我买购物清单*/
@@ -277,8 +293,19 @@ public class HelpMeBuyActivity extends Activity{
 
             case RESULT_FOODSMENU:
                 Bundle foodsb = data.getExtras();
-                List<GoodsBean> goodsBeanArrayList =  foodsb.getParcelableArrayList("foodsList");
-                initShoppingMenu(goodsBeanArrayList);
+                if(foodsb != null) {
+                    List<GoodsBean> goodsBeanArrayList = foodsb.getParcelableArrayList("foodsMenu");
+
+                    if((goodsBeanArrayList != null)) {
+                        Log.i("helpmebuy,goodsBeanArr",goodsBeanArrayList.size()+"");
+                        /*initShoppingMenu(goodsBeanArrayList);*/
+                       /* goodsBeanList.clear();*/
+                        helpMeBuyShoppingMenuRecyclerViewAdapter.setGoodsBeanList(goodsBeanArrayList);
+                       /* goodsBeanList.clear();
+                        goodsBeanList.addAll(goodsBeanArrayList);*/
+                    }
+                }
+
                 break;
             default:
                 break;
@@ -287,13 +314,14 @@ public class HelpMeBuyActivity extends Activity{
 
     /*初始化购物清单*/
     private void initShoppingMenu(List<GoodsBean> goodsBeanLists){
-        goodsBeanList.clear();
-        goodsBeanList.addAll(goodsBeanLists);
-        /*helpMeBuyShoppingMenuRecyclerViewAdapter = new HelpMeBuyShoppingMenuRecyclerViewAdapter(this,goodsBeanList);*/
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,6);
-        rvHelpMeBuyContentShoppingMenu.setLayoutManager(gridLayoutManager);
-        rvHelpMeBuyContentShoppingMenu.setAdapter(helpMeBuyShoppingMenuRecyclerViewAdapter);
-
+        if(goodsBeanLists != null) {
+            /*goodsBeanList.clear();
+            goodsBeanList.addAll(goodsBeanLists);*/
+            helpMeBuyShoppingMenuRecyclerViewAdapter = new HelpMeBuyShoppingMenuRecyclerViewAdapter(this,goodsBeanList);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 6);
+            rvHelpMeBuyContentShoppingMenu.setLayoutManager(gridLayoutManager);
+            rvHelpMeBuyContentShoppingMenu.setAdapter(helpMeBuyShoppingMenuRecyclerViewAdapter);
+        }
     }
 
 

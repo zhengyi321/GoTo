@@ -61,13 +61,13 @@ public class CardsDataAdapter extends ArrayAdapter<String> {
         public ViewHold(View view){
             ButterKnife.bind(this,view);
             goodsBeanList.add(new GoodsBean());
-            recyclerViewAdapter = new SwipFlingRecyclerViewAdapter(context,goodsBeanList);
+          /*  recyclerViewAdapter = new SwipFlingRecyclerViewAdapter(context,goodsBeanList);
             recyclerView.setHasFixedSize(true);
-            /*位置不一样会导致刷新不了的bug*/
+            *//*位置不一样会导致刷新不了的bug*//*
             recyclerView.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));
             recyclerView.setAdapter(recyclerViewAdapter);
             recyclerView.addItemDecoration(new DividerItemDecoration(context,
-                    DividerItemDecoration.VERTICAL));
+                    DividerItemDecoration.VERTICAL));*/
         }
 
     }

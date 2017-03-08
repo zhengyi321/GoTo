@@ -49,7 +49,7 @@ public class SplashActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shoppinglist_content_piper_card_item_lly);
+        setContentView(R.layout.activity_splash_lly);
    /*     test();*/
         init();
     }
