@@ -2,13 +2,11 @@ package tianhao.agoto.Activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -20,14 +18,10 @@ import com.baidu.mapapi.search.poi.PoiAddrInfo;
 import com.baidu.mapapi.search.poi.PoiCitySearchOption;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
 import com.baidu.mapapi.search.poi.PoiIndoorResult;
-import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
-import com.baidu.mapapi.search.sug.OnGetSuggestionResultListener;
-import com.baidu.mapapi.search.sug.SuggestionResult;
 import com.baidu.mapapi.search.sug.SuggestionSearch;
 import com.baidu.mapapi.search.sug.SuggestionSearchOption;
-import com.baidu.mapapi.search.sug.SuggestionResult.SuggestionInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +30,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import tianhao.agoto.Adapter.BaiduAddressSearchSuggestRecycleViewAdapter;
-import tianhao.agoto.Common.Widget.LinearLayoutManager.CustomLinearLayoutManager;
-import tianhao.agoto.Common.Widget.LinearLayoutManager.FullyLinearLayoutManager;
-import tianhao.agoto.Common.Widget.LinearLayoutManager.MyLinearLayoutManager;
 import tianhao.agoto.R;
 
 /**
@@ -60,8 +51,9 @@ public class BaiduAddressSearchSuggestActivity extends Activity implements/* OnG
     private SuggestionSearch mSuggestionSearch;
     private SuggestionSearchOption suggestionSearchOption;
     private BaiduAddressSearchSuggestRecycleViewAdapter baiduAddressSearchSuggestRecycleViewAdapter;
-    private  List<SuggestionInfo> suggestionInfoList;
+  /*  private List<SuggestionInfo> suggestionInfoList;*/
     private List<PoiInfo> poiInfoList;
+    /*private List<PoiAddrInfo> poiInfoList;*/
     private String city,keyword;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +125,7 @@ public class BaiduAddressSearchSuggestActivity extends Activity implements/* OnG
             if((indexCity >= 0)){
             /*搜索全国*/
             /*city = keyword.substring(indexProvince + 1, indexCity);*/
-                city = address.substring(0,indexCity);
+
             /*keyword = address.substring(indexCity+1,address.length()-1);*/
                 // 使用建议搜索服务获取建议列表，结果在onSuggestionResult()中更新
                 /*mSuggestionSearch.requestSuggestion(suggestionSearchOption
@@ -144,6 +136,9 @@ public class BaiduAddressSearchSuggestActivity extends Activity implements/* OnG
                         .keyword(address)
                         .pageNum(30));*/
                 /*mpoiSearch.searchNearby(new PoiNearbySearchOption().keyword(address).pageNum(30));*/
+               /* int theSecondCity = address.substring(indexCity,address.length()).indexOf("市");*/
+                city = address.substring(0,indexCity);
+               /* String addr = address.substring(theSecondCity,address.length());*/
                 mpoiSearch.searchInCity(new PoiCitySearchOption().pageNum(0).pageCapacity(30).city(city).keyword(address).isReturnAddr(true));
                 return;
             }
@@ -201,7 +196,10 @@ public class BaiduAddressSearchSuggestActivity extends Activity implements/* OnG
             return;
         }
         /*Toast.makeText(this,"size:"+suggestionResult.getAllSuggestions().size(),Toast.LENGTH_SHORT).show();*/
-        /*Toast.makeText(this,"size:success"+result.getAllPoi().size(),Toast.LENGTH_SHORT).show();*/
+        /*if(result.isHasAddrInfo()) {
+            Toast.makeText(this,"getpoiresult"+result.getAllAddr().size(),Toast.LENGTH_SHORT).show();
+            baiduAddressSearchSuggestRecycleViewAdapter.setDataList(result.getAllAddr());
+        }*/
         baiduAddressSearchSuggestRecycleViewAdapter.setDataList(result.getAllPoi());
     }
 

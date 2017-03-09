@@ -1,13 +1,16 @@
 package tianhao.agoto.Activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -19,8 +22,38 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.alipay.sdk.app.AuthTask;
-import com.alipay.sdk.app.PayTask;
+
+import com.baidu.mapapi.bikenavi.BikeNavigateHelper;
+import com.baidu.mapapi.bikenavi.adapter.IBEngineInitListener;
+import com.baidu.mapapi.bikenavi.adapter.IBRoutePlanListener;
+import com.baidu.mapapi.bikenavi.model.BikeRoutePlanError;
+import com.baidu.mapapi.bikenavi.params.BikeNaviLauchParam;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.navi.BaiduMapAppNotSupportNaviException;
+import com.baidu.mapapi.navi.BaiduMapNavigation;
+import com.baidu.mapapi.navi.NaviParaOption;
+import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import com.baidu.mapapi.search.route.BikingRouteLine;
+import com.baidu.mapapi.search.route.BikingRoutePlanOption;
+import com.baidu.mapapi.search.route.BikingRouteResult;
+import com.baidu.mapapi.search.route.DrivingRouteResult;
+import com.baidu.mapapi.search.route.IndoorRouteResult;
+import com.baidu.mapapi.search.route.MassTransitRouteResult;
+import com.baidu.mapapi.search.route.OnGetRoutePlanResultListener;
+import com.baidu.mapapi.search.route.PlanNode;
+import com.baidu.mapapi.search.route.RoutePlanSearch;
+import com.baidu.mapapi.search.route.SuggestAddrInfo;
+import com.baidu.mapapi.search.route.TransitRoutePlanOption;
+import com.baidu.mapapi.search.route.TransitRouteResult;
+import com.baidu.mapapi.search.route.WalkingRouteResult;
+import com.baidu.mapapi.search.sug.SuggestionResult;
+import com.baidu.mapapi.utils.OpenClientUtil;
+
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +78,7 @@ import tianhao.agoto.Utils.TimeUtil;
  * Created by zhyan on 2017/2/12.
  */
 
-public class HelpMeBuyActivity extends Activity{
+public class HelpMeBuyActivity extends Activity  {
 
     @BindView(R.id.rly_helpmebuy_topbar_leftmenu)
     RelativeLayout rlyHelpMeBuyTopBarLeftMenu;
@@ -88,7 +121,10 @@ public class HelpMeBuyActivity extends Activity{
      HelpMeBuyShoppingMenuRecyclerViewAdapter helpMeBuyShoppingMenuRecyclerViewAdapter /*= new HelpMeBuyShoppingMenuRecyclerViewAdapter(this,goodsBeanList)*/;
 
     /*购物清单*/
-
+    /*价格未知按钮*/
+    @BindView(R.id.lly_helpmebuy_content_price)
+    LinearLayout llyHelpMeBuyContentPrice;
+    /*价格未知按钮*/
 
     /*不辣*/
     @BindView(R.id.cb_helpmebuy_content_nochilli)
@@ -131,10 +167,15 @@ public class HelpMeBuyActivity extends Activity{
     CheckBox cbHelpMeBuyContentManualinput;
 
     private final int RESULT_BUY = 10;//购买地址
-    private double blat,rlat,blon,rlon;
+    private double blat=0,rlat=0,blon=0,rlon=0;
     private final int RESULT_RECE = 11;//收件人信息
     private final int RESULT_FOODSMENU = 12;//菜单
-
+    /*百度骑行引擎*/
+    private RoutePlanSearch mSearch;
+    BikeNaviLauchParam param;
+    private final String LTAG = "BaiduQiXing导航引擎";
+    private static boolean isPermissionRequested = false;
+    /*百度骑行引擎*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,12 +184,74 @@ public class HelpMeBuyActivity extends Activity{
     }
     private void init(){
         ButterKnife.bind(this);
+
         initShoppingMenu(goodsBeanList);
+        initRoutePlanDisNavi();
     }
 
-    /*百度骑行导航初始化http://lbsyun.baidu.com/index.php?title=androidsdk/guide/bikenavi   http://wiki.lbsyun.baidu.com/cms/androidsdk/doc/v4_2_1/index.html*/
-    private void baiduBikeInit(){
-        
+    /*百度骑行导航初始化http://lbsyun.baidu.com/index.php?title=androidsdk/guide/bikenavi   http://wiki.lbsyun.baidu.com/cms/androidsdk/doc/v4_2_1/index.html
+    * http://lbsyun.baidu.com/index.php?title=androidsdk/guide/tool里面的步行导航中有骑行导航  再加上doc文档即可解决
+    * */
+    private void initRoutePlanDisNavi(){
+        mSearch = RoutePlanSearch.newInstance();
+        mSearch.setOnGetRoutePlanResultListener(new OnGetRoutePlanResultListener(){
+
+            @Override
+            public void onGetWalkingRouteResult(WalkingRouteResult walkingRouteResult) {
+
+            }
+
+            @Override
+            public void onGetTransitRouteResult(TransitRouteResult transitRouteResult) {
+
+            }
+
+            @Override
+            public void onGetMassTransitRouteResult(MassTransitRouteResult massTransitRouteResult) {
+
+            }
+
+            @Override
+            public void onGetDrivingRouteResult(DrivingRouteResult drivingRouteResult) {
+
+            }
+
+            @Override
+            public void onGetIndoorRouteResult(IndoorRouteResult indoorRouteResult) {
+
+            }
+
+            @Override
+            public void onGetBikingRouteResult(BikingRouteResult bikingRouteResult) {
+                if(bikingRouteResult != null){
+                    List<BikingRouteLine> bikingRouteLineList = bikingRouteResult.getRouteLines();
+                    int count = bikingRouteLineList.size();
+                    int min = bikingRouteLineList.get(0).getDistance();
+                    for(int i=0;i<count;i++ ){
+                        if(min > bikingRouteLineList.get(i).getDistance()){
+                            min = bikingRouteLineList.get(i).getDistance();
+                        }
+                        continue;
+                    }
+                    Toast.makeText(getBaseContext(),"两地骑行距离onGetBikingRouteResult:"+min,Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+
+    }
+    private void startBikeNaviSearch(){
+        /*Toast.makeText(getBaseContext(),"两地骑行距离startBikeNaviSearchBegin:"+blat+" "+blon+" "+rlat+" "+rlon,Toast.LENGTH_SHORT).show();*/
+        if((blat != 0) &&(blon != 0)&&(rlat !=0)&&(rlon != 0)) {
+            /*Toast.makeText(getBaseContext(),"两地骑行距离startBikeNaviSearchMiddle",Toast.LENGTH_SHORT).show();*/
+            LatLng blal = new LatLng(blat, blon);
+            LatLng elal = new LatLng(rlat, rlon);
+            PlanNode stNode = PlanNode.withLocation(blal);
+            PlanNode enNode = PlanNode.withLocation(elal);
+            mSearch.bikingSearch((new BikingRoutePlanOption())
+                    .from(stNode)
+                    .to(enNode));
+        }
     }
 
 
@@ -266,26 +369,34 @@ public class HelpMeBuyActivity extends Activity{
                 Bundle b=data.getExtras(); //data为B中回传的Intent
                 String nameCall=b.getString("nameCall");//str即为回传的值
                 String address=b.getString("address");//str即为回传的值
-                String lat = b.getString("lat");
-                String lon = b.getString("lon");
+                String lat = b.getString("blat");
+                String lon = b.getString("blon");
+                /*Toast.makeText(getBaseContext(),"RESULT_BUY:"+lat+" "+lon+" ",Toast.LENGTH_SHORT).show();*/
+
                 if((lat != null) && (lon != null)) {
                     blat = Double.parseDouble(lat);
                     blon = Double.parseDouble(lon);
+
                 }
                 tvHelpMeBuyContentAddress.setText(nameCall);
                 tvHelpMeBuyContentAddressDetail.setText(address);
+
                 break;
             case RESULT_RECE:
                 Bundle r=data.getExtras(); //data为B中回传的Intent
                 String name=r.getString("nameCall");//str即为回传的值
                 String addr=r.getString("address");//str即为回传的值
                 String tel =r.getString("tel");
-                String latt = r.getString("lat");
-                String lonn = r.getString("lon");
+                String latt = r.getString("rlat");
+                String lonn = r.getString("rlon");
+                /*Toast.makeText(getBaseContext(),"RESULT_RECE:"+name+" "+addr+" "+tel+" "+latt+" "+lonn,Toast.LENGTH_SHORT).show();*/
+               /* Toast.makeText(getBaseContext(),"RESULT_BUY:"+latt+" "+lonn+" ",Toast.LENGTH_SHORT).show();*/
                 if((latt != null) && (lonn != null)) {
                     rlat = Double.parseDouble(latt);
                     rlon = Double.parseDouble(lonn);
+
                 }
+
                 tvHelpMeBuyContentReceiveName.setText(name);
                 tvHelpMeBuyContentReceiveTel.setText(tel);
                 tvHelpMeBuyContentReceiveAddressDetail.setText(addr);
@@ -305,7 +416,6 @@ public class HelpMeBuyActivity extends Activity{
                         goodsBeanList.addAll(goodsBeanArrayList);*/
                     }
                 }
-
                 break;
             default:
                 break;
@@ -326,6 +436,28 @@ public class HelpMeBuyActivity extends Activity{
 
 
     /*初始化购物清单*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*价格未知按钮*/
+    @OnClick(R.id.lly_helpmebuy_content_price)
+    public void llyHelpMeBuyContentPriceOnclick(){
+
+        startBikeNaviSearch();
+    }
+    /*价格未知按钮*/
+
 
 
 
@@ -449,9 +581,24 @@ public class HelpMeBuyActivity extends Activity{
     public void cbHelpMeBuyContentManualinputOnclick(){
 
     }
-
+    protected void onResume(){
+        super.onResume();
+        startBikeNaviSearch();
+    }
     protected void onPause(){
         super.onPause();
 
     }
+    protected void onStop(){
+        super.onStop();
+    }
+    protected void onDestroy(){
+        super.onDestroy();
+        BaiduMapNavigation.finish(this);
+        mSearch.destroy();
+        Log.d(LTAG, "引擎初始化成功");
+        Log.d(LTAG, "引擎初始化失败");
+    }
+
+
 }

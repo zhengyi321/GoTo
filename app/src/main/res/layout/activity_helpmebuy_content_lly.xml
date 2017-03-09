@@ -725,6 +725,7 @@
                             />
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/lly_helpmebuy_content_price"
                     android:layout_width="@dimen/zero"
                     android:layout_height="match_parent"
                     android:layout_weight="2"

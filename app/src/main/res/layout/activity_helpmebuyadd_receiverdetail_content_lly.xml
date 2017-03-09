@@ -127,7 +127,7 @@
     <!--地址-->
 
     <LinearLayout
-        android:id="@+id/lly_helpmebuyadd_receiverdetail_searchaddress"
+        android:id="@+id/lly_helpmebuyadd_receiverdetail_addresssearch"
         android:layout_width="match_parent"
         android:layout_height="@dimen/zero"
         android:orientation="horizontal"

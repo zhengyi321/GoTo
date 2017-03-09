@@ -16,7 +16,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -48,12 +50,19 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
+import com.baidu.mapapi.search.poi.PoiCitySearchOption;
+import com.baidu.mapapi.search.poi.PoiDetailResult;
+import com.baidu.mapapi.search.poi.PoiIndoorResult;
+import com.baidu.mapapi.search.poi.PoiResult;
+import com.baidu.mapapi.search.poi.PoiSearch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +70,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import tianhao.agoto.Common.Widget.EditText.EditTextWithDel;
 import tianhao.agoto.R;
 import tianhao.agoto.Utils.SystemUtils;
 
@@ -103,8 +113,10 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
     private String addressLocation = "";
     private Boolean isFirst = true;
 
+/*
     @BindView(R.id.rly_helpmebuyadd_receiverdetail_addresssearch)
     RelativeLayout rlyHelpMeBuyAddReceiverDetailAddressSearch;
+*/
 
 
     /*地名转换经纬度*/
@@ -112,9 +124,10 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
     TextView tvHelpMeBuyAddReceiverDetailContentAddress;
     private GeoCoder search=null;
     private String city;
+
     /*地名转换经纬度*/
     /*百度地图定位 end2*/
-    @BindView(R.id.lly_helpmebuyadd_receiverdetail_searchaddress)
+    @BindView(R.id.lly_helpmebuyadd_receiverdetail_addresssearch)
     LinearLayout llyHelpMeBuyAddReceiverDetailSearchAddress;
     /*手机通讯录*/
     @BindView(R.id.rly_helpmebuyadd_receiverdetail_addcontacter)
@@ -133,7 +146,8 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
     @BindView(R.id.rly_helpmebuyadd_receiverdetail_topbar_rightmenu)
     RelativeLayout rlyHelpMeBuyAddReceiverDetailTopBarRightMenu;
     /*确认*/
-    private final int RESULT_ADDRESS = 11;
+    private final int RESULT_OK = 11;
+    private final int RESULT_SEARCH = 15;
     private final int RESULT_CONTACTER = 12;
     private Double rlat,rlon;
 
@@ -159,7 +173,22 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
         InitTabBg(true);
         InitImageView();
         InitViewPager();
+        initEditAddress();
     }
+    /*初始化输入地址框 保证随时找到新地址*/
+    private void initEditAddress(){
+        /*搜索参数初始化*/
+       /* suggestionSearchOption = new SuggestionSearchOption();*/
+        // 实例化PoiSearch
+  /*      mpoiSearch = PoiSearch.newInstance();
+        // 注册搜索事件监听
+        mpoiSearch.setOnGetPoiSearchResultListener(this);*/
+
+    }
+
+    /*初始化输入地址框 保证随时找到新地址*/
+
+
     /*返回上级菜单*/
     @OnClick(R.id.rly_helpmebuyadd_receiverdetail_topbar_leftmenu)
     public void rlyHelpMeBuyAddReceiverDetailTopBarLeftMenuOnclick(){
@@ -175,9 +204,10 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
         bundle.putString("address",tvHelpMeBuyAddReceiverDetailContentAddress.getText().toString());
         bundle.putString("rlat", "" + rlat);
         bundle.putString("rlon", "" + rlon);
+        /*Toast.makeText(getBaseContext(),"rlyHelpMeBuyAddReceiverDetailTopBarRightMenuOnclick:"+rlat+" "+rlon+" ",Toast.LENGTH_SHORT).show();*/
         Intent intent = new Intent();
         intent.putExtras(bundle);
-        setResult(RESULT_ADDRESS, intent);
+        setResult(RESULT_OK, intent);
         finish();
     }
     /*信息确认返回*/
@@ -224,10 +254,10 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
     * http://www.2cto.com/kf/201203/122494.html
     * http://5200415.blog.51cto.com/3851969/969821
     * */
-    @OnClick(R.id.lly_helpmebuyadd_receiverdetail_searchaddress)
+    @OnClick(R.id.lly_helpmebuyadd_receiverdetail_addresssearch)
     public void llyHelpMeBuyAddReceiverDetailSearchAddressOnclick(){
         Intent intent = new Intent(this,BaiduAddressSearchSuggestActivity.class);
-        startActivityForResult(intent,RESULT_ADDRESS);
+        startActivityForResult(intent,RESULT_SEARCH);
     }
 
 
@@ -240,7 +270,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
                     getPhoneContracts(data);
                 }
                 break;
-            case RESULT_ADDRESS:
+            case RESULT_SEARCH:
                 getAddressData(data);
                 break;
             default:
@@ -318,7 +348,6 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
         dataList.add("");*/
         initRecycleView(0,dataList);
     }
-
 
 
 
@@ -606,7 +635,6 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
         option.setScanSpan(5000);// 设置发起定位请求的间隔时间,ms
         option.setIsNeedAddress(true);// 返回的定位结果包含地址信息
         option.setNeedDeviceDirect(true);// 设置返回结果包含手机的方向
-
         locationClient.setLocOption(option);
     }
 
@@ -716,6 +744,10 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
 
     /**经纬度地址动画显示在屏幕中间  有关mark网站的出处http://blog.csdn.net/callmesen/article/details/40540895**/
     private void location(double latitude,double longitude){
+        /*只要调用画面 就能赋值*/
+        rlat = latitude;
+        rlon = longitude;
+        /*只要调用画面 就能赋值*/
         mBaiduMap.clear();
         LatLng ll = new LatLng(latitude, longitude);
         //定义地图状态
@@ -784,6 +816,43 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /*百度地图 end*/
 
 
@@ -797,6 +866,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
             locationClient.stop();
         }
         super.onDestroy();
+
     }
     @Override
     protected void onResume() {

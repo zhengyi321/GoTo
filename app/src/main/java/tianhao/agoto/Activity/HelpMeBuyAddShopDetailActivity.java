@@ -12,6 +12,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,6 +51,12 @@ import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
+import com.baidu.mapapi.search.poi.PoiCitySearchOption;
+import com.baidu.mapapi.search.poi.PoiDetailResult;
+import com.baidu.mapapi.search.poi.PoiIndoorResult;
+import com.baidu.mapapi.search.poi.PoiResult;
+import com.baidu.mapapi.search.poi.PoiSearch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +64,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import tianhao.agoto.Common.Widget.EditText.EditTextWithDel;
 import tianhao.agoto.R;
 import tianhao.agoto.Utils.SystemUtils;
 
@@ -108,8 +117,8 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
     private String addressLocation = "";
     private Boolean isFirst = true;
     private double blat,blon;
-    @BindView(R.id.rly_helpmebuyaddselleraddress_addresssearch)
-    RelativeLayout rlyHelpMeBuyAddSellerAddressAddressSearch;
+/*    @BindView(R.id.rly_helpmebuyaddselleraddress_addresssearch)
+    RelativeLayout rlyHelpMeBuyAddSellerAddressAddressSearch;*/
     @BindView(R.id.lly_helpmebuyadd_shopdetail_searchaddress)
     LinearLayout llyHelpMeBuyAddShopDetailSearchAddress;
 
@@ -121,6 +130,8 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
     /*地名转换经纬度*/
     /*百度地图定位 end2*/
     private final int RESULT_OK = 10;//startactivityforresult
+    private final int RESULT_SEARCH = 15;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,12 +170,22 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
 
     }
 
+
     /*viewpage recycleview 历史记录 收藏地址 功能*/
     private void initSwitchContent(){
         InitTabBg(true);
         InitImageView();
         InitViewPager();
+
     }
+
+
+
+
+    /*初始化输入地址框 保证随时找到新地址*/
+
+
+    /*初始化输入地址框 保证随时找到新地址*/
 
     /**
      * 初始化头标
@@ -222,6 +243,28 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
         dataList.add("");*/
         initRecycleView(0,dataList);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     /**
@@ -429,12 +472,12 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
     }
     /*viewpage recycleview 历史记录 收藏地址 功能 end*/
 
-    /*百度地图定位begin*/
+   /* *//*百度地图定位begin*//*
     private void initBaiDuSDK(){
         // 在使用SDK各组件之前初始化context信息，传入ApplicationContext
         // 注意该方法要再setContentView方法之前实现
         SDKInitializer.initialize(getApplicationContext());
-    }
+    }*/
 
 
     private void initBaiDuMap(){
@@ -563,9 +606,12 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
 
     /**经纬度地址动画显示在屏幕中间  有关mark网站的出处http://blog.csdn.net/callmesen/article/details/40540895**/
     private void location(double latitude,double longitude){
+
+        /*无论哪个调用此动画 都将经纬度赋值*/
+        blat = latitude;
+        blon = longitude;
+        /*无论哪个调用此动画 都将经纬度赋值*/
         mBaiduMap.clear();
-
-
         LatLng ll = new LatLng(latitude, longitude);
         //定义地图状态
         MapStatus mMapStatus = new MapStatus.Builder()
@@ -616,8 +662,9 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(result.getLocation()));*/
         LatLng latLng = result.getLocation();
         addressLocation = result.getAddress();
-        /*if(isFirst) {*/
-        tvHelpMeBuyAddSellerAddressContentAddress.setText(addressLocation+"  "+result.getSematicDescription());
+
+        tvHelpMeBuyAddSellerAddressContentAddress.setText(addressLocation + "  " + result.getSematicDescription());
+
         location(latLng.latitude,latLng.longitude);
         /*getLaLoFromCity();*/
        /* }else{
@@ -649,22 +696,23 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
     /*获取手指在地图上的经纬度*/
 
     @OnClick(R.id.lly_helpmebuyadd_shopdetail_searchaddress)
-    public void rlyHelpMeBuyAddSellerAddressAddressSearchOnclick(){
+    public void llyHelpMeBuyAddSellerAddressAddressSearchOnclick(){
         Intent intent = new Intent(this,BaiduAddressSearchSuggestActivity.class);
-        startActivityForResult(intent,RESULT_OK);
+        startActivityForResult(intent,RESULT_SEARCH);
        /* getLaLoFromCity();*/
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (resultCode) { //resultCode为回传的标记，我在B中回传的是RESULT_OK
-            case RESULT_OK:
+            case RESULT_SEARCH:
                 Bundle b=data.getExtras(); //data为B中回传的Intent
                 String address=b.getString("address");//str即为回传的值
                 String lat = b.getString("lat");
                 String lon = b.getString("lon");
+                Toast.makeText(getBaseContext(),"RESULT_SEARCH:"+lat+" "+lon,Toast.LENGTH_SHORT).show();
                 if((lat != null) && (lon != null)) {
-                     blat = Double.parseDouble(lat);
-                     blon = Double.parseDouble(lon);
-                    location(blat, blon);
+                     /*blat = Double.parseDouble(lat);
+                     blon = Double.parseDouble(lon);*/
+                    location(Double.parseDouble(lat), Double.parseDouble(lon));
                     tvHelpMeBuyAddSellerAddressContentAddress.setText(address);
                 }
 
@@ -675,8 +723,8 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
         }
     }
 
-    private void getLaLoFromCity(){
-        /*getCity();*/
+/*    private void getLaLoFromCity(){
+        *//*getCity();*//*
         addressLocation = tvHelpMeBuyAddSellerAddressContentAddress.getText().toString();
         if(addressLocation!=null&&!addressLocation.equals("")){
             int indexProvince=addressLocation.indexOf("省");
@@ -689,7 +737,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
                 }
                 search.geocode(new GeoCodeOption().city("温州市").address(addressLocation));
             }
-        }
+        }*/
 
         /*location(latitudeLocation, longitudeLocation);*/
         /*search=GeoCoder.newInstance();*/
@@ -698,10 +746,10 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
         }*/
       /*  *得到经纬度**/
        /* search.setOnGetGeoCodeResultListener(this);*/
-    }
+/*    }*/
 
     /**得到当前所在城市**/
-    private void getCity(){
+ /*   private void getCity(){
         addressLocation = tvHelpMeBuyAddSellerAddressContentAddress.getText().toString();
         if(addressLocation!=null&&!addressLocation.equals("")){
             int indexProvince=addressLocation.indexOf("省");
@@ -712,7 +760,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
                 city = addressLocation.substring(indexProvince + 1, indexCity);
             }
         }
-    }
+    }*/
 
 
 
@@ -734,15 +782,17 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
             locationClient.stop();
         }
         super.onDestroy();
+
     }
 
     protected void onResume(){
         /*init();*/
         super.onResume();
-
+        mMapView.onResume();
     }
     protected void onPause(){
         super.onPause();
+        mMapView.onPause();
 /*        locationClient.unRegisterLocationListener(locationListener);
         mBaiduMap.clear();
         search.destroy();*/

@@ -29,8 +29,9 @@ import tianhao.agoto.R;
 public class BaiduAddressSearchSuggestRecycleViewAdapter extends RecyclerView.Adapter<BaiduAddressSearchSuggestRecycleViewAdapter.ItemContentViewHolder> {
     private Activity activity;
     private List<PoiInfo> poiInfoList;
+    /*private List<PoiAddrInfo> poiInfoList;*/
     private LayoutInflater inflater;
-    private int RESULT_OK = 10;
+    private int RESULT_OK = 15;
     public BaiduAddressSearchSuggestRecycleViewAdapter(Activity activity, List<PoiInfo> poiInfoList){
         this.activity = activity;
         this.poiInfoList = poiInfoList;
@@ -38,8 +39,16 @@ public class BaiduAddressSearchSuggestRecycleViewAdapter extends RecyclerView.Ad
     }
     /*实时更新数据*/
     public void setDataList(List<PoiInfo> dataList){
-        this.poiInfoList = dataList;
-        this.notifyDataSetChanged();
+        if((dataList != null)&&(dataList.size() > 0)) {
+            int count = poiInfoList.size();
+            this.poiInfoList.clear();
+            notifyItemRangeRemoved(0,count);
+            notifyItemRangeChanged(0,count);
+            this.poiInfoList.addAll(dataList);
+            notifyItemRangeInserted(0,dataList.size());
+            notifyItemRangeChanged(0,dataList.size());
+
+        }
     }
     /*实时更新数据*/
 
@@ -52,14 +61,14 @@ public class BaiduAddressSearchSuggestRecycleViewAdapter extends RecyclerView.Ad
     public void onBindViewHolder(ItemContentViewHolder holder, int position) {
         if((poiInfoList.get(position) != null)&& (poiInfoList.get(position).location != null)) {
             /*holder.tvBaiduAddressSearchSuggestRVItemContentName.setText(suggestionInfoList.get(position).city + suggestionInfoList.get(position).district + suggestionInfoList.get(position).key);*/
-            holder.tvBaiduAddressSearchSuggestRVItemContentName.setText(poiInfoList.get(position).address );
+            holder.tvBaiduAddressSearchSuggestRVItemContentName.setText(poiInfoList.get(position).city+poiInfoList.get(position).name+poiInfoList.get(position).address );
 /*            holder.tvBaiduAddressSearchSuggestRVItemContentName.setText(poiInfoList.get(position).address +" "+ poiInfoList.get(position).city +" "+poiInfoList.get(position).name +" "+ poiInfoList.get(position).phoneNum+" "+poiInfoList.get(position).postCode+" "+poiInfoList.get(position).uid );*/
 
            /* holder.lat = suggestionInfoList.get(position).pt.latitude;
             holder.lon = suggestionInfoList.get(position).pt.longitude;*/
              holder.lat = poiInfoList.get(position).location.latitude;
             holder.lon = poiInfoList.get(position).location.longitude;
-
+     
         }
     }
 

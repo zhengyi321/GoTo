@@ -123,7 +123,7 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
     /*地名转换经纬度*/
     /*百度地图定位 end2*/
     private  int RESULT_TYPE = 0;
-    private final int RESULT_ADDRESS = 10;
+    private final int RESULT_SEARCH = 15;
     private final int RESULT_CONTACTER = 11;
     @BindView(R.id.lly_helpmesendadd_contacter_searchaddress)
     LinearLayout llyHelpMeSendAddContacterSearchAddress;
@@ -543,13 +543,13 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
     @OnClick(R.id.lly_helpmesendadd_contacter_searchaddress)
     public void llyHelpMeSendAddContacterSearchAddressOnclick(){
         Intent intent = new Intent(this,BaiduAddressSearchSuggestActivity.class);
-        startActivityForResult(intent,RESULT_ADDRESS);
+        startActivityForResult(intent,RESULT_SEARCH);
         /*getLaLoFromCity();*/
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) { //resultCode为回传的标记，我在B中回传的是RESULT_OK
-            case RESULT_ADDRESS:
+            case RESULT_SEARCH:
                 getAddressData(data);
                 break;
             case RESULT_CONTACTER :
@@ -625,7 +625,7 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
         finish();
     }
     /*信息确认*/
-    private void getLaLoFromCity(){
+ /*   private void getLaLoFromCity(){
         addressLocation = tvHelpMeSendAddContacterContentAddr.getText().toString();
         if(addressLocation!=null&&!addressLocation.equals("")){
             int indexProvince=addressLocation.indexOf("省");
@@ -641,7 +641,7 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
         }
     }
 
-    /**得到当前所在城市**/
+    *//**得到当前所在城市**//*
     private void getCity(){
         addressLocation = tvHelpMeSendAddContacterContentAddr.getText().toString();
         if(addressLocation!=null&&!addressLocation.equals("")){
@@ -653,7 +653,7 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
                 city = addressLocation.substring(indexProvince + 1, indexCity);
             }
         }
-    }
+    }*/
 
 
 
@@ -766,7 +766,19 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
 
 
     /*百度地图 end*/
-
+    protected void onResume(){
+        /*init();*/
+        super.onResume();
+        mMapView.onResume();
+    }
+    protected void onPause(){
+        super.onPause();
+        mMapView.onPause();
+/*        locationClient.unRegisterLocationListener(locationListener);
+        mBaiduMap.clear();
+        search.destroy();*/
+        /*isFirst = true;*/
+    }
 
 
     protected void onDestroy(){
