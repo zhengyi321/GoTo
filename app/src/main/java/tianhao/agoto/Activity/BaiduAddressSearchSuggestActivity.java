@@ -7,12 +7,19 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.geocode.GeoCodeOption;
+import com.baidu.mapapi.search.geocode.GeoCodeResult;
+import com.baidu.mapapi.search.geocode.GeoCoder;
+import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
 import com.baidu.mapapi.search.poi.PoiAddrInfo;
 import com.baidu.mapapi.search.poi.PoiCitySearchOption;
@@ -38,7 +45,7 @@ import tianhao.agoto.R;
  * Created by admin on 2017/2/27.
  */
 
-public class BaiduAddressSearchSuggestActivity extends Activity implements/* OnGetSuggestionResultListener,*/TextWatcher,OnGetPoiSearchResultListener {
+public class BaiduAddressSearchSuggestActivity extends Activity implements/* OnGetSuggestionResultListener,*/TextWatcher,OnGetPoiSearchResultListener,OnGetGeoCoderResultListener {
 
     @BindView(R.id.rlv_baiduaddress_suggest_content)
     RecyclerView rlvBaiduAddressSuggestContent;
@@ -50,6 +57,7 @@ public class BaiduAddressSearchSuggestActivity extends Activity implements/* OnG
     private PoiSearch mpoiSearch;
     private SuggestionSearch mSuggestionSearch;
     private SuggestionSearchOption suggestionSearchOption;
+    private GeoCoder mSearch;//地理编码
     private BaiduAddressSearchSuggestRecycleViewAdapter baiduAddressSearchSuggestRecycleViewAdapter;
   /*  private List<SuggestionInfo> suggestionInfoList;*/
     private List<PoiInfo> poiInfoList;
@@ -87,6 +95,14 @@ public class BaiduAddressSearchSuggestActivity extends Activity implements/* OnG
         mpoiSearch = PoiSearch.newInstance();
         // 注册搜索事件监听
         mpoiSearch.setOnGetPoiSearchResultListener(this);
+
+        /*地理编码初始化*/
+        mSearch = GeoCoder.newInstance();
+        /*地理编码初始化*/
+        /*设置编码监听者*/
+        mSearch.setOnGetGeoCodeResultListener(this);
+        /*设置编码监听者*/
+
     }
 
     private void initRecycleView(){
@@ -140,6 +156,9 @@ public class BaiduAddressSearchSuggestActivity extends Activity implements/* OnG
                 city = address.substring(0,indexCity);
                /* String addr = address.substring(theSecondCity,address.length());*/
                 mpoiSearch.searchInCity(new PoiCitySearchOption().pageNum(0).pageCapacity(30).city(city).keyword(address).isReturnAddr(true));
+                mSearch.geocode(new GeoCodeOption()
+                        .city(city)
+                        .address(address));
                 return;
             }
             /*默认搜索温州市*/
@@ -149,6 +168,9 @@ public class BaiduAddressSearchSuggestActivity extends Activity implements/* OnG
             // 分页编号
             /*mpoiSearch.searchNearby(new PoiNearbySearchOption().keyword(address).pageNum(30));*/
             mpoiSearch.searchInCity(new PoiCitySearchOption().pageNum(0).pageCapacity(30).city("温州市").isReturnAddr(true).keyword(address));
+            mSearch.geocode(new GeoCodeOption()
+                    .city("温州市")
+                    .address(address));
                     /*searchInCity((new PoiCitySearchOption())
                     .city("温州市")
                     .keyword(address)
@@ -161,7 +183,8 @@ public class BaiduAddressSearchSuggestActivity extends Activity implements/* OnG
 
     protected void onDestroy(){
         /*mSuggestionSearch.destroy();*/
-        mpoiSearch.destroy();;
+        mpoiSearch.destroy();
+        mSearch.destroy();
         super.onDestroy();
 
     }
@@ -218,5 +241,35 @@ public class BaiduAddressSearchSuggestActivity extends Activity implements/* OnG
     @Override
     public void onGetPoiIndoorResult(PoiIndoorResult poiIndoorResult) {
 
+    }
+
+    @Override
+    public void onGetGeoCodeResult(GeoCodeResult result) {
+        Log.i("onGetGeoCodeResult","我有结果啦1");
+        if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
+            //没有检索到结果
+        }
+        //获取地理编码结果
+        PoiInfo poiInfo = new PoiInfo();
+        poiInfo.address = result.getAddress();
+        LatLng latLng = new LatLng(result.getLocation().latitude,result.getLocation().longitude);
+
+        poiInfo.location = latLng;
+        poiInfo.city = "";
+        poiInfo.name = "";
+        baiduAddressSearchSuggestRecycleViewAdapter.setHeadView(poiInfo);
+        /*Log.i("onGetGeoCodeResult",result.getLocation().latitude+" "+result.getLocation().longitude+" "+result.getAddress());*/
+        /*System.out.println("GeoCodeResult" + result.getLocation().latitude+" "+result.getLocation().longitude+" "+result.getAddress());*/
+    }
+
+    @Override
+    public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
+        Log.i("onGetGeoCodeResult","我有结果啦2");
+        if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
+            //没有找到检索结果
+        }
+        //获取反向地理编码结果
+        Log.i("ReverseGeoCodeResult",result.getLocation().latitude+" "+result.getLocation().longitude+" "+result.getAddress());
+        /*System.out.println("GeoCodeResult" + result.getLocation().latitude+" "+result.getLocation().longitude+" "+result.getAddress());*/
     }
 }

@@ -15,6 +15,7 @@ import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.poi.PoiAddrInfo;
 import com.baidu.mapapi.search.sug.SuggestionResult.SuggestionInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -51,6 +52,26 @@ public class BaiduAddressSearchSuggestRecycleViewAdapter extends RecyclerView.Ad
         }
     }
     /*实时更新数据*/
+
+    /*增加头数据*/
+    public void setHeadView(PoiInfo head){
+        List<PoiInfo> tempInfo = new ArrayList<PoiInfo>();
+        tempInfo.add(head);
+        for(int i =0;i<poiInfoList.size();i++){
+            tempInfo.add(poiInfoList.get(i));
+        }
+        int count = poiInfoList.size();
+        poiInfoList.clear();
+        notifyItemRangeRemoved(0,count);
+        notifyItemRangeChanged(0,count);
+        for(int i=0;i<tempInfo.size();i++){
+            poiInfoList.add(tempInfo.get(i));
+        }
+        notifyItemRangeInserted(0,tempInfo.size());
+        notifyItemRangeChanged(0,tempInfo.size());
+    }
+    /*增加头数据*/
+
 
     @Override
     public ItemContentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
