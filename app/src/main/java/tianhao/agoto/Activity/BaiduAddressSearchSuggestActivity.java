@@ -252,12 +252,14 @@ public class BaiduAddressSearchSuggestActivity extends Activity implements/* OnG
         //获取地理编码结果
         PoiInfo poiInfo = new PoiInfo();
         poiInfo.address = result.getAddress();
-        LatLng latLng = new LatLng(result.getLocation().latitude,result.getLocation().longitude);
+        if(result.getLocation() !=null) {
+            LatLng latLng = new LatLng(result.getLocation().latitude, result.getLocation().longitude);
 
-        poiInfo.location = latLng;
-        poiInfo.city = "";
-        poiInfo.name = "";
-        baiduAddressSearchSuggestRecycleViewAdapter.setHeadView(poiInfo);
+            poiInfo.location = latLng;
+            poiInfo.city = "";
+            poiInfo.name = "";
+            baiduAddressSearchSuggestRecycleViewAdapter.setHeadView(poiInfo);
+        }
         /*Log.i("onGetGeoCodeResult",result.getLocation().latitude+" "+result.getLocation().longitude+" "+result.getAddress());*/
         /*System.out.println("GeoCodeResult" + result.getLocation().latitude+" "+result.getLocation().longitude+" "+result.getAddress());*/
     }

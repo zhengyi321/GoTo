@@ -36,15 +36,15 @@ public class ContactInjfoDao {
     // 调用谷歌的api去进行增删改查
 
     // 增加的方法吗，返回的的是一个long值
-    public long addDate(String name,String phone){
+    public long addDate(String key,String values){
         // 增删改查每一个方法都要得到数据库，然后操作完成后一定要关闭
         // getWritableDatabase(); 执行后数据库文件才会生成
         // 数据库文件利用DDMS可以查看，在 data/data/包名/databases 目录下即可查看
         SQLiteDatabase sqLiteDatabase =  mMyDBHelper.getWritableDatabase();
         ContentValues contentValues=new ContentValues();
 
-        contentValues.put("name",name);
-        contentValues.put("phone", phone);
+        contentValues.put(key,values);
+
         // 返回,显示数据添加在第几行
         // 加了现在连续添加了3行数据,突然删掉第三行,然后再添加一条数据返回的是4不是3
         // 因为自增长
@@ -65,35 +65,41 @@ public class ContactInjfoDao {
 
     /**
      * 修改的方法
-     * @param name
-     * @param newPhone
+     * @param key
+     * @param value
      * @return
      */
-    public int updateData(String name,String newPhone){
+    public int updateData(String key,String value){
         SQLiteDatabase sqLiteDatabase = mMyDBHelper.getWritableDatabase();
         ContentValues contentValues =new ContentValues();
-        contentValues.put("phone", newPhone);
-        int updateResult = sqLiteDatabase.update("contactinfo", contentValues, "name=?", new String[]{name});
+        contentValues.put(key, value);
+        int updateResult = sqLiteDatabase.update("contactinfo", contentValues, "name=?", new String[]{key});
         sqLiteDatabase.close();
         return updateResult;
     }
 
     /**
      * 查询的方法（查找电话）
-     * @param name
+     * @param key value colum
      * @return
      */
-    public String queryDate(String name){
+    public String queryDate(String key/*,String value*//*,String column,String columnValues*/){
         String phone = null;
+        try {
+            SQLiteDatabase readableDatabase = mMyDBHelper.getReadableDatabase();
+            /*ContentValues cvValues = new ContentValues();
+            cvValues.put(key,value);*///key为字段名，value为值
+            // 查询比较特别,涉及到 cursor
+            Cursor cursor = readableDatabase.query("contactinfo", new String[]{key}/*new String[]{"phone"}*/,null/* column+"=?"*//*"name=?"*/, null/*new String[]{columnValues}*/, null, null, null);
+            if(cursor.moveToNext()){
+                phone=cursor.getString(0);
+            }
 
-        SQLiteDatabase readableDatabase = mMyDBHelper.getReadableDatabase();
-        // 查询比较特别,涉及到 cursor
-        Cursor cursor = readableDatabase.query("contactinfo", new String[]{"phone"}, "name=?", new String[]{name}, null, null, null);
-        if(cursor.moveToNext()){
-            phone=cursor.getString(0);
+            cursor.close(); // 记得关闭 corsor
+            readableDatabase.close(); // 关闭数据库
+        }catch (Exception e){
+
         }
-        cursor.close(); // 记得关闭 corsor
-        readableDatabase.close(); // 关闭数据库
         return phone;
     }
 

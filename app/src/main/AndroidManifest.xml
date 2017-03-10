@@ -142,8 +142,10 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" >
             <intent-filter>
-                <!-- ※这里需要将1105785901改成你在腾讯申请后得到的AppId-->
-                <data android:scheme="tencent1105785901" />
+                <!-- ※这里需要将1105785901改成你在腾讯申请后得到的AppId
+                http://blog.csdn.net/little_shengsheng/article/details/51558473
+                -->
+                <data android:scheme="tencent1105986962" />
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />

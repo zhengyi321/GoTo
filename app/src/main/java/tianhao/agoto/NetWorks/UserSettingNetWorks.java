@@ -24,11 +24,11 @@ public class UserSettingNetWorks extends BaseNetWork{
         final String CACHE_CONTROL_NETWORK = "max-age=0";
         /*用户注册*/
         //GET请求
-        @GET("appusers/appreg.do")
+        @GET("users/appreg.do")
         Observable<UserReg> userReg(@Query("userName") String tel, @Query("userPassword") String pass);
 
         //用户登录
-        @GET("appusers/applogin.do")
+        @GET("users/applogin.do")
         Observable<UserLogin> userLogin(@Query("userName") String tel, @Query("userPassword") String pass);
 
     }

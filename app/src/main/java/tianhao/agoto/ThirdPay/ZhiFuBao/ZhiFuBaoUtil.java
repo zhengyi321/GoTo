@@ -39,7 +39,7 @@ public class ZhiFuBaoUtil {
     /** 支付宝支付业务：入参app_id */
     public  final String APPID = "2017021605701384";
 
-    /** 支付宝账户登录授权业务：入参pid值 */
+    /** 支付宝账户登录授权业务：入参pid值  签约合作者身份ID */
     public  final String PID = "2088621212377360";
     /** 支付宝账户登录授权业务：入参target_id值 */
     public  final String TARGET_ID = "";
@@ -56,7 +56,8 @@ public class ZhiFuBaoUtil {
     private  final int SDK_PAY_FLAG = 1;
     private  final int SDK_AUTH_FLAG = 2;
 
-
+    // 签约卖家支付宝账号
+    String SELLER = "zttcapp@163.com";
     /*支付宝*/
 
 
@@ -122,7 +123,7 @@ public class ZhiFuBaoUtil {
      *
      * @param v
      */
-    public void payV2(View v) {
+    public void payV2(View v,String goodsName,String price) {
         if (TextUtils.isEmpty(APPID) || (TextUtils.isEmpty(RSA2_PRIVATE) && TextUtils.isEmpty(RSA_PRIVATE))) {
             new AlertDialog.Builder(activity).setTitle("警告").setMessage("需要配置APPID | RSA_PRIVATE")
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -142,13 +143,13 @@ public class ZhiFuBaoUtil {
          * orderInfo的获取必须来自服务端；
          */
         boolean rsa2 = (RSA2_PRIVATE.length() > 0);
-        Map<String, String> params = OrderInfoUtil2_0.buildOrderParamMap(APPID, rsa2);
+        Map<String, String> params = OrderInfoUtil2_0.buildOrderParamMap(APPID, rsa2,goodsName,price);
         String orderParam = OrderInfoUtil2_0.buildOrderParam(params);
 
         String privateKey = rsa2 ? RSA2_PRIVATE : RSA_PRIVATE;
         String sign = OrderInfoUtil2_0.getSign(params, privateKey, rsa2);
         final String orderInfo = orderParam + "&" + sign;
-
+        /*final String orderInfo = getOrderInfo("走兔商品名称","走兔商品详情","0.01");*/
         Runnable payRunnable = new Runnable() {
 
             @Override
@@ -167,8 +168,6 @@ public class ZhiFuBaoUtil {
         Thread payThread = new Thread(payRunnable);
         payThread.start();
     }
-
-
 
 
 

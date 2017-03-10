@@ -1,30 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
     >
-    <LinearLayout
-        android:id="@+id/lly_dialogpopup_not_pop_payconfirm"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/zero"
-        android:background="@color/transparent"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:alpha="1"
-        >
 
-
-    </LinearLayout>
     <LinearLayout
-        android:id="@+id/lly_dialogpopup"
+        android:id="@+id/lly_popup_thirdpay_payconfirm"
         android:layout_width="fill_parent"
-        android:layout_height="@dimen/zero"
+        android:layout_height="@dimen/popup_dialog_thirdpay_payconfirm_height"
         android:orientation="vertical"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
-        android:layout_weight="2"
+
         >
         <RelativeLayout
             android:layout_width="match_parent"
@@ -41,6 +30,7 @@
                 android:textStyle="bold"
                 />
             <RelativeLayout
+                android:id="@+id/rly_popup_thirdpay_payconfirm_closewin"
                 android:layout_width="@dimen/dialogpopup_payconfirm_rly_cancel_width"
                 android:layout_height="@dimen/dialogpopup_payconfirm_rly_cancel_height"
                 android:layout_alignParentRight="true"
@@ -70,6 +60,7 @@
                     android:layout_gravity="center_horizontal"
                     />
             <TextView
+                android:id="@+id/tv_popup_thirdpay_payconfirm_fee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/moneyTest"
@@ -80,6 +71,7 @@
                 />
 
             <TextView
+                android:id="@+id/tv_popup_thirdpay_payconfirm_feedescri"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/theWayOfFee"
@@ -89,23 +81,17 @@
                 android:layout_gravity="center_horizontal"
                 />
         </LinearLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/zero"
-            android:layout_weight="1"
-            >
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="@dimen/the_split_line_height"
             android:background="@color/colorDialogPopupPayConfirmGrayWordBg"
             android:layout_alignParentBottom="true"
             />
-        </RelativeLayout>
-
         <!--账户支付（推荐使用)-->
 
         <LinearLayout
-            android:id="@+id/lly_popup_payconfirm_local"
+            android:id="@+id/lly_popup_thirdpay_payconfirm_local"
             android:layout_width="match_parent"
             android:layout_height="@dimen/zero"
             android:layout_weight="1.2"
@@ -154,7 +140,7 @@
                 android:layout_weight="1"
                 >
                 <CheckBox
-                    android:id="@+id/cb_popup_payconfirm_local"
+                    android:id="@+id/cb_popup_thirdpay_payconfirm_local"
                     android:layout_width="@dimen/dialogpopup_payconfirm_pay_way_ico_width"
                     android:layout_height="@dimen/dialogpopup_payconfirm_pay_way_ico_height"
                     android:background="@drawable/paywayselect"
@@ -173,7 +159,7 @@
         <!--我是分割线-->
         <!--微信支付-->
         <LinearLayout
-            android:id="@+id/lly_popup_payconfirm_wx"
+            android:id="@+id/lly_popup_thirdpay_payconfirm_wx"
             android:layout_width="match_parent"
             android:layout_height="@dimen/zero"
             android:layout_weight="1.2"
@@ -224,7 +210,7 @@
                 android:layout_weight="1"
                 >
                 <CheckBox
-                    android:id="@+id/cb_popup_payconfirm_wx"
+                    android:id="@+id/cb_popup_thirdpay_payconfirm_wx"
                     android:layout_width="@dimen/dialogpopup_payconfirm_pay_way_ico_width"
                     android:layout_height="@dimen/dialogpopup_payconfirm_pay_way_ico_height"
                     android:background="@drawable/paywaynormal"
@@ -247,7 +233,7 @@
         <!--支付宝支付-->
 
         <LinearLayout
-            android:id="@+id/lly_popup_payconfirm_zfb"
+            android:id="@+id/lly_popup_thirdpay_payconfirm_zfb"
             android:layout_width="match_parent"
             android:layout_height="@dimen/zero"
             android:layout_weight="1.2"
@@ -297,7 +283,7 @@
                 android:layout_weight="1"
                 >
                 <CheckBox
-                    android:id="@+id/cb_popup_payconfirm_zfb"
+                    android:id="@+id/cb_popup_thirdpay_payconfirm_zfb"
                     android:layout_width="@dimen/dialogpopup_payconfirm_pay_way_ico_width"
                     android:layout_height="@dimen/dialogpopup_payconfirm_pay_way_ico_height"
                     android:background="@drawable/paywaynormal"
@@ -309,7 +295,7 @@
         <!--支付宝支付-->
 
         <RelativeLayout
-            android:id="@+id/rly_popup_payconfirm_querypay"
+            android:id="@+id/rly_popup_thirdpay_payconfirm_querypay"
             android:layout_width="match_parent"
             android:layout_height="@dimen/activity_helpmebuy_bottombar_zhifu_height"
             android:background="@color/colorDialogPopupPayConfirmBlackWordBg"
@@ -327,4 +313,4 @@
         </RelativeLayout>
 
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

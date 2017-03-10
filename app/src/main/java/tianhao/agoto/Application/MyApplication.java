@@ -1,5 +1,6 @@
 package tianhao.agoto.Application;
 
+import android.app.Activity;
 import android.app.Application;
 
 import com.baidu.mapapi.SDKInitializer;
@@ -12,7 +13,8 @@ import cn.sharesdk.framework.ShareSDK;
  */
 public class MyApplication extends Application {
 
-    private  MyApplication instance;
+    public static  MyApplication instance;
+
 
     @Override
     public void onCreate() {

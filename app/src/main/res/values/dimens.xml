@@ -334,4 +334,10 @@
     <dimen name="radius_alertview">15px</dimen>
     <!--仿ios对话框-->
 
+    <!--PopupWindow-->
+    <dimen name="popup_dialog_thirdpay_payconfirm_height">370dp</dimen>
+
+
+    <!--PopupWindow-->
+
 </resources>

@@ -194,16 +194,24 @@ public class LoginActivity extends Activity implements Handler.Callback, Platfor
 
             @Override
             public void onError(Throwable e) {
-                Toast.makeText(getBaseContext(),"网络君被孤立啦！！"+e,Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(),"网络君凯旋失败啦！！快检查你的账号和密码吧",Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onNext(UserLogin userLogin) {
                 String name = "userName";
+                String usid = "usid";
+                String phone = "phone";
+                String loginStatus = "loginStatus";
                 /*Toast.makeText(getBaseContext(),""+userLogin.getResult(),Toast.LENGTH_LONG).show();*/
                 if(userLogin.getUserName() != null){
                     mDao.deleteDate(name);
-                    long addLong = mDao.addDate(name, userLogin.getUserName());
+                    mDao.deleteDate(phone);
+                    mDao.deleteDate(usid);
+                    long addNameLong = mDao.addDate(name,name);
+                    long addPhoneLong = mDao.addDate(phone,phone);
+                    long addUsidLong = mDao.addDate(usid,usid);
+                    long addLoginStatusLong = mDao.addDate(loginStatus,"yes");
                     Toast.makeText(getBaseContext(),""+userLogin.getResult(),Toast.LENGTH_LONG).show();
                     finish();
                 }else{
@@ -242,15 +250,14 @@ public class LoginActivity extends Activity implements Handler.Callback, Platfor
         }
         return false;
     }
-
+    /*第三方平台登陆完成 并记录返回值*/
     @Override
     public void onComplete(Platform platform, int action, HashMap<String, Object> res) {
         if (action == Platform.ACTION_USER_INFOR) {
             //登录成功,获取需要的信息
             UIHandler.sendEmptyMessage(MSG_AUTH_COMPLETE, this);
             login(platform.getName(), platform.getDb().getUserId(), res);
-            Log.e("asd", "platform.getName():" + platform.getName());
-            Log.e("asd", "platform.getDb().getUserId()" + platform.getDb().getUserId());
+
             String openid = platform.getDb().getUserId() + "";
             String gender = platform.getDb().getUserGender();
             String head_url = platform.getDb().getUserIcon();
@@ -258,13 +265,10 @@ public class LoginActivity extends Activity implements Handler.Callback, Platfor
             mDao.addDate("userName",nickname);
             mDao.addDate("thirdHeadUrl",head_url);
             finish();
-            Log.e("asd", "openid:" + openid);
-            Log.e("asd", "gender:" + gender);
-            Log.e("asd", "head_url:" + head_url);
-            Log.e("asd", "nickname:" + nickname);
+
         }
     }
-
+    /*第三方平台登陆完成 并记录返回值*/
     @Override
     public void onError(Platform platform, int action, Throwable t) {
         if(action==Platform.ACTION_USER_INFOR){

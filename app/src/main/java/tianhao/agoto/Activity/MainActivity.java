@@ -209,8 +209,13 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.lly_main_leftmenu_login)
     public void llyMainLeftMenuLoginOnclick(){
-        Intent intent = new Intent(this,LoginActivity.class);
-        startActivity(intent);
+        String isLogin = mDao.queryDate("loginStatus");
+        if((isLogin != null)&&(isLogin.equals("yes"))){
+
+        }else {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
 /*登录*/

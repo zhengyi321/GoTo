@@ -280,6 +280,7 @@
         >
         <!--物品重量-->
         <LinearLayout
+            android:id="@+id/lly_helpmesend_content_weight"
             android:layout_width="@dimen/zero"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -307,9 +308,10 @@
             android:layout_weight="1"
             >
             <TextView
+                android:id="@+id/tv_helpmesend_content_goodsweight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/weightKgTest"
+
                 android:textColor="@color/colorHelpMeSendActivityContentItemBlackBg"
                 android:textSize="16sp"
                 android:layout_centerVertical="true"
@@ -358,9 +360,10 @@
                 android:layout_weight="1"
                 >
                 <TextView
+                    android:id="@+id/tv_helpmesend_content_senddis"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/mileTest"
+
                     android:textColor="@color/colorHelpMeSendActivityContentItemBlackBg"
                     android:textSize="16sp"
                     android:layout_centerVertical="true"
@@ -372,6 +375,7 @@
                     android:background="@drawable/rightarrow"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:visibility="gone"
                     />
 
             </RelativeLayout>
@@ -390,6 +394,7 @@
         android:orientation="horizontal"
         >
         <LinearLayout
+            android:id="@+id/lly_helpmesend_content_goodstype"
             android:layout_width="@dimen/zero"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -417,9 +422,10 @@
                 android:layout_weight="1"
                 >
                 <TextView
+                    android:id="@+id/tv_helpmesend_content_goodstype"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/dinner"
+
                     android:textColor="@color/colorHelpMeSendActivityContentItemBlackBg"
                     android:textSize="16sp"
                     android:layout_centerVertical="true"
@@ -441,6 +447,7 @@
         <!--配送里程-->
 
         <LinearLayout
+            android:id="@+id/lly_helpmesend_content_rectime"
             android:layout_width="@dimen/zero"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -468,6 +475,7 @@
                 android:layout_weight="1"
                 >
                 <TextView
+                    android:id="@+id/tv_helpmesend_content_rectime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/timeTest"

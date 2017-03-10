@@ -730,12 +730,14 @@
                     android:layout_height="match_parent"
                     android:layout_weight="2"
                     >
-                        <ImageView
+                        <CheckBox
+                            android:id="@+id/cb_helpmebuy_content_pricecheck"
                             android:layout_width="@dimen/activity_helpmebuy_content_lastitem_priceselect_width"
                             android:layout_height="@dimen/activity_helpmebuy_content_lastitem_priceselect_height"
-                            android:background="@drawable/pricselected"
+                            android:background="@drawable/red_checked_selector"
                             android:layout_gravity="center_vertical"
                             android:layout_marginRight="@dimen/activity_helpmebuy_content_lastitem_goodsprice_margin_right"
+                            android:button="@null"
                             />
                         <TextView
                             android:layout_width="wrap_content"

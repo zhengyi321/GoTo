@@ -69,6 +69,7 @@ import tianhao.agoto.R;
 import tianhao.agoto.ThirdPay.ZhiFuBao.AuthResult;
 import tianhao.agoto.ThirdPay.ZhiFuBao.OrderInfoUtil2_0;
 import tianhao.agoto.ThirdPay.ZhiFuBao.PayResult;
+import tianhao.agoto.Utils.PriceUtil;
 import tianhao.agoto.Utils.TimeUtil;
 
 /**
@@ -97,6 +98,12 @@ public class HelpMeBuyActivity extends Activity  {
 
     @BindView(R.id.lly_helpmebuy)
     LinearLayout llyHelpMeBuy;
+
+    /*价格*/
+    @BindView(R.id.tv_helpmebuy_bottombar_fee)
+    TextView tvHelpMeBuyBottomBarFee;
+    /*价格*/
+
     /*购买地址*/
     @BindView(R.id.tv_helpmebuy_content_address)
     TextView tvHelpMeBuyContentAddress;
@@ -113,6 +120,12 @@ public class HelpMeBuyActivity extends Activity  {
     /*收件人地址*/
     @BindView(R.id.tv_helpmebuy_content_receiveaddressdetail)
     TextView tvHelpMeBuyContentReceiveAddressDetail;
+
+    /*价格未知*/
+    @BindView(R.id.cb_helpmebuy_content_pricecheck)
+    CheckBox cbHelpMeBuyContentPriceCheck;
+    /*价格未知*/
+
 
     /*购物清单*/
     @BindView(R.id.rv_helpmebuy_content_shoppingmenu)
@@ -176,6 +189,9 @@ public class HelpMeBuyActivity extends Activity  {
     private final String LTAG = "BaiduQiXing导航引擎";
     private static boolean isPermissionRequested = false;
     /*百度骑行引擎*/
+
+    private String goodsName,price;
+    private int dis = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -233,13 +249,24 @@ public class HelpMeBuyActivity extends Activity  {
                         }
                         continue;
                     }
-                    Toast.makeText(getBaseContext(),"两地骑行距离onGetBikingRouteResult:"+min,Toast.LENGTH_LONG).show();
+                    dis = min;
+                    /*Toast.makeText(getBaseContext(),"两地骑行距离onGetBikingRouteResult:"+min,Toast.LENGTH_LONG).show();*/
+                    getPrice();
                 }
             }
         });
 
 
     }
+    /*获取价格*/
+    private void getPrice(){
+        PriceUtil priceUtil = new PriceUtil();
+        float dist = dis/1000;
+        price = priceUtil.gotoHelpMeBuylFee(dist,helpMeBuyShoppingMenuRecyclerViewAdapter.getItemCount());
+        tvHelpMeBuyBottomBarFee.setVisibility(View.VISIBLE);
+        tvHelpMeBuyBottomBarFee.setText(price);
+    }
+    /*获取价格*/
     private void startBikeNaviSearch(){
         /*Toast.makeText(getBaseContext(),"两地骑行距离startBikeNaviSearchBegin:"+blat+" "+blon+" "+rlat+" "+rlon,Toast.LENGTH_SHORT).show();*/
         if((blat != 0) &&(blon != 0)&&(rlat !=0)&&(rlon != 0)) {
@@ -362,7 +389,6 @@ public class HelpMeBuyActivity extends Activity  {
 
 
 
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (resultCode) { //resultCode为回传的标记，我在B中回传的是RESULT_OK
             case RESULT_BUY:
@@ -434,7 +460,6 @@ public class HelpMeBuyActivity extends Activity  {
         }
     }
 
-
     /*初始化购物清单*/
 
 
@@ -453,8 +478,12 @@ public class HelpMeBuyActivity extends Activity  {
     /*价格未知按钮*/
     @OnClick(R.id.lly_helpmebuy_content_price)
     public void llyHelpMeBuyContentPriceOnclick(){
-
-        startBikeNaviSearch();
+        if(cbHelpMeBuyContentPriceCheck.isChecked()){
+            cbHelpMeBuyContentPriceCheck.setChecked(false);
+        }else{
+            cbHelpMeBuyContentPriceCheck.setChecked(true);
+        }
+        /*startBikeNaviSearch();*/
     }
     /*价格未知按钮*/
 
@@ -466,8 +495,9 @@ public class HelpMeBuyActivity extends Activity  {
     public void rlyHelpMeBuyBottomToPayOnclick(){
        /* Intent intent = new Intent(this, PayConfirmPopup.class);
         startActivity(intent);*/
-        PopupOnClickEvents popupOnClickEvents = new PopupOnClickEvents();
-        popupOnClickEvents.PayConfirm(this,llyHelpMeBuy,new ArrayList<String>());
+        PopupOnClickEvents popupOnClickEvents = new PopupOnClickEvents(this);
+        goodsName = "走兔订单号";
+        popupOnClickEvents.PayConfirm(llyHelpMeBuy,goodsName,price);
     }
 
 

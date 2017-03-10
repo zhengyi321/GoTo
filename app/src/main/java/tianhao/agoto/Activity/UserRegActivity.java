@@ -163,6 +163,7 @@ public class UserRegActivity extends Activity {
             }
         }if(result==SMSSDK.RESULT_ERROR)
         {
+            Toast.makeText(this, "验证码输入错误", Toast.LENGTH_LONG).show();
             try {
                 Throwable throwable = (Throwable) data;
                 throwable.printStackTrace();
@@ -173,6 +174,7 @@ public class UserRegActivity extends Activity {
                     Toast.makeText(this, des, Toast.LENGTH_LONG).show();
                     return;
                 }
+
             } catch (Exception e) {
                 //do something
             }
@@ -223,6 +225,9 @@ public class UserRegActivity extends Activity {
         if(isPhoneNum()) {
             String tel = etUserRegContentTel.getText().toString();
             String identity = etUserRegContentIdentity.getText().toString();
+            if(identity.isEmpty()){
+                Toast.makeText(this,"请输入验证码",Toast.LENGTH_LONG).show();
+            }
             mobsmssdkUtil.confirmVerifSubmit(tel,identity);
         }
     }

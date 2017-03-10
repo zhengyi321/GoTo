@@ -23,25 +23,55 @@ public class HelpMeSendActivity extends Activity {
     @BindView(R.id.rly_helpmesend_topbar_leftmenu)
     RelativeLayout rlyHelpMeSendTopBarLeftMenu;
 
-
+    /*收件人信息*/
     @BindView(R.id.lly_helpmesend_content_receiverdata)
     LinearLayout llyHelpMeSendReceiverData;
-    @BindView(R.id.lly_helpmesend_content_senderdata)
-    LinearLayout llyHelpMeSendContentSenderData;
-
     @BindView(R.id.tv_helpmesend_content_receiveraddr)
     TextView tvHelpMeSendContentReceiverAddr;
     @BindView(R.id.tv_helpmesend_content_receivername)
     TextView tvHelpMeSendContentReceiverName;
     @BindView(R.id.tv_helpmesend_content_receivertel)
     TextView tvHelpMeSendContentReceiverTel;
-
+    /*收件人信息*/
+    /*发件人信息*/
+    @BindView(R.id.lly_helpmesend_content_senderdata)
+    LinearLayout llyHelpMeSendContentSenderData;
     @BindView(R.id.tv_helpmesend_content_senderaddr)
     TextView tvHelpMeSendContentSenderAddr;
     @BindView(R.id.tv_helpmesend_content_sendername)
     TextView tvHelpMeSendContentSenderName;
     @BindView(R.id.tv_helpmesend_content_sendertel)
     TextView tvHelpMeSendContentSenderTel;
+    /*发件人信息*/
+
+
+    /*物品重量*/
+    @BindView(R.id.lly_helpmesend_content_weight)
+    LinearLayout llyHelpMeSendContentWeight;
+    @BindView(R.id.tv_helpmesend_content_goodsweight)
+    TextView tvHelpMeSendContentGoodsWeight;
+
+    /*物品重量*/
+
+    /*配送里程*/
+    @BindView(R.id.tv_helpmesend_content_senddis)
+    TextView tvHelpMeSendContentSendDis;
+    /*配送里程*/
+
+    /*物品种类*/
+    @BindView(R.id.lly_helpmesend_content_goodstype)
+    LinearLayout llyHelpMeSendContentGoodsType;
+    @BindView(R.id.tv_helpmesend_content_goodstype)
+    TextView tvHelpMeSendContentGoodsType;
+    /*物品种类*/
+
+    /*收件时间*/
+    @BindView(R.id.lly_helpmesend_content_rectime)
+    LinearLayout llyHelpMeSendContentRecTime;
+    @BindView(R.id.tv_helpmesend_content_rectime)
+    TextView tvHelpMeSendContentRecTime;
+    /*收件时间*/
+
 
     private final int RESULT_SENDER = 10;
     private final int RESULT_RECEIVER = 11;
@@ -86,7 +116,7 @@ public class HelpMeSendActivity extends Activity {
     }
     /*发件人*/
 
-
+    /*百度地图定位结果*/
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (resultCode) { //resultCode为回传的标记，我在B中回传的是RESULT_OK
             case RESULT_SENDER:
@@ -101,7 +131,7 @@ public class HelpMeSendActivity extends Activity {
                 break;
         }
     }
-
+    /*百度地图定位结果*/
     private void getDataFromAddActivity(Intent data,boolean isSender){
         if(data != null){
             Bundle b=data.getExtras(); //data为B中回传的Intent

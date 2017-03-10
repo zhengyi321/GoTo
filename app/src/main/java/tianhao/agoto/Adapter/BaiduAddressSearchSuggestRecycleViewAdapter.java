@@ -42,13 +42,30 @@ public class BaiduAddressSearchSuggestRecycleViewAdapter extends RecyclerView.Ad
     public void setDataList(List<PoiInfo> dataList){
         if((dataList != null)&&(dataList.size() > 0)) {
             int count = poiInfoList.size();
-            this.poiInfoList.clear();
-            notifyItemRangeRemoved(0,count);
-            notifyItemRangeChanged(0,count);
-            this.poiInfoList.addAll(dataList);
-            notifyItemRangeInserted(0,dataList.size());
-            notifyItemRangeChanged(0,dataList.size());
+            if(count > 0) {
+                PoiInfo temp = poiInfoList.get(0);
+                this.poiInfoList.clear();
+                notifyItemRangeRemoved(0, count);
+                notifyItemRangeChanged(0, count);
+                poiInfoList.add(temp);
+                for (int i = 0; i < dataList.size(); i++) {
 
+                    poiInfoList.add(dataList.get(i));
+
+                }
+            /*this.poiInfoList.addAll(dataList);*/
+                notifyItemRangeInserted(0, dataList.size() + 1);
+                notifyItemRangeChanged(0, dataList.size() + 1);
+            }else{
+                for (int i = 0; i < dataList.size(); i++) {
+
+                    poiInfoList.add(dataList.get(i));
+
+                }
+            /*this.poiInfoList.addAll(dataList);*/
+                notifyItemRangeInserted(0, dataList.size() + 1);
+                notifyItemRangeChanged(0, dataList.size() + 1);
+            }
         }
     }
     /*实时更新数据*/
@@ -82,7 +99,7 @@ public class BaiduAddressSearchSuggestRecycleViewAdapter extends RecyclerView.Ad
     public void onBindViewHolder(ItemContentViewHolder holder, int position) {
         if((poiInfoList.get(position) != null)&& (poiInfoList.get(position).location != null)) {
             /*holder.tvBaiduAddressSearchSuggestRVItemContentName.setText(suggestionInfoList.get(position).city + suggestionInfoList.get(position).district + suggestionInfoList.get(position).key);*/
-            holder.tvBaiduAddressSearchSuggestRVItemContentName.setText(poiInfoList.get(position).city+poiInfoList.get(position).name+poiInfoList.get(position).address );
+            holder.tvBaiduAddressSearchSuggestRVItemContentName.setText(/*poiInfoList.get(position).city+poiInfoList.get(position).name+*/poiInfoList.get(position).address );
 /*            holder.tvBaiduAddressSearchSuggestRVItemContentName.setText(poiInfoList.get(position).address +" "+ poiInfoList.get(position).city +" "+poiInfoList.get(position).name +" "+ poiInfoList.get(position).phoneNum+" "+poiInfoList.get(position).postCode+" "+poiInfoList.get(position).uid );*/
 
            /* holder.lat = suggestionInfoList.get(position).pt.latitude;

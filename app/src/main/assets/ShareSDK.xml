@@ -77,10 +77,16 @@
     <QZone
         Id="3"
         SortId="3"
+        AppId="1105986962"
+        AppKey="Ojcum2qEmkXZUmVk"
+        Enable="true" />
+	<!--<QZone
+        Id="3"
+        SortId="3"
         AppId="100371282"
         AppKey="aed9b0303e3ed1e27bae87c33761161d"
         Enable="true" />
-    
+    -->
     <!-- 
     	Wechat微信和WechatMoments微信朋友圈的appid是一样的；
     
@@ -96,10 +102,18 @@
     <Wechat
         Id="4"
         SortId="4"
+        AppId="wxf180adf1575a69e0"
+        AppSecret="1b1451be63fc1a994f304b61b08b6955"
+        BypassApproval="false"
+        Enable="true" />
+
+	<!--<Wechat
+        Id="4"
+        SortId="4"
         AppId="wx4868b35061f87885"
         AppSecret="64020361b8ec4c99936c0e3999a9f249"
         BypassApproval="false"
-        Enable="true" />
+        Enable="true" />-->
     
     <WechatMoments
         Id="5"
@@ -120,10 +134,17 @@
 	<QQ
         Id="7"
         SortId="7"
+        AppId="1105986962"
+        AppKey="Ojcum2qEmkXZUmVk"
+        ShareByAppClient="true"
+        Enable="true" />
+	<!--<QQ
+        Id="7"
+        SortId="7"
         AppId="100371282"
         AppKey="aed9b0303e3ed1e27bae87c33761161d"
         ShareByAppClient="true"
-        Enable="true" />
+        Enable="true" />-->
     
     <Facebook
         Id="8"

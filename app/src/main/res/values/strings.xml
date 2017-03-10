@@ -159,7 +159,7 @@
     <string name="hourTest">0h34m</string>
     <string name="payDetail">付款详情</string>
     <string name="orderTotalMoney">订单总金额</string>
-    <string name="theWayOfFee">(基础跑腿费5元+额外里程2元/1km)</string>
+    <string name="theWayOfFee">(基础跑腿费7元+额外里程2元/1km)</string>
     <string name="payByAccount">账户支付(推荐使用)</string>
     <string name="accountBanlanceTest">账户余额¥0.0元</string>
     <string name="payByWX">微信支付</string>
@@ -207,6 +207,10 @@
    <!-- <string name="price">价格</string>-->
     <!--购物单-->
 
+
+    <!--PopupWindow-->
+    <string name="getTime">收件时间</string>
+    <!--PopupWindow-->
     <!--dialog 添加商品信息-->
     <string name="addgoods">添加商品名称</string>
     <string name="goodsname">商品名称</string>
