@@ -534,6 +534,7 @@ public class SwipeRefreshLayout extends FrameLayout implements NestedScrollingPa
      * @deprecated Use {@link #setColorSchemeResources(int...)}
      */
     @Deprecated
+    @SuppressWarnings("ResourceType")
     public void setColorScheme(@ColorInt int... colors) {
         setColorSchemeResources(colors);
     }
