@@ -478,7 +478,7 @@
                     android:id="@+id/tv_helpmesend_content_rectime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/timeTest"
+
                     android:textColor="@color/colorHelpMeSendActivityContentItemBlackBg"
                     android:textSize="16sp"
                     android:layout_centerVertical="true"
@@ -493,7 +493,7 @@
                     />
 
             </RelativeLayout>
-
+            <!--android:text="@string/timeTest"-->
         </LinearLayout>
 
     </LinearLayout>

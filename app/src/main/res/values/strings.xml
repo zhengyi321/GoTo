@@ -216,4 +216,17 @@
     <string name="goodsname">商品名称</string>
      <string name="goodsnum">商品数量</string>
     <!--dialog 添加商品信息-->
+
+    <!--物品种类-->
+    <string name="lunch">午餐</string>
+    <string name="clothes">衣服</string>
+    <string name="flower">鲜花</string>
+    <string name="fruits">水果</string>
+    <string name="afternoon">下午茶</string>
+    <string name="packages">包裹</string>
+    <string name="cake">蛋糕</string>
+    <string name="articles">生活用品</string>
+    <string name="file">文件</string>
+
+    <!--物品种类-->
 </resources>

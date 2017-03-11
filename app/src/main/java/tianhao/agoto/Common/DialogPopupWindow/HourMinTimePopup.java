@@ -1,5 +1,6 @@
 package tianhao.agoto.Common.DialogPopupWindow;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
@@ -14,8 +15,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import tianhao.agoto.Common.Widget.WheelView.AbstractWheelTextAdapter;
 import tianhao.agoto.Common.Widget.WheelView.OnWheelChangedListener;
+import tianhao.agoto.Common.Widget.WheelView.OnWheelScrollListener;
 import tianhao.agoto.Common.Widget.WheelView.WheelView;
 import tianhao.agoto.R;
 
@@ -25,7 +28,7 @@ import tianhao.agoto.R;
 
 public class HourMinTimePopup extends PopupWindow {
     private View mPopView;
-    private Context context;
+    private Activity activity;
     private boolean isInitData = false;
     private String selectDay,selectHour,selectMin;
     private String currentDay;
@@ -33,11 +36,25 @@ public class HourMinTimePopup extends PopupWindow {
     private String day;
     private int hour,min;
     private List<String> dayList,hourList,minList;
+    private OnDateTimePopupListener onDateTimePopupListener;
     /*取消 确定*/
     @BindView(R.id.rly_popup_threewheel_cancel)
     RelativeLayout rlyPopupThreeWheelCancel;
+    @OnClick(R.id.rly_popup_threewheel_cancel)
+    public void rlyPopupThreeWheelCancelOnclick(){
+        dismiss();
+    }
     @BindView(R.id.rly_popup_threewheel_query)
     RelativeLayout rlyPopupThreeWheelQuery;
+
+    @OnClick(R.id.rly_popup_threewheel_query)
+    public void rlyPopupThreeWheelQueryOnclick(){
+        if(onDateTimePopupListener != null){
+            onDateTimePopupListener.onClick(selectDay,selectHour,selectMin);
+        }
+        dismiss();
+    }
+
     /*取消 确定*/
 
     /*三个仿造ios的滚轮*/
@@ -59,8 +76,8 @@ public class HourMinTimePopup extends PopupWindow {
     private int minTextSize = 14;
     /*字体大小*/
 
-    public HourMinTimePopup(final Context context1){
-        context = context1;
+    public HourMinTimePopup(final Activity activity1){
+        activity = activity1;
         init();
     }
     private void init(){
@@ -73,13 +90,16 @@ public class HourMinTimePopup extends PopupWindow {
         initHour();
         initMin();
         initAdapter();
+        initListener();
     }
     /*界面初始化*/
     private void initInflateView(){
-        LayoutInflater inflater = (LayoutInflater) context
+        LayoutInflater inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mPopView= inflater.inflate(R.layout.popupwindow_Threewheel_lly, null);
+        mPopView= inflater.inflate(R.layout.popupwindow_threewheel_lly, null);
         this.setContentView(mPopView);
+        this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        this.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
 
         // 设置SelectPicPopupWindow弹出窗体可点击
         this.setFocusable(true);
@@ -87,10 +107,8 @@ public class HourMinTimePopup extends PopupWindow {
         this.setOutsideTouchable(true);
         // 设置SelectPicPopupWindow弹出窗体动画效果
         this.setAnimationStyle(R.style.PopupAnimation);
-        // 实例化一个ColorDrawable颜色为半透明
-        ColorDrawable dw = new ColorDrawable(0xb0000000);//0xb0000000
-        // 设置SelectPicPopupWindow弹出窗体的背景
-        this.setBackgroundDrawable(dw);//半透明颜色
+
+
     }
     /*界面初始化*/
     /*初始化选择天 小时 分钟*/
@@ -209,15 +227,15 @@ public class HourMinTimePopup extends PopupWindow {
     /*数据填充初始化*/
     private void initAdapter(){
 
-        mDayAdapter = new CalendarTextAdapter(context,dayList,setDay(currentDay),maxTextSize,minTextSize);
+        mDayAdapter = new CalendarTextAdapter(activity,dayList,setDay(currentDay),maxTextSize,minTextSize);
         wvPopupThreeWheelDay.setVisibleItems(6);
         wvPopupThreeWheelDay.setViewAdapter(mDayAdapter);
         wvPopupThreeWheelDay.setCurrentItem(0);
-        hourAdapter = new CalendarTextAdapter(context,dayList,setHour(currentHour),maxTextSize,minTextSize);
+        hourAdapter = new CalendarTextAdapter(activity,hourList,setHour(currentHour),maxTextSize,minTextSize);
         wvPopupThreeWheelHour.setVisibleItems(6);
         wvPopupThreeWheelHour.setViewAdapter(hourAdapter);
         wvPopupThreeWheelHour.setCurrentItem(0);
-        minAdapter = new CalendarTextAdapter(context,dayList,setMin(currentMin),maxTextSize,minTextSize);
+        minAdapter = new CalendarTextAdapter(activity,minList,setMin(currentMin),maxTextSize,minTextSize);
         wvPopupThreeWheelMin.setVisibleItems(6);
         wvPopupThreeWheelMin.setViewAdapter(minAdapter);
         wvPopupThreeWheelMin.setCurrentItem(0);
@@ -233,16 +251,88 @@ public class HourMinTimePopup extends PopupWindow {
                 setTextviewSize(currentDay,mDayAdapter);
                 setDay(currentDay);
                 initHour();
-                hourAdapter = new CalendarTextAdapter(context,dayList,0,maxTextSize,minTextSize);
+                hourAdapter = new CalendarTextAdapter(activity,hourList,0,maxTextSize,minTextSize);
                 wvPopupThreeWheelHour.setVisibleItems(6);
                 wvPopupThreeWheelHour.setViewAdapter(hourAdapter);
                 wvPopupThreeWheelHour.setCurrentItem(setDay(currentDay));
             }
         });
+        wvPopupThreeWheelDay.addScrollingListener(new OnWheelScrollListener() {
+            @Override
+            public void onScrollingStarted(WheelView wheel) {
+                String currentDay = (String)mDayAdapter.getItemText(wheel.getCurrentItem());
+                setTextviewSize(currentDay,mDayAdapter);
+            }
+
+            @Override
+            public void onScrollingFinished(WheelView wheel) {
+
+            }
+        });
+        wvPopupThreeWheelHour.addChangingListener(new OnWheelChangedListener() {
+            @Override
+            public void onChanged(WheelView wheel, int oldValue, int newValue) {
+                String currentHour = hourAdapter.getItemText(wheel.getCurrentItem()).toString();
+                if(currentHour != null) {
+                    selectHour = currentHour;
+                    setTextviewSize(currentHour, hourAdapter);
+
+                    setHour(Integer.valueOf(currentHour));
+                }
+            }
+        });
+        wvPopupThreeWheelHour.addScrollingListener(new OnWheelScrollListener() {
+            @Override
+            public void onScrollingStarted(WheelView wheel) {
+                String currentHour = (String)hourAdapter.getItemText(wheel.getCurrentItem());
+                setTextviewSize(currentHour,hourAdapter);
+            }
+
+            @Override
+            public void onScrollingFinished(WheelView wheel) {
+
+            }
+        });
+
+
+
+        wvPopupThreeWheelMin.addChangingListener(new OnWheelChangedListener() {
+            @Override
+            public void onChanged(WheelView wheel, int oldValue, int newValue) {
+                String currentMin = minAdapter.getItemText(wheel.getCurrentItem()).toString();
+                if(currentMin != null) {
+                    selectMin = currentMin;
+                    setTextviewSize(currentMin, minAdapter);
+
+                    setHour(Integer.valueOf(currentHour));
+                }
+            }
+        });
+        wvPopupThreeWheelMin.addScrollingListener(new OnWheelScrollListener() {
+            @Override
+            public void onScrollingStarted(WheelView wheel) {
+                String currentMin = (String)minAdapter.getItemText(wheel.getCurrentItem());
+                setTextviewSize(currentMin,minAdapter);
+            }
+
+            @Override
+            public void onScrollingFinished(WheelView wheel) {
+
+            }
+        });
     }
+
+
 
     /*滚轮监听初始化*/
 
+    public interface OnDateTimePopupListener{
+        public void onClick(String day,String hour,String min);
+    }
+
+    public void setOnDateTimePopupListener(OnDateTimePopupListener onDateTimePopupListener){
+        this.onDateTimePopupListener = onDateTimePopupListener;
+    }
 
     /**
      * 设置字体大小

@@ -18,32 +18,27 @@ import tianhao.agoto.Common.Widget.EditText.EditTextWithDel;
 import tianhao.agoto.R;
 
 /**
- *
- * http://blog.csdn.net/xuyonghong1122/article/details/51074474
- * Created by zhyan on 2017/3/3.
+ * Created by admin on 2017/3/11.
  */
-public class CustomDialog extends Dialog {
+
+public class ShouDongShuRuDialog  extends Dialog {
+
 
     Context context;
-   /* public interface DialogCallBackListener{//通过该接口回调Dialog需要传递的值
-        public void callBack(String msg);//具体方法
-    }*/
+
     public interface DialogCallBackListener{//通过该接口回调Dialog需要传递的值
-        public void callBack(String msgName,String msgNum);//具体方法
+        public void callBack(String msgName);//具体方法
     }
-
-
-    public CustomDialog(Context context) {
+    public ShouDongShuRuDialog(Context context) {
         super(context);
         this.context = context;
     }
-
-    public CustomDialog(Context context, int themeResId) {
+    public ShouDongShuRuDialog(Context context, int themeResId) {
         super(context, themeResId);
         this.context = context;
     }
 
-    protected CustomDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
+    protected ShouDongShuRuDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
         this.context = context;
     }
@@ -106,41 +101,22 @@ public class CustomDialog extends Dialog {
          * 3，基本逻辑处理
          * 4，显示dialog的布局
          */
-        public CustomDialog build(Context context) {
+        public ShouDongShuRuDialog build(Context context) {
             LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            /*LayoutInflater mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);*/
-            /*final CustomDialog mCustomDialog = new CustomDialog(mContext, R.style.CustomDialog);//默认调用带style的构造*/
-            final CustomDialog mCustomDialog = new CustomDialog(context, R.style.MyDialogStyle);//默认调用带style的构造
-            mCustomDialog.setCanceledOnTouchOutside(false);//默认点击布局外不能取消dialog
-            View view = mInflater.inflate(R.layout.dialog_add_goods_lly, null);
-            mCustomDialog.addContentView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            /*mCustomDialog.addContentView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));*/
-            final EditTextWithDel messageViewName = (EditTextWithDel) view.findViewById(R.id.et_dialog_add_goods_goodsname);
-            final EditTextWithDel messageViewNum = (EditTextWithDel) view.findViewById(R.id.et_dialog_add_goods_goodsnum);
-         /*   if (!TextUtils.isEmpty(title)) {
-                TextView titleView = (TextView) view.findViewById(R.id.tv_title);
-                titleView.setText(title);
-            }
-            if (!TextUtils.isEmpty(message)) {
-                messageViewName.setHint(message);//显示的内容
-                messageViewNum.setHint(message);//显示的内容
-            } else if (contentView != null) {//如果内容区域要显示其他的View的话
-                LinearLayout mContentLayout = (LinearLayout) view.findViewById(R.id.content);
-                mContentLayout.removeAllViews();
-                mContentLayout.addView(contentView);
-            }*/
-
+            final ShouDongShuRuDialog shouDongShuRuDialog = new ShouDongShuRuDialog(context, R.style.MyDialogStyle);//默认调用带style的构造
+            shouDongShuRuDialog.setCanceledOnTouchOutside(false);//默认点击布局外不能取消dialog
+            View view = mInflater.inflate(R.layout.dialog_shoudongshuru_lly, null);
+            shouDongShuRuDialog.addContentView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            final EditTextWithDel etdInputItem = (EditTextWithDel) view.findViewById(R.id.etd_dialog_shoudongshuru);
             if (!TextUtils.isEmpty(positiveText)) {//这是确认按钮
-                /*Button btn_cofirm = (Button) view.findViewById(R.id.btn_confirm);*/
-                RelativeLayout btn_cofirm = (RelativeLayout) view.findViewById(R.id.rly_dialog_add_goods_query);
-                /*btn_cofirm.setText(positiveText);*/
+                RelativeLayout rly_cofirm = (RelativeLayout) view.findViewById(R.id.rly_dialog_shoudongshuru_query);
                 if (positiviOnclickListener != null) {
-                    btn_cofirm.setOnClickListener(new View.OnClickListener() {
+                    rly_cofirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            positiviOnclickListener.onClick(mCustomDialog, BUTTON_POSITIVE);
+                            positiviOnclickListener.onClick(shouDongShuRuDialog, BUTTON_POSITIVE);
                             if(mDialogCallBackListener != null )
-                                mDialogCallBackListener.callBack(messageViewName.getText().toString(),messageViewNum.getText().toString());  //触发回调
+                                mDialogCallBackListener.callBack(etdInputItem.getText().toString());  //触发回调
                         }
                     });
                 }
@@ -148,14 +124,12 @@ public class CustomDialog extends Dialog {
                 view.findViewById(R.id.rly_dialog_add_goods_query).setVisibility(View.GONE);
             }
             if (!TextUtils.isEmpty(negativeText)) {//这是取消按钮逻辑处理
-                /*Button btn_cancle = (Button) view.findViewById(R.id.btn_cancle);*/
-                RelativeLayout btn_cancle = (RelativeLayout) view.findViewById(R.id.rly_dialog_add_goods_cancel);
-                /*btn_cancle.setText(negativeText);*/
+                RelativeLayout btn_cancle = (RelativeLayout) view.findViewById(R.id.rly_dialog_shoudongshuru_cancel);
                 if (negativeOnclickListener != null) {
                     btn_cancle.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            negativeOnclickListener.onClick(mCustomDialog, BUTTON_NEGATIVE);
+                            negativeOnclickListener.onClick(shouDongShuRuDialog, BUTTON_NEGATIVE);
                         }
                     });
                 }
@@ -163,8 +137,8 @@ public class CustomDialog extends Dialog {
                 view.findViewById(R.id.rly_dialog_add_goods_cancel).setVisibility(View.GONE);
             }
 
-            mCustomDialog.setContentView(view);
-            return mCustomDialog;
+            shouDongShuRuDialog.setContentView(view);
+            return shouDongShuRuDialog;
         }
 
     }

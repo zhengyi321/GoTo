@@ -7,9 +7,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.security.PublicKey;
+
 import butterknife.ButterKnife;
 import butterknife.BindView;
 import butterknife.OnClick;
+import tianhao.agoto.Common.DialogPopupWindow.PopupOnClickEvents;
 import tianhao.agoto.R;
 
 /**
@@ -20,6 +23,12 @@ import tianhao.agoto.R;
 
 public class HelpMeSendActivity extends Activity {
 
+
+    PopupOnClickEvents popupOnClickEvents = new PopupOnClickEvents(this);
+    /*帮我送*/
+    @BindView(R.id.lly_helpmesend)
+    LinearLayout llyHelpMeSend;
+    /*帮我送*/
     @BindView(R.id.rly_helpmesend_topbar_leftmenu)
     RelativeLayout rlyHelpMeSendTopBarLeftMenu;
 
@@ -61,6 +70,10 @@ public class HelpMeSendActivity extends Activity {
     /*物品种类*/
     @BindView(R.id.lly_helpmesend_content_goodstype)
     LinearLayout llyHelpMeSendContentGoodsType;
+    @OnClick(R.id.lly_helpmesend_content_goodstype)
+    public void llyHelpMeSendContentGoodsTypeOnclick(){
+        popupOnClickEvents.GoodsTypeSelect(llyHelpMeSend,tvHelpMeSendContentGoodsType);
+    }
     @BindView(R.id.tv_helpmesend_content_goodstype)
     TextView tvHelpMeSendContentGoodsType;
     /*物品种类*/
@@ -70,6 +83,11 @@ public class HelpMeSendActivity extends Activity {
     LinearLayout llyHelpMeSendContentRecTime;
     @BindView(R.id.tv_helpmesend_content_rectime)
     TextView tvHelpMeSendContentRecTime;
+    @OnClick(R.id.lly_helpmesend_content_rectime)
+    public void llyHelpMeSendContentRecTimeOnclick(){
+
+        popupOnClickEvents.TimeSelect(llyHelpMeSend,tvHelpMeSendContentRecTime);
+    }
     /*收件时间*/
 
 
