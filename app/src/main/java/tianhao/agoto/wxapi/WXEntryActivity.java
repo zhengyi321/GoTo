@@ -8,45 +8,187 @@
 
 package tianhao.agoto.wxapi;
 
+
+import com.tencent.mm.opensdk.constants.ConstantsAPI;
+import com.tencent.mm.opensdk.modelbase.BaseReq;
+import com.tencent.mm.opensdk.modelbase.BaseResp;
+import com.tencent.mm.opensdk.modelmsg.ShowMessageFromWX;
+import com.tencent.mm.opensdk.modelmsg.WXAppExtendObject;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
-import cn.sharesdk.wechat.utils.WXAppExtendObject;
-import cn.sharesdk.wechat.utils.WXMediaMessage;
-import cn.sharesdk.wechat.utils.WechatHandlerActivity;
 
-/** 微信客户端回调activity示例 */
-public class WXEntryActivity extends WechatHandlerActivity {
+import tianhao.agoto.R;
+import tianhao.agoto.ThirdPay.WeiXin.Constants;
+import tianhao.agoto.ThirdPay.WeiXin.GetFromWXActivity;
+import tianhao.agoto.ThirdPay.WeiXin.ScanQRCodeLoginActivity;
+import tianhao.agoto.ThirdPay.WeiXin.SendToWXActivity;
+import tianhao.agoto.ThirdPay.WeiXin.ShowFromWXActivity;
 
-	/**
-	 * 处理微信发出的向第三方应用请求app message
-	 * <p>
-	 * 在微信客户端中的聊天页面有“添加工具”，可以将本应用的图标添加到其中
-	 * 此后点击图标，下面的代码会被执行。Demo仅仅只是打开自己而已，但你可
-	 * 做点其他的事情，包括根本不打开任何页面
-	 */
-	public void onGetMessageFromWXReq(WXMediaMessage msg) {
-		if (msg != null) {
-			Intent iLaunchMyself = getPackageManager().getLaunchIntentForPackage(getPackageName());
-			startActivity(iLaunchMyself);
+public class WXEntryActivity extends Activity implements IWXAPIEventHandler{
+
+	private static final int TIMELINE_SUPPORTED_VERSION = 0x21020001;
+
+	private Button gotoBtn, regBtn, launchBtn, checkBtn, scanBtn;
+
+	// IWXAPI 是第三方app和微信通信的openapi接口
+	private IWXAPI api;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.entry);
+
+		// 通过WXAPIFactory工厂，获取IWXAPI的实例
+		api = WXAPIFactory.createWXAPI(this, Constants.APP_ID, false);
+
+		regBtn = (Button) findViewById(R.id.reg_btn);
+		regBtn.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// 将该app注册到微信
+				api.registerApp(Constants.APP_ID);
+			}
+		});
+
+		gotoBtn = (Button) findViewById(R.id.goto_send_btn);
+		gotoBtn.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(WXEntryActivity.this, SendToWXActivity.class));
+				finish();
+			}
+		});
+
+		launchBtn = (Button) findViewById(R.id.launch_wx_btn);
+		launchBtn.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(WXEntryActivity.this, "launch result = " + api.openWXApp(), Toast.LENGTH_LONG).show();
+			}
+		});
+
+		checkBtn = (Button) findViewById(R.id.check_timeline_supported_btn);
+		checkBtn.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				int wxSdkVersion = api.getWXAppSupportAPI();
+				if (wxSdkVersion >= TIMELINE_SUPPORTED_VERSION) {
+					Toast.makeText(WXEntryActivity.this, "wxSdkVersion = " + Integer.toHexString(wxSdkVersion) + "\ntimeline supported", Toast.LENGTH_LONG).show();
+				} else {
+					Toast.makeText(WXEntryActivity.this, "wxSdkVersion = " + Integer.toHexString(wxSdkVersion) + "\ntimeline not supported", Toast.LENGTH_LONG).show();
+				}
+			}
+		});
+
+		scanBtn = (Button) findViewById(R.id.scan_qrcode_login_btn);
+		scanBtn.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(WXEntryActivity.this, ScanQRCodeLoginActivity.class));
+				finish();
+			}
+		});
+
+		//注意：
+		//第三方开发者如果使用透明界面来实现WXEntryActivity，需要判断handleIntent的返回值，如果返回值为false，则说明入参不合法未被SDK处理，应finish当前透明界面，避免外部通过传递非法参数的Intent导致停留在透明界面，引起用户的疑惑
+		try {
+			api.handleIntent(getIntent(), this);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
-	/**
-	 * 处理微信向第三方应用发起的消息
-	 * <p>
-	 * 此处用来接收从微信发送过来的消息，比方说本demo在wechatpage里面分享
-	 * 应用时可以不分享应用文件，而分享一段应用的自定义信息。接受方的微信
-	 * 客户端会通过这个方法，将这个信息发送回接收方手机上的本demo中，当作
-	 * 回调。
-	 * <p>
-	 * 本Demo只是将信息展示出来，但你可做点其他的事情，而不仅仅只是Toast
-	 */
-	public void onShowMessageFromWXReq(WXMediaMessage msg) {
-		if (msg != null && msg.mediaObject != null
-				&& (msg.mediaObject instanceof WXAppExtendObject)) {
-			WXAppExtendObject obj = (WXAppExtendObject) msg.mediaObject;
-			Toast.makeText(this, obj.extInfo, Toast.LENGTH_SHORT).show();
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+
+		setIntent(intent);
+		api.handleIntent(intent, this);
+	}
+
+	// 微信发送请求到第三方应用时，会回调到该方法
+	@Override
+	public void onReq(BaseReq req) {
+		switch (req.getType()) {
+			case ConstantsAPI.COMMAND_GETMESSAGE_FROM_WX:
+				goToGetMsg();
+				break;
+			case ConstantsAPI.COMMAND_SHOWMESSAGE_FROM_WX:
+				goToShowMsg((ShowMessageFromWX.Req) req);
+				break;
+			default:
+				break;
 		}
 	}
 
+	// 第三方应用发送到微信的请求处理后的响应结果，会回调到该方法
+	@Override
+	public void onResp(BaseResp resp) {
+		int result = 0;
+
+		Toast.makeText(this, "baseresp.getType = " + resp.getType(), Toast.LENGTH_SHORT).show();
+
+		switch (resp.errCode) {
+			case BaseResp.ErrCode.ERR_OK:
+				result = R.string.errcode_success;
+				break;
+			case BaseResp.ErrCode.ERR_USER_CANCEL:
+				result = R.string.errcode_cancel;
+				break;
+			case BaseResp.ErrCode.ERR_AUTH_DENIED:
+				result = R.string.errcode_deny;
+				break;
+			case BaseResp.ErrCode.ERR_UNSUPPORT:
+				result = R.string.errcode_unsupported;
+				break;
+			default:
+				result = R.string.errcode_unknown;
+				break;
+		}
+
+		Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+	}
+
+	private void goToGetMsg() {
+		Intent intent = new Intent(this, GetFromWXActivity.class);
+		intent.putExtras(getIntent());
+		startActivity(intent);
+		finish();
+	}
+
+	private void goToShowMsg(ShowMessageFromWX.Req showReq) {
+		WXMediaMessage wxMsg = showReq.message;
+		WXAppExtendObject obj = (WXAppExtendObject) wxMsg.mediaObject;
+
+		StringBuffer msg = new StringBuffer(); // 组织一个待显示的消息内容
+		msg.append("description: ");
+		msg.append(wxMsg.description);
+		msg.append("\n");
+		msg.append("extInfo: ");
+		msg.append(obj.extInfo);
+		msg.append("\n");
+		msg.append("filePath: ");
+		msg.append(obj.filePath);
+
+		Intent intent = new Intent(this, ShowFromWXActivity.class);
+		intent.putExtra(Constants.ShowMsgActivity.STitle, wxMsg.title);
+		intent.putExtra(Constants.ShowMsgActivity.SMessage, msg.toString());
+		intent.putExtra(Constants.ShowMsgActivity.BAThumbData, wxMsg.thumbData);
+		startActivity(intent);
+		finish();
+	}
 }
