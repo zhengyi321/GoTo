@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ly_myinfo_changebirth"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00000000"
+    android:gravity="bottom"
+    android:orientation="vertical" >
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical" >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@color/white"
+            >
+            <RelativeLayout
+                android:id="@+id/rly_popupwindow_goodsweight_cancel"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"
+                    android:text="@string/cancel"
+                    android:layout_centerInParent="true"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="130dp"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    android:textColor="@color/black"
+                    android:text="@string/goodsWeight"
+                    android:layout_centerInParent="true"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rly_popupwindow_goodsweight_query"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"
+                    android:text="@string/query"
+                    android:layout_centerInParent="true"
+                    />
+
+            </RelativeLayout>
+        </RelativeLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/the_split_line_height"
+            android:background="@color/gray"
+            />
+
+
+        <LinearLayout
+            android:id="@+id/lly_popupwindow_goodsweight_cbmanage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_margin="20dp"
+            android:orientation="vertical"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+
+                >
+                <CheckBox
+                    android:id="@+id/cb_popupwindow_goodsweight_10kg"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:layout_width="@dimen/zero"
+                    android:layout_weight="1"
+                    android:background="@drawable/activity_gray_bg_half_round_radius"
+                    android:text="10kg"
+                    android:textSize="13sp"
+                    android:textColor="@color/black"
+                    android:padding="5dp"
+                    android:layout_margin="1dp"
+                    android:button="@null"
+                    />
+                <CheckBox
+                    android:id="@+id/cb_popupwindow_goodsweight_11kg"
+                    android:layout_width="@dimen/zero"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:background="@drawable/activity_gray_bg_half_round_radius"
+                    android:text="11kg"
+                    android:textSize="13sp"
+                    android:textColor="@color/black"
+                    android:padding="5dp"
+                    android:layout_margin="1dp"
+                    android:button="@null"
+                    />
+                <CheckBox
+                    android:id="@+id/cb_popupwindow_goodsweight_12kg"
+                    android:layout_width="@dimen/zero"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:background="@drawable/activity_gray_bg_half_round_radius"
+                    android:text="12kg"
+                    android:textSize="13sp"
+                    android:textColor="@color/black"
+                    android:padding="5dp"
+                    android:layout_margin="1dp"
+                    android:button="@null"
+                    />
+                <CheckBox
+                    android:id="@+id/cb_popupwindow_goodsweight_13kg"
+                    android:layout_width="@dimen/zero"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:background="@drawable/activity_gray_bg_half_round_radius"
+                    android:text="13kg"
+                    android:textSize="13sp"
+                    android:textColor="@color/black"
+                    android:padding="5dp"
+                    android:button="@null"
+                    android:layout_margin="1dp"
+                />
+                <CheckBox
+                    android:id="@+id/cb_popupwindow_goodsweight_14kg"
+                    android:layout_width="@dimen/zero"
+                    android:layout_weight="1.5"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:background="@drawable/activity_gray_bg_half_round_radius"
+                    android:text="14kg"
+                    android:textSize="13sp"
+                    android:textColor="@color/black"
+                    android:padding="5dp"
+                    android:layout_margin="1dp"
+                    android:button="@null"
+                />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal"
+                >
+               <CheckBox
+                    android:id="@+id/cb_popupwindow_goodsweight_15kg"
+                    android:layout_width="@dimen/zero"
+                    android:layout_weight="1"
+                   android:layout_height="match_parent"
+                   android:gravity="center"
+                    android:background="@drawable/activity_gray_bg_half_round_radius"
+                    android:text="15kg"
+                    android:textSize="13sp"
+                    android:textColor="@color/black"
+                    android:padding="5dp"
+                    android:button="@null"
+                    android:layout_margin="1dp"
+                    />
+                <CheckBox
+                    android:id="@+id/cb_popupwindow_goodsweight_16kg"
+                    android:layout_width="@dimen/zero"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:background="@drawable/activity_gray_bg_half_round_radius"
+                    android:text="16kg"
+                    android:textSize="13sp"
+                    android:textColor="@color/black"
+                    android:padding="5dp"
+                    android:button="@null"
+                    android:layout_margin="1dp"
+                    />
+                <CheckBox
+                    android:id="@+id/cb_popupwindow_goodsweight_manualInput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/activity_gray_bg_half_round_radius"
+                    android:text="@string/manualInput"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:padding="5dp"
+                    android:button="@null"
+                    android:gravity="center"
+                    />
+                <LinearLayout
+                    android:layout_width="@dimen/zero"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    >
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

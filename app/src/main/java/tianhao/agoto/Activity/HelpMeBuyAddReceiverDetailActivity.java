@@ -757,7 +757,9 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
                 .build();
         //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
-        mBaiduMap.animateMapStatus(mMapStatusUpdate);
+        if(mMapStatusUpdate != null) {
+            mBaiduMap.animateMapStatus(mMapStatusUpdate);
+        }
         //准备 marker   的图片  定位图标
         /*BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.search_map);*/
         TextView textView = new TextView(this);

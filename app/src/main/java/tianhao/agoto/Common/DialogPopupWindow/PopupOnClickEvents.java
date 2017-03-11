@@ -101,6 +101,51 @@ public class PopupOnClickEvents {
         });
 
     }
+    public void GoodsWeightSelect(LinearLayout layout, final TextView textView){
+
+        final GoodsWeightPopup goodsWeightPopup = new GoodsWeightPopup(activity);
+        setBackgroundAlpha(0.5f);
+        /*hourMinTimePopup.setFocusable(true);*/
+        goodsWeightPopup.showAtLocation(layout, Gravity.BOTTOM, 0, 0);
+        goodsWeightPopup.setOnSelectGoodsItemValueListener(new GoodsWeightPopup.OnSelectGoodsItemValueListener() {
+
+            @Override
+            public void OnClick(String value) {
+                textView.setText(value);
+            }
+        });
+        goodsWeightPopup.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                setBackgroundAlpha(1.0f);
+
+            }
+        });
+        goodsWeightPopup.cbPopupWindowGoodsWeightManualInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goodsWeightPopup.dismiss();
+                shouDongShuRuDialog = new ShouDongShuRuDialog(activity).Build.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dissmissDialog();
+                    }
+                }).setPositiveButton("确认",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dissmissDialog();
+                    }
+                }).setCallBackListener(new ShouDongShuRuDialog.DialogCallBackListener() {
+                    @Override
+                    public void callBack(String msgName) {
+                        textView.setText(msgName);
+                    }
+                }).build(activity);
+                showDialog();
+            }
+        });
+
+    }
     public void showDialog() {
         if (shouDongShuRuDialog != null && !shouDongShuRuDialog.isShowing())
             shouDongShuRuDialog.show();

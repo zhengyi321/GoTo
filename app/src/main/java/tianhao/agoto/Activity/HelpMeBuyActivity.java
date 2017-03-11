@@ -64,6 +64,7 @@ import butterknife.OnClick;
 import butterknife.OnTouch;
 import tianhao.agoto.Adapter.HelpMeBuyShoppingMenuRecyclerViewAdapter;
 import tianhao.agoto.Bean.GoodsBean;
+import tianhao.agoto.Common.DialogAlterView.LikeIosStyle.ShouDongShuRuDialog;
 import tianhao.agoto.Common.DialogPopupWindow.PopupOnClickEvents;
 import tianhao.agoto.R;
 import tianhao.agoto.ThirdPay.ZhiFuBao.AuthResult;
@@ -80,7 +81,8 @@ import tianhao.agoto.Utils.TimeUtil;
  */
 
 public class HelpMeBuyActivity extends Activity  {
-
+    ShouDongShuRuDialog shouDongShuRuDialog;
+    private List<View> addRemarkList = new ArrayList<View>();
     @BindView(R.id.rly_helpmebuy_topbar_leftmenu)
     RelativeLayout rlyHelpMeBuyTopBarLeftMenu;
 
@@ -178,7 +180,12 @@ public class HelpMeBuyActivity extends Activity  {
     /*手动输入*/
     @BindView(R.id.cb_helpmebuy_content_manualinput)
     CheckBox cbHelpMeBuyContentManualinput;
-
+    /*备注*/
+    @BindView(R.id.lly_helpmebuy_content_orderremark)
+    LinearLayout llyHelpMeBuyContentOrderRemark;
+    @BindView(R.id.lly_helpmebuy_content_newadd)
+    LinearLayout llyHelpMeBuyContentNewAdd;
+    /*备注*/
     private final int RESULT_BUY = 10;//购买地址
     private double blat=0,rlat=0,blon=0,rlon=0;
     private final int RESULT_RECE = 11;//收件人信息
@@ -241,17 +248,19 @@ public class HelpMeBuyActivity extends Activity  {
             public void onGetBikingRouteResult(BikingRouteResult bikingRouteResult) {
                 if(bikingRouteResult != null){
                     List<BikingRouteLine> bikingRouteLineList = bikingRouteResult.getRouteLines();
-                    int count = bikingRouteLineList.size();
-                    int min = bikingRouteLineList.get(0).getDistance();
-                    for(int i=0;i<count;i++ ){
-                        if(min > bikingRouteLineList.get(i).getDistance()){
-                            min = bikingRouteLineList.get(i).getDistance();
+                    if(bikingRouteLineList != null) {
+                        int count = bikingRouteLineList.size();
+                        int min = bikingRouteLineList.get(0).getDistance();
+                        for (int i = 0; i < count; i++) {
+                            if (min > bikingRouteLineList.get(i).getDistance()) {
+                                min = bikingRouteLineList.get(i).getDistance();
+                            }
+                            continue;
                         }
-                        continue;
-                    }
-                    dis = min;
+                        dis = min;
                     /*Toast.makeText(getBaseContext(),"两地骑行距离onGetBikingRouteResult:"+min,Toast.LENGTH_LONG).show();*/
-                    getPrice();
+                        getPrice();
+                    }
                 }
             }
         });
@@ -609,8 +618,45 @@ public class HelpMeBuyActivity extends Activity  {
     /*手动输入*/
     @OnClick(R.id.cb_helpmebuy_content_manualinput)
     public void cbHelpMeBuyContentManualinputOnclick(){
+        shouDongShuRuDialog = new ShouDongShuRuDialog(this).Build.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dissmissDialog();
+            }
+        }).setPositiveButton("确认",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dissmissDialog();
+            }
+        }).setCallBackListener(new ShouDongShuRuDialog.DialogCallBackListener() {
+            @Override
+            public void callBack(String msgName) {
+                TextView textView = new TextView(getBaseContext());
+                textView.setText(msgName);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(3,0,3,0);
+                textView.setLayoutParams(layoutParams);
+                textView.setPadding(2, 6, 2, 6);
+                textView.setTextColor(getResources().getColor(R.color.red));
+                textView.setTextSize(12);
 
+                textView.setBackgroundResource(R.drawable.activity_gray_bg_half_round_radius);
+                addRemarkList.add(textView);
+                llyHelpMeBuyContentNewAdd.addView(textView);
+            }
+        }).build(this);
+        showDialog();
     }
+    public void showDialog() {
+        if (shouDongShuRuDialog != null && !shouDongShuRuDialog.isShowing())
+            shouDongShuRuDialog.show();
+    }
+
+    public void dissmissDialog() {
+        if (shouDongShuRuDialog != null && shouDongShuRuDialog.isShowing())
+            shouDongShuRuDialog.dismiss();
+    }
+    /*手动输入*/
     protected void onResume(){
         super.onResume();
         startBikeNaviSearch();

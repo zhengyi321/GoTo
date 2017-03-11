@@ -57,6 +57,10 @@ public class HelpMeSendActivity extends Activity {
     /*物品重量*/
     @BindView(R.id.lly_helpmesend_content_weight)
     LinearLayout llyHelpMeSendContentWeight;
+    @OnClick(R.id.lly_helpmesend_content_weight)
+    public void llyHelpMeSendContentWeightOnclick(){
+        popupOnClickEvents.GoodsWeightSelect(llyHelpMeSend,tvHelpMeSendContentGoodsWeight);
+    }
     @BindView(R.id.tv_helpmesend_content_goodsweight)
     TextView tvHelpMeSendContentGoodsWeight;
 
