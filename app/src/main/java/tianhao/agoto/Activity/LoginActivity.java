@@ -27,6 +27,7 @@ import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
 import rx.Observer;
 import tianhao.agoto.Bean.UserLogin;
+import tianhao.agoto.Common.Widget.DB.XCCacheManager.xccache.XCCacheManager;
 import tianhao.agoto.NetWorks.UserSettingNetWorks;
 import tianhao.agoto.R;
 import tianhao.agoto.Common.Widget.DB.ContactInjfoDao;
@@ -41,6 +42,10 @@ import tianhao.agoto.Common.Widget.DB.ContactInjfoDao;
  */
 
 public class LoginActivity extends Activity implements Handler.Callback, PlatformActionListener {
+
+    /*缓存*/
+    private XCCacheManager mCacheManager;
+    /*缓存*/
 
     /*注册页面*/
     @BindView(R.id.rly_login_content_reg)
@@ -82,7 +87,7 @@ public class LoginActivity extends Activity implements Handler.Callback, Platfor
     /*第三方登录 qq 微信*/
 
     /*登录*/
-    private ContactInjfoDao mDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +100,7 @@ public class LoginActivity extends Activity implements Handler.Callback, Platfor
         ButterKnife.bind(this);
         //初始化
         ShareSDK.initSDK(this);
-        mDao =new ContactInjfoDao(this);
+        mCacheManager = XCCacheManager.getInstance(this);
     }
 
     /*注册页面*/
@@ -203,16 +208,22 @@ public class LoginActivity extends Activity implements Handler.Callback, Platfor
                 String usid = "usid";
                 String phone = "phone";
                 String loginStatus = "loginStatus";
-                /*Toast.makeText(getBaseContext(),""+userLogin.getResult(),Toast.LENGTH_LONG).show();*/
+                /*Toast.makeText(getBaseContext(),"usid"+userLogin.getUserUsid(),Toast.LENGTH_LONG).show();*/
                 if(userLogin.getUserName() != null){
-                    mDao.deleteDate(name);
+                    mCacheManager.writeCache(name,userLogin.getUserName());
+                    mCacheManager.writeCache(phone,userLogin.getUserName());
+                    mCacheManager.writeCache(usid,userLogin.getUserUsid());
+                    mCacheManager.writeCache(loginStatus,"yes");
+                    /*mDao.deleteDate(name);
                     mDao.deleteDate(phone);
-                    mDao.deleteDate(usid);
-                    long addNameLong = mDao.addDate(name,name);
-                    long addPhoneLong = mDao.addDate(phone,phone);
-                    long addUsidLong = mDao.addDate(usid,usid);
+                    mDao.deleteDate(usid);*/
+                    /*mDao.deleteAllDate();
+                    mDao.addDate(userLogin.getUserName(),userLogin.getUserName(),userLogin.getUsid(),"yes","");*/
+                   /* long addNameLong = mDao.addDate(name,userLogin.getUserName());
+                    long addPhoneLong = mDao.addDate(phone,userLogin.getUserName());
+                    long addUsidLong = mDao.addDate(usid,userLogin.getUsid());
                     System.out.println(usid);
-                    long addLoginStatusLong = mDao.addDate(loginStatus,"yes");
+                    long addLoginStatusLong = mDao.addDate(loginStatus,"yes");*/
                     Toast.makeText(getBaseContext(),""+userLogin.getResult(),Toast.LENGTH_LONG).show();
                     finish();
                 }else{
@@ -263,8 +274,15 @@ public class LoginActivity extends Activity implements Handler.Callback, Platfor
             String gender = platform.getDb().getUserGender();
             String head_url = platform.getDb().getUserIcon();
             String nickname = platform.getDb().getUserName();
-            mDao.addDate("userName",nickname);
-            mDao.addDate("thirdHeadUrl",head_url);
+
+            String name = "userName";
+            String usid = "usid";
+            String headUrl = "headUrl";
+            String loginStatus = "loginStatus";
+            mCacheManager.writeCache(name,nickname);
+            mCacheManager.writeCache(headUrl,head_url);
+            mCacheManager.writeCache(loginStatus,loginStatus);
+
             finish();
 
         }

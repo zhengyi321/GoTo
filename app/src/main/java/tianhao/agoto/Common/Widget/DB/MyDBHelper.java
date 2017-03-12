@@ -45,7 +45,7 @@ public class MyDBHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table contactinfo (id integer primary key autoincrement, name varchar(20), phone varchar(20))");
+        db.execSQL("create table contactinfo (id integer primary key autoincrement, name varchar(20), phone varchar(20), usid varchar(20), loginStatus varchar(20), head_url varchar(20))");
     }
 
 

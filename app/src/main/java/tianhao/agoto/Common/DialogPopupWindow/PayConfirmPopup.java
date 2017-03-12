@@ -17,11 +17,15 @@ import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observer;
 import tianhao.agoto.Bean.BaseBean;
+import tianhao.agoto.Bean.HelpMeBuyBean;
 import tianhao.agoto.Bean.OrderDetail;
 import tianhao.agoto.NetWorks.HelpMeSendBuyNetWorks;
 import tianhao.agoto.R;
@@ -122,7 +126,7 @@ public class PayConfirmPopup extends PopupWindow {
     private ZhiFuBaoUtil zhiFuBaoUtil;
     private String goodsName,price;
     private OrderDetail orderDetail;
-    public PayConfirmPopup(Activity activity, OrderDetail orderDetail){
+    public PayConfirmPopup(Activity activity, OrderDetail orderDetail1){
 
         LayoutInflater inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -130,7 +134,7 @@ public class PayConfirmPopup extends PopupWindow {
         this.activity = activity;
         msgApi = WXAPIFactory.createWXAPI(activity, "wxf180adf1575a69e0");
         goodsName = "走兔";
-        orderDetail = orderDetail;
+        orderDetail = orderDetail1;
         if(orderDetail.getOrderOrderprice() != null) {
             price = orderDetail.getOrderOrderprice();
         }
@@ -230,7 +234,7 @@ public class PayConfirmPopup extends PopupWindow {
             return;
         }
         if(orderDetail.getUserUsid() == null || orderDetail.getUserUsid().isEmpty()  ){
-            Toast.makeText(activity,"请登录",Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity,"请登录1",Toast.LENGTH_SHORT).show();
             return;
         }
         if((goodsName!= null)&&(price != null)) {
@@ -239,27 +243,38 @@ public class PayConfirmPopup extends PopupWindow {
             zhiFuBaoUtil.setOnPaySuccessfulListener(new ZhiFuBaoUtil.OnPaySuccessfulListener() {
                 @Override
                 public void isSuccessful(boolean isSuccessful) {
-                    if(isSuccessful){
+                    /*Toast.makeText(activity," 我成功啦 isSuccessful:"+isSuccessful,Toast.LENGTH_LONG).show();*/
+                    if(!isSuccessful){
                         helpMeSendBuyNetWorks = new HelpMeSendBuyNetWorks();
-                        if(orderDetail != null) {
-                            helpMeSendBuyNetWorks.orderUpdate(orderDetail.getUserUsid(),orderDetail.getClientaddrAddr(),orderDetail.getClientaddrAddr1(),orderDetail.getOrderHeight(),orderDetail.getOrderName(),orderDetail.getOrderTimeliness(),orderDetail.getOrderRemark(),orderDetail.getOrderOrderprice(),orderDetail.getOrderMileage(),orderDetail.getClientaddrArea(),orderDetail.getDetailsGoodsname(), new Observer<BaseBean>() {
+                        Map<String,String> paramMap = new HashMap<String, String>();
+                        paramMap.put("userUsid",orderDetail.getUserUsid());
+                        paramMap.put("clientaddrAddr",orderDetail.getClientaddrAddr());
+                        paramMap.put("clientaddrAddr1",orderDetail.getClientaddrAddr1());
+                        paramMap.put("orderHeight",orderDetail.getOrderHeight());
+                        paramMap.put("orderName",orderDetail.getOrderName());
+                        paramMap.put("orderTimeliness",orderDetail.getOrderTimeliness());
+                        paramMap.put("orderRemark",orderDetail.getOrderRemark());
+                        paramMap.put("orderOrderprice",orderDetail.getOrderOrderprice());
+                        paramMap.put("orderMileage",orderDetail.getOrderMileage());
+                        paramMap.put("clientaddrArea",orderDetail.getClientaddrArea());
+                        paramMap.put("detailsGoodsname",orderDetail.getDetailsGoodsname());
+                        helpMeSendBuyNetWorks.orderUpdate(paramMap,new Observer<HelpMeBuyBean>() {
                                 @Override
                                 public void onCompleted() {
-
+                                    Toast.makeText(activity," onCompleted isSuccessful:",Toast.LENGTH_LONG).show();
                                 }
 
                                 @Override
                                 public void onError(Throwable e) {
-                                    Toast.makeText(activity,"网络君凯旋失败啦！！快检查你的账号和密码吧",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(activity," onError isSuccessful:"+e,Toast.LENGTH_LONG).show();
                                 }
 
                                 @Override
-                                public void onNext(BaseBean baseBean) {
-                                    Toast.makeText(activity,baseBean.getResult()+" ",Toast.LENGTH_LONG).show();
+                                public void onNext(HelpMeBuyBean helpMeBuyBean) {
+                                    Toast.makeText(activity," 我成功啦111 isSuccessful:"+helpMeBuyBean.getOrderNo(),Toast.LENGTH_LONG).show();
                                 }
-                            });
-                        }
-                    }
+                        });
+                    };
                 }
             });
         }

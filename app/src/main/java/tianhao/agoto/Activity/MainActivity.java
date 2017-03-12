@@ -29,6 +29,7 @@ import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
+import tianhao.agoto.Common.Widget.DB.XCCacheManager.xccache.XCCacheManager;
 import tianhao.agoto.Common.Widget.ImageView.CircleImageView;
 import tianhao.agoto.Fragment.MainFragment;
 import tianhao.agoto.R;
@@ -70,8 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.tv_main_leftmenu_name)
     TextView tvMainLeftMenuName;
-
-    private ContactInjfoDao mDao;
+    private XCCacheManager xcCacheManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     /*各种初始化*/
     private void init(){
         ButterKnife.bind(this);
-        mDao=new ContactInjfoDao(MainActivity.this);
+        xcCacheManager = XCCacheManager.getInstance(this);
         initFragment();
 
     }
@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.lly_main_leftmenu_login)
     public void llyMainLeftMenuLoginOnclick(){
-        String isLogin = mDao.queryDate("loginStatus");
+        String isLogin = xcCacheManager.readCache("loginStatus");
         if((isLogin != null)&&(isLogin.equals("yes"))){
 
         }else {
@@ -238,12 +238,13 @@ public class MainActivity extends AppCompatActivity {
 
     /*登陆以后初始化名字*/
     private void initAfterLogin(){
-        String userName = mDao.queryDate("userName");
+        String userName = xcCacheManager.readCache("userName");
+        /*Toast.makeText(this,"userName:"+userName,Toast.LENGTH_LONG).show();*/
         if(userName != null){
             tvMainLeftMenuName.setText(userName);
-            String headImgUrl = mDao.queryDate("thirdHeadUrl");
-            if((!headImgUrl.isEmpty()) &&(headImgUrl != null)){
-                /*Toast.makeText(this,"headimgurl:"+headImgUrl,Toast.LENGTH_LONG).show();*/
+            String headImgUrl = xcCacheManager.readCache("headUrl");
+            if((headImgUrl != null) &&(!headImgUrl.isEmpty())){
+                Toast.makeText(this,"headimgurl:"+headImgUrl,Toast.LENGTH_LONG).show();
                 FinalBitmap finalBitMap=null;
                 finalBitMap=FinalBitmap.create(MainActivity.this);
                 finalBitMap.display(civMainLeftMenuHeadImg, headImgUrl);

@@ -65,7 +65,7 @@ public class ZhiFuBaoUtil {
         public void isSuccessful(boolean isSuccessful);
     }
     public void setOnPaySuccessfulListener(OnPaySuccessfulListener onPaySuccessfulListener1){
-        onPaySuccessfulListener1 = onPaySuccessfulListener1;
+        onPaySuccessfulListener = onPaySuccessfulListener1;
     }
 
     @SuppressLint("HandlerLeak")

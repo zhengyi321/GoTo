@@ -7,7 +7,7 @@ package tianhao.agoto.Bean;
 public class UserLogin extends BaseBean{
     private String userName;
 
-    private String usid;
+    private String userUsid;
 
     public String getUserName() {
         return userName;
@@ -16,11 +16,12 @@ public class UserLogin extends BaseBean{
     public void setUserName(String userName) {
         this.userName = userName;
     }
-    public String getUsid() {
-        return usid;
+
+    public String getUserUsid() {
+        return userUsid;
     }
 
-    public void setUsid(String usid) {
-        this.usid = usid;
+    public void setUserUsid(String userUsid) {
+        this.userUsid = userUsid;
     }
 }

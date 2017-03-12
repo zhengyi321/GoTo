@@ -69,6 +69,7 @@ import tianhao.agoto.Bean.OrderDetail;
 import tianhao.agoto.Common.DialogAlterView.LikeIosStyle.ShouDongShuRuDialog;
 import tianhao.agoto.Common.DialogPopupWindow.PopupOnClickEvents;
 import tianhao.agoto.Common.Widget.DB.ContactInjfoDao;
+import tianhao.agoto.Common.Widget.DB.XCCacheManager.xccache.XCCacheManager;
 import tianhao.agoto.R;
 import tianhao.agoto.ThirdPay.ZhiFuBao.AuthResult;
 import tianhao.agoto.ThirdPay.ZhiFuBao.OrderInfoUtil2_0;
@@ -86,7 +87,8 @@ import tianhao.agoto.Utils.TimeUtil;
 public class HelpMeBuyActivity extends Activity  {
     ShouDongShuRuDialog shouDongShuRuDialog;
 
-    private ContactInjfoDao mDao;
+
+    private XCCacheManager xcCacheManager;
     private OrderDetail orderDetail;
     private List<String> checkList = new ArrayList<String>();
     private List<TextView> addRemarkList = new ArrayList<TextView>();
@@ -519,8 +521,11 @@ public class HelpMeBuyActivity extends Activity  {
 
     private void initOrderDetail(){
         orderDetail = new OrderDetail();
-        mDao = new ContactInjfoDao(this);
-        orderDetail.setUserUsid(mDao.queryDate("usid"));
+
+        xcCacheManager = XCCacheManager.getInstance(this);
+        String usid = xcCacheManager.readCache("usid");
+        Toast.makeText(this,"usid:"+usid,Toast.LENGTH_LONG).show();
+        orderDetail.setUserUsid(usid);
         System.out.println(orderDetail.getUserUsid());
         orderDetail.setClientaddrAddr(tvHelpMeBuyContentAddress.getText().toString() + " "+tvHelpMeBuyContentAddressDetail.getText().toString());
         orderDetail.setClientaddrAddr1(tvHelpMeBuyContentReceiveName.getText().toString()+" "+tvHelpMeBuyContentReceiveTel.getText().toString()+" "+tvHelpMeBuyContentReceiveAddressDetail.getText().toString());

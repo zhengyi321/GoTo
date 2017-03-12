@@ -1,10 +1,17 @@
 package tianhao.agoto.NetWorks;
 
+import java.util.Map;
+
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 import rx.Observable;
 import rx.Observer;
 import tianhao.agoto.Bean.BaseBean;
+import tianhao.agoto.Bean.HelpMeBuyBean;
 import tianhao.agoto.Bean.UserLogin;
 import tianhao.agoto.Bean.UserReg;
 
@@ -24,16 +31,22 @@ public class HelpMeSendBuyNetWorks extends BaseNetWork{
         final String CACHE_CONTROL_NETWORK = "max-age=0";
         /*用户注册*/
         //GET请求
+
         @GET("orders/appsave.do")
-        Observable<BaseBean> orderUpdate(@Query("userUsid") String usid, @Query("clientaddrAddr") String address, @Query("clientaddrAddr1") String address1, @Query("orderHeight") String orderHeight, @Query("orderName") String orderName, @Query("orderTimeliness") String orderTimeliness, @Query("orderRemark") String orderRemark,@Query("orderOrderprice") String orderOrderprice,@Query("orderMileage") String orderMileage,@Query("clientaddrArea") String clientaddrArea,@Query("detailsGoodsname") String detailsGoodsname
-        );
+        Observable<HelpMeBuyBean> orderUpdate(@QueryMap Map<String, String> param);
+    /*        @GET("orders/appsave.do")
+        Observable<HelpMeBuyBean> orderUpdate(@Query("userUsid") String usid, @Query("clientaddrAddr") String address, @Query("clientaddrAddr1") String address1, @Query("orderHeight") String orderHeight, @Query("orderName") String orderName, @Query("orderTimeliness") String orderTimeliness, @Query("orderRemark") String orderRemark, @Query("orderOrderprice") String orderOrderprice, @Query("orderMileage") String orderMileage, @Query("clientaddrArea") String clientaddrArea, @Query("detailsGoodsname") String detailsGoodsname
+    */
 
 
     }
 
-    public  void orderUpdate( String usid, String address, String address1, String orderHeight, String orderName, String orderTimeliness, String orderRemark, String orderOrderprice, String orderMileage, String clientaddrArea, String detailsGoodsname, Observer<BaseBean> observer){
+    public  void orderUpdate(@QueryMap Map<String, String> param, Observer<HelpMeBuyBean> observer){
+        setSubscribe(service.orderUpdate( param),observer);
+    }
+    /*public  void orderUpdate( String usid, String address, String address1, String orderHeight, String orderName, String orderTimeliness, String orderRemark, String orderOrderprice, String orderMileage, String clientaddrArea, String detailsGoodsname, Observer<HelpMeBuyBean> observer){
         setSubscribe(service.orderUpdate(  usid,  address,  address1,  orderHeight,  orderName,  orderTimeliness,  orderRemark,  orderOrderprice,  orderMileage,  clientaddrArea,  detailsGoodsname),observer);
-    }
+    }*/
 
 
 }
