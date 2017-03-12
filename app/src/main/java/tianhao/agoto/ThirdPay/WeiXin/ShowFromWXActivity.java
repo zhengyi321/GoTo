@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.widget.ImageView;
 
 import tianhao.agoto.R;
-
+/*
+https://github.com/Javen205/JPay
+ */
 public class ShowFromWXActivity extends Activity {
 	
 	@Override

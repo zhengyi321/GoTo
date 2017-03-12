@@ -19,7 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import tianhao.agoto.R;
-
+/*
+https://github.com/Javen205/JPay
+ */
 public class ScanQRCodeLoginActivity extends Activity implements OAuthListener{
 
 	private static final String TAG = "MicroMsg.SDKSample.ScanQRCodeLoginActivity";

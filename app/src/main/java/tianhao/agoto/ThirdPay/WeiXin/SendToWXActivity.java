@@ -32,7 +32,9 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import tianhao.agoto.R;
 import tianhao.agoto.ThirdPay.WeiXin.uikit.CameraUtil;
 import tianhao.agoto.ThirdPay.WeiXin.uikit.MMAlert;
-
+/*
+https://github.com/Javen205/JPay
+ */
 public class SendToWXActivity extends Activity {
 
 	private static final int THUMB_SIZE = 150;

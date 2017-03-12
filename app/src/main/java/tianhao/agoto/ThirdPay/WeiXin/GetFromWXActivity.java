@@ -24,7 +24,9 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import tianhao.agoto.R;
 import tianhao.agoto.ThirdPay.WeiXin.uikit.CameraUtil;
 import tianhao.agoto.ThirdPay.WeiXin.uikit.MMAlert;
-
+/*
+https://github.com/Javen205/JPay
+ */
 public class GetFromWXActivity extends Activity {
 
 	private static final int THUMB_SIZE = 150;
@@ -35,9 +37,9 @@ public class GetFromWXActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		Constants constants = new Constants();
 		// acquire wxapi
-		api = WXAPIFactory.createWXAPI(this, Constants.APP_ID);
+		api = WXAPIFactory.createWXAPI(this, constants.APP_ID);
 		bundle = getIntent().getExtras();
 
 		setContentView(R.layout.get_from_wx);
