@@ -25,14 +25,14 @@
 	        android:id="@+id/start_oauth_btn"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
-	        android:text="@string/auth"
+	        android:text="授权"
 	        style="@style/MMLineActionButton"/>
 	
 	    <Button
 	        android:id="@+id/stop_oauth_btn"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
-	        android:text="@string/cancel_auth"
+	        android:text="取消授权"
 	        style="@style/MMLineActionButton"/>
 	    
 	    <ImageView 

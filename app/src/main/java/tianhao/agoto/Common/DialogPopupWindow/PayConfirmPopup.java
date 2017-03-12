@@ -2,6 +2,7 @@ package tianhao.agoto.Common.DialogPopupWindow;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.Observable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
@@ -18,7 +20,12 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.Observer;
+import tianhao.agoto.Bean.BaseBean;
+import tianhao.agoto.Bean.OrderDetail;
+import tianhao.agoto.NetWorks.HelpMeSendBuyNetWorks;
 import tianhao.agoto.R;
+import tianhao.agoto.ThirdPay.WeiXin.Constants;
 import tianhao.agoto.ThirdPay.WeiXin.asyncTask.WXPayTask;
 import tianhao.agoto.ThirdPay.WeiXin.bean.Order;
 import tianhao.agoto.ThirdPay.ZhiFuBao.ZhiFuBaoUtil;
@@ -29,6 +36,8 @@ import tianhao.agoto.ThirdPay.ZhiFuBao.ZhiFuBaoUtil;
  */
 
 public class PayConfirmPopup extends PopupWindow {
+
+    private HelpMeSendBuyNetWorks helpMeSendBuyNetWorks;
 
     /*跑腿费用*/
     @BindView(R.id.tv_popup_thirdpay_payconfirm_fee)
@@ -84,7 +93,7 @@ public class PayConfirmPopup extends PopupWindow {
 
                 break;
             case "wx":
-                wxPay(mPopView);
+                wxPay();
                 break;
             case "zfb":
                 zhiFuBaoPay();
@@ -108,18 +117,23 @@ public class PayConfirmPopup extends PopupWindow {
     private Activity activity;
     /*微信支付*/
     private PayReq req;
-    final IWXAPI msgApi = WXAPIFactory.createWXAPI(activity, null);
+     IWXAPI msgApi/* = WXAPIFactory.createWXAPI(activity, null)*/;
     /*微信支付*/
     private ZhiFuBaoUtil zhiFuBaoUtil;
     private String goodsName,price;
-    public PayConfirmPopup(Activity activity,String goodsName1,String price1){
+    private OrderDetail orderDetail;
+    public PayConfirmPopup(Activity activity, OrderDetail orderDetail){
 
         LayoutInflater inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mPopView= inflater.inflate(R.layout.dialogpopup_payconfirm_lly, null);
         this.activity = activity;
-        goodsName = goodsName1;
-        price = price1;
+        msgApi = WXAPIFactory.createWXAPI(activity, "wxf180adf1575a69e0");
+        goodsName = "走兔";
+        orderDetail = orderDetail;
+        if(orderDetail.getOrderOrderprice() != null) {
+            price = orderDetail.getOrderOrderprice();
+        }
         init();
 
     }
@@ -180,7 +194,7 @@ public class PayConfirmPopup extends PopupWindow {
 
 
     /*微信支付*/
-    public void wxPay(View view){
+    public void wxPay(){
         /*Toast.makeText(activity, "测试", Toast.LENGTH_SHORT).show();*/
         req = new PayReq();
         Constants constants = new Constants();
@@ -193,15 +207,61 @@ public class PayConfirmPopup extends PopupWindow {
         order.setAttach("json");//附加参数
         order.setNofityUrl("http://www.baidu.com");//支付成功服务端回调通知的地址
         order.setDeviceInfo("");
+        PayReq request = new PayReq();
+        request.appId = "wxf180adf1575a69e0";
+        request.partnerId = "1900000109";
+        request.prepayId= "1101000000140415649af9fc314aa427";
+        request.packageValue = "Sign=WXPay";
+        request.nonceStr= "1101000000140429eb40476f8896f4c9";
+        request.timeStamp= "1398746574";
+        request.sign= "7FFECB600D7157C5AA49810D2D8F28BC2811827B";
+        msgApi.sendReq(req);
+       /* req.appId = "wxf180adf1575a69e0";
 
-        new WXPayTask(activity).execute(order);
+
+        msgApi.sendReq(req);*/
+        /*new WXPayTask(activity).execute(order);*/
     }
     /*微信支付*/
     /*支付宝支付*/
     public void zhiFuBaoPay(){
+        if(orderDetail == null){
+            Toast.makeText(activity,"请登录",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(orderDetail.getUserUsid() == null || orderDetail.getUserUsid().isEmpty()  ){
+            Toast.makeText(activity,"请登录",Toast.LENGTH_SHORT).show();
+            return;
+        }
         if((goodsName!= null)&&(price != null)) {
             price = price.substring(1,price.length());
             zhiFuBaoUtil.payV2(mPopView, goodsName, price);
+            zhiFuBaoUtil.setOnPaySuccessfulListener(new ZhiFuBaoUtil.OnPaySuccessfulListener() {
+                @Override
+                public void isSuccessful(boolean isSuccessful) {
+                    if(isSuccessful){
+                        helpMeSendBuyNetWorks = new HelpMeSendBuyNetWorks();
+                        if(orderDetail != null) {
+                            helpMeSendBuyNetWorks.orderUpdate(orderDetail.getUserUsid(),orderDetail.getClientaddrAddr(),orderDetail.getClientaddrAddr1(),orderDetail.getOrderHeight(),orderDetail.getOrderName(),orderDetail.getOrderTimeliness(),orderDetail.getOrderRemark(),orderDetail.getOrderOrderprice(),orderDetail.getOrderMileage(),orderDetail.getClientaddrArea(),orderDetail.getDetailsGoodsname(), new Observer<BaseBean>() {
+                                @Override
+                                public void onCompleted() {
+
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    Toast.makeText(activity,"网络君凯旋失败啦！！快检查你的账号和密码吧",Toast.LENGTH_LONG).show();
+                                }
+
+                                @Override
+                                public void onNext(BaseBean baseBean) {
+                                    Toast.makeText(activity,baseBean.getResult()+" ",Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                    }
+                }
+            });
         }
     }
     /*支付宝支付*/

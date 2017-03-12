@@ -65,6 +65,7 @@
 
     <!--微信支付-->
     <!-- Navigation Header -->
+    <!-- Navigation Header -->
     <style name="NavPage">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
@@ -489,6 +490,13 @@
 
     <style name="DataSheetAnimation" parent="@android:style/Animation.Dialog">
         <item name="android:windowEnterAnimation">@anim/push_up_in</item>
+    </style>
+
+    <style name="TitleText">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/BasicTextSize</item>
+        <item name="android:textColor">#ff000000</item>
     </style>
     <!--微信支付-->
 </resources>

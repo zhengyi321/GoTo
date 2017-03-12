@@ -9,6 +9,7 @@ import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Map;
 
+import tianhao.agoto.ThirdPay.WeiXin.Constants;
 import tianhao.agoto.ThirdPay.WeiXin.bean.Order;
 import tianhao.agoto.ThirdPay.WeiXin.utils.HttpKit;
 import tianhao.agoto.ThirdPay.WeiXin.utils.JPay;

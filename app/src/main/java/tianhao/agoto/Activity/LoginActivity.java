@@ -211,6 +211,7 @@ public class LoginActivity extends Activity implements Handler.Callback, Platfor
                     long addNameLong = mDao.addDate(name,name);
                     long addPhoneLong = mDao.addDate(phone,phone);
                     long addUsidLong = mDao.addDate(usid,usid);
+                    System.out.println(usid);
                     long addLoginStatusLong = mDao.addDate(loginStatus,"yes");
                     Toast.makeText(getBaseContext(),""+userLogin.getResult(),Toast.LENGTH_LONG).show();
                     finish();

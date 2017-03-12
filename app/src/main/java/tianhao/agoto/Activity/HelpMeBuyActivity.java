@@ -55,6 +55,7 @@ import com.baidu.mapapi.utils.OpenClientUtil;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,8 +65,10 @@ import butterknife.OnClick;
 import butterknife.OnTouch;
 import tianhao.agoto.Adapter.HelpMeBuyShoppingMenuRecyclerViewAdapter;
 import tianhao.agoto.Bean.GoodsBean;
+import tianhao.agoto.Bean.OrderDetail;
 import tianhao.agoto.Common.DialogAlterView.LikeIosStyle.ShouDongShuRuDialog;
 import tianhao.agoto.Common.DialogPopupWindow.PopupOnClickEvents;
+import tianhao.agoto.Common.Widget.DB.ContactInjfoDao;
 import tianhao.agoto.R;
 import tianhao.agoto.ThirdPay.ZhiFuBao.AuthResult;
 import tianhao.agoto.ThirdPay.ZhiFuBao.OrderInfoUtil2_0;
@@ -82,7 +85,11 @@ import tianhao.agoto.Utils.TimeUtil;
 
 public class HelpMeBuyActivity extends Activity  {
     ShouDongShuRuDialog shouDongShuRuDialog;
-    private List<View> addRemarkList = new ArrayList<View>();
+
+    private ContactInjfoDao mDao;
+    private OrderDetail orderDetail;
+    private List<String> checkList = new ArrayList<String>();
+    private List<TextView> addRemarkList = new ArrayList<TextView>();
     @BindView(R.id.rly_helpmebuy_topbar_leftmenu)
     RelativeLayout rlyHelpMeBuyTopBarLeftMenu;
 
@@ -127,7 +134,7 @@ public class HelpMeBuyActivity extends Activity  {
     @BindView(R.id.cb_helpmebuy_content_pricecheck)
     CheckBox cbHelpMeBuyContentPriceCheck;
     /*价格未知*/
-
+    private List<CheckBox> remarkList = new ArrayList<CheckBox>();
 
     /*购物清单*/
     @BindView(R.id.rv_helpmebuy_content_shoppingmenu)
@@ -506,9 +513,40 @@ public class HelpMeBuyActivity extends Activity  {
         startActivity(intent);*/
         PopupOnClickEvents popupOnClickEvents = new PopupOnClickEvents(this);
         goodsName = "走兔订单号";
-        popupOnClickEvents.PayConfirm(llyHelpMeBuy,goodsName,price);
+        initOrderDetail();
+        popupOnClickEvents.PayConfirm(llyHelpMeBuy,orderDetail);
     }
 
+    private void initOrderDetail(){
+        orderDetail = new OrderDetail();
+        mDao = new ContactInjfoDao(this);
+        orderDetail.setUserUsid(mDao.queryDate("usid"));
+        System.out.println(orderDetail.getUserUsid());
+        orderDetail.setClientaddrAddr(tvHelpMeBuyContentAddress.getText().toString() + " "+tvHelpMeBuyContentAddressDetail.getText().toString());
+        orderDetail.setClientaddrAddr1(tvHelpMeBuyContentReceiveName.getText().toString()+" "+tvHelpMeBuyContentReceiveTel.getText().toString()+" "+tvHelpMeBuyContentReceiveAddressDetail.getText().toString());
+        String remark = "";
+        if((addRemarkList != null)&&(addRemarkList.size() > 0)) {
+            for (int i=0; i<addRemarkList.size();i++){
+                remark += addRemarkList.get(i).getText().toString()+";";
+            }
+        }
+        if((checkList != null)&&(checkList.size() > 0)){
+            for(int i=0;i<checkList.size();i++){
+                remark += checkList.get(i)+";";
+            }
+        }
+        orderDetail.setOrderRemark(remark);
+        orderDetail.setOrderOrderprice(price);
+        orderDetail.setOrderMileage(""+dis);
+        List<GoodsBean> goodsBeanList1 =  helpMeBuyShoppingMenuRecyclerViewAdapter.getGoodsBeanList();
+        String menu = "";
+        if((goodsBeanList1 != null)&&(goodsBeanList1.size() > 0)){
+            for(int i=0;i<goodsBeanList1.size();i++){
+                menu += goodsBeanList1.get(i).getName()+"x"+goodsBeanList1.get(i).getNum()+";";
+            }
+        }
+        orderDetail.setDetailsGoodsname(menu);
+    }
 
 
 
@@ -524,8 +562,10 @@ public class HelpMeBuyActivity extends Activity  {
     public void cbHelpMeBuyContentNoChilliOnclick(){
         if(cbHelpMeBuyContentNoChilli.isChecked()){
             cbHelpMeBuyContentNoChilli.setTextColor(getResources().getColor(R.color.red));
+            checkList.add("不辣");
         }else{
             cbHelpMeBuyContentNoChilli.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
+            checkList.remove("nochilli");
         }
     }
     /*微辣*/
@@ -533,8 +573,10 @@ public class HelpMeBuyActivity extends Activity  {
     public void cbHelpMeBuyContentSmallChilliOnclick(){
         if(cbHelpMeBuyContentSmallChilli.isChecked()){
             cbHelpMeBuyContentSmallChilli.setTextColor(getResources().getColor(R.color.red));
+            checkList.add("微辣");
         }else{
             cbHelpMeBuyContentSmallChilli.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
+            checkList.remove("微辣");
         }
     }
     /*中辣*/
@@ -542,8 +584,10 @@ public class HelpMeBuyActivity extends Activity  {
     public void cbHelpMeBuyContentMediaChilliOnclick(){
         if(cbHelpMeBuyContentMediaChilli.isChecked()){
             cbHelpMeBuyContentMediaChilli.setTextColor(getResources().getColor(R.color.red));
+            checkList.add("中辣");
         }else{
             cbHelpMeBuyContentMediaChilli.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
+            checkList.remove("中辣");
         }
     }
     /*特辣*/
@@ -551,8 +595,10 @@ public class HelpMeBuyActivity extends Activity  {
     public void cbHelpMeBuyContentSpecialChilliOnclick(){
         if(cbHelpMeBuyContentSpecialChilli.isChecked()){
             cbHelpMeBuyContentSpecialChilli.setTextColor(getResources().getColor(R.color.red));
+            checkList.add("特辣");
         }else{
             cbHelpMeBuyContentSpecialChilli.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
+            checkList.remove("特辣");
         }
     };
     /*放葱*/
@@ -560,8 +606,10 @@ public class HelpMeBuyActivity extends Activity  {
     public void cbHelpMeBuyContentHaveOnionOnclick(){
         if(cbHelpMeBuyContentHaveOnion.isChecked()){
             cbHelpMeBuyContentHaveOnion.setTextColor(getResources().getColor(R.color.red));
+            checkList.add("放葱");
         }else{
             cbHelpMeBuyContentHaveOnion.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
+            checkList.remove("放葱");
         }
     }
 
@@ -570,8 +618,10 @@ public class HelpMeBuyActivity extends Activity  {
     public void cbHelpMeBuyContentNoOnionOnclick(){
         if(cbHelpMeBuyContentNoOnion.isChecked()){
             cbHelpMeBuyContentNoOnion.setTextColor(getResources().getColor(R.color.red));
+            checkList.add("不放葱");
         }else{
             cbHelpMeBuyContentNoOnion.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
+            checkList.remove("不放葱");
         }
     }
 
@@ -580,8 +630,10 @@ public class HelpMeBuyActivity extends Activity  {
     public void cbHelpMeBuyContentHaveCarawayOnclick(){
         if(cbHelpMeBuyContentHaveCaraway.isChecked()){
             cbHelpMeBuyContentHaveCaraway.setTextColor(getResources().getColor(R.color.red));
+            checkList.add("放香菜");
         }else{
             cbHelpMeBuyContentHaveCaraway.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
+            checkList.remove("放香菜");
         }
     }
 
@@ -590,8 +642,10 @@ public class HelpMeBuyActivity extends Activity  {
     public void cbHelpMeBuyContentNoCarawayOnclick(){
         if(cbHelpMeBuyContentNoCaraway.isChecked()){
             cbHelpMeBuyContentNoCaraway.setTextColor(getResources().getColor(R.color.red));
+            checkList.add("不放香菜");
         }else{
             cbHelpMeBuyContentNoCaraway.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
+            checkList.remove("不放香菜");
         }
     }
 
@@ -600,8 +654,10 @@ public class HelpMeBuyActivity extends Activity  {
     public void cbHelpMeBuyContentHaveVinegarOnclick(){
         if(cbHelpMeBuyContentHaveVinegar.isChecked()){
             cbHelpMeBuyContentHaveVinegar.setTextColor(getResources().getColor(R.color.red));
+            checkList.add("放醋");
         }else{
             cbHelpMeBuyContentHaveVinegar.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
+            checkList.remove("放醋");
         }
     }
 
@@ -610,8 +666,10 @@ public class HelpMeBuyActivity extends Activity  {
     public void cbHelpMeBuyContentNoVinegarOnclick(){
         if(cbHelpMeBuyContentNoVinegar.isChecked()){
             cbHelpMeBuyContentNoVinegar.setTextColor(getResources().getColor(R.color.red));
+            checkList.add("不放醋");
         }else{
             cbHelpMeBuyContentNoVinegar.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
+            checkList.remove("不放醋");
         }
     }
 

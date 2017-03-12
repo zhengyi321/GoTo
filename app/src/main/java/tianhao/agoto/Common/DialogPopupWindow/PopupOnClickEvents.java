@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import tianhao.agoto.Bean.OrderDetail;
 import tianhao.agoto.Common.DialogAlterView.LikeIosStyle.ShouDongShuRuDialog;
 
 /**
@@ -23,8 +24,8 @@ public class PopupOnClickEvents {
     public PopupOnClickEvents(Activity activity1){
         activity = activity1;
     }
-    public void PayConfirm(LinearLayout layout, String goodsName,String price){
-        PayConfirmPopup payConfirmPopup = new PayConfirmPopup(activity,goodsName,price);
+    public void PayConfirm(LinearLayout layout, OrderDetail orderDetail){
+        PayConfirmPopup payConfirmPopup = new PayConfirmPopup(activity,orderDetail);
         setBackgroundAlpha(0.5f);
 /*        payConfirmPopup.setFocusable(true);*/
         payConfirmPopup.showAtLocation(layout, Gravity.BOTTOM, 0, 0);

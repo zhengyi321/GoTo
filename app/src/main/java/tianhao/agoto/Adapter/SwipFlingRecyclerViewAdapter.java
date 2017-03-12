@@ -44,12 +44,12 @@ public class SwipFlingRecyclerViewAdapter extends RecyclerView.Adapter<SwipFling
     private List<GoodsBean> goodsBeanList /*= new ArrayList<GoodsBean>()*/;
     private Activity context;
     private LayoutInflater inflater;
-    private PostcardAdapter.ViewHolder viewHold;
+    /*private PostcardAdapter.ViewHolder viewHold;*/
  /*   private TextView textViewGoodsType;*/
-    public SwipFlingRecyclerViewAdapter(Activity mContext,List<GoodsBean> goodsBeanList1,PostcardAdapter.ViewHolder viewHold1){
+    public SwipFlingRecyclerViewAdapter(Activity mContext,List<GoodsBean> goodsBeanList1/*,PostcardAdapter.ViewHolder viewHold1*/){
         /*this.goodsBeanList = new ArrayList<GoodsBean>();*/
         this.context = mContext;
-        this.viewHold = viewHold1;
+        /*this.viewHold = viewHold1;*/
         /*textViewGoodsType = textView;*/
         this.goodsBeanList = goodsBeanList1;
         inflater = LayoutInflater.from(context);

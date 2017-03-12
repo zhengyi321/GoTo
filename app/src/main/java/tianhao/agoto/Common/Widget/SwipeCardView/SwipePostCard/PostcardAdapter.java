@@ -47,7 +47,7 @@ public class PostcardAdapter extends SwipePostcard.Adapter {
     private Activity mContext;
     private List<Bean> mData;
     private LayoutInflater inflater;
-    public ViewHolder viewHold;
+
     private List<GoodsBean> goodsBeanList ;
     public SwipFlingRecyclerViewAdapter recyclerViewAdapter;/* = new SwipFlingRecyclerViewAdapter(mContext,goodsBeanList)*/;
     public PostcardAdapter(Activity context, List<Bean> data,List<GoodsBean> goodsBeanList1) {
@@ -55,7 +55,7 @@ public class PostcardAdapter extends SwipePostcard.Adapter {
         mData = data;
         inflater = LayoutInflater.from(context);
         goodsBeanList = goodsBeanList1;
-        recyclerViewAdapter = new SwipFlingRecyclerViewAdapter(mContext,goodsBeanList,viewHold);
+        recyclerViewAdapter = new SwipFlingRecyclerViewAdapter(mContext,goodsBeanList/*,viewHold*/);
     }
     public void addAll(List<Bean> beanList){
 
@@ -97,7 +97,7 @@ public class PostcardAdapter extends SwipePostcard.Adapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
+         ViewHolder viewHold;
         if(convertView == null){
             convertView = LayoutInflater.from(mContext).inflate(R.layout.activity_shoppinglist_content_piper_card_item_lly, parent, false);
           /*  TextView textView =(TextView) convertView.findViewById(R.id.tv_shoppinglist_content_piper_card_item_goodstypenum);*/
@@ -124,7 +124,7 @@ public class PostcardAdapter extends SwipePostcard.Adapter {
 
         /*商品种类*/
         @BindView(R.id.tv_shoppinglist_content_piper_card_item_goodstypenum)
-        public TextView tvShoppingListContentPiperCardItemGoodsTypeNum;
+        TextView tvShoppingListContentPiperCardItemGoodsTypeNum;
         /*商品种类*/
 
         @BindView(R.id.erv_shoppinglist_content_piper_card_item_goods)

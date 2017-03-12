@@ -59,9 +59,14 @@ public class ZhiFuBaoUtil {
     // 签约卖家支付宝账号
     String SELLER = "zttcapp@163.com";
     /*支付宝*/
+    public OnPaySuccessfulListener onPaySuccessfulListener;
 
-
-
+    public interface OnPaySuccessfulListener{
+        public void isSuccessful(boolean isSuccessful);
+    }
+    public void setOnPaySuccessfulListener(OnPaySuccessfulListener onPaySuccessfulListener1){
+        onPaySuccessfulListener1 = onPaySuccessfulListener1;
+    }
 
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
@@ -80,9 +85,15 @@ public class ZhiFuBaoUtil {
                     if (TextUtils.equals(resultStatus, "9000")) {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
                         Toast.makeText(activity, "支付成功", Toast.LENGTH_SHORT).show();
+                        if(onPaySuccessfulListener != null){
+                            onPaySuccessfulListener.isSuccessful(true);
+                        }
                     } else {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
                         Toast.makeText(activity, "支付失败", Toast.LENGTH_SHORT).show();
+                        if(onPaySuccessfulListener != null){
+                            onPaySuccessfulListener.isSuccessful(false);
+                        }
                     }
                     break;
                 }
@@ -143,6 +154,7 @@ public class ZhiFuBaoUtil {
          * orderInfo的获取必须来自服务端；
          */
         boolean rsa2 = (RSA2_PRIVATE.length() > 0);
+        price = "0.01";
         Map<String, String> params = OrderInfoUtil2_0.buildOrderParamMap(APPID, rsa2,goodsName,price);
         String orderParam = OrderInfoUtil2_0.buildOrderParam(params);
 

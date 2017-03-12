@@ -19,6 +19,7 @@ import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import tianhao.agoto.ThirdPay.WeiXin.utils.WeiXinPay;
 
 /**
+ * https://github.com/iyakexi/app-pay-demo-android
  * Created by Javen on 2016/11/20.
  */
 /*
