@@ -255,7 +255,7 @@
     <dimen name="activity_aboutgoto_logo_name_margin_top_size">20dp</dimen>
     <dimen name="activity_aboutgoto_topbar_title_textstyle_size">16sp</dimen>
     <dimen name="activity_aboutgoto_content_margin_size">20dp</dimen>
-    <dimen name="activity_aboutgoto_content_word_size">14sp</dimen>
+    <dimen name="activity_aboutgoto_content_word_size">12sp</dimen>
     <dimen name="activity_aboutgoto_bottom_rights_word_size">12sp</dimen>
     <!--关于走兔-->
 

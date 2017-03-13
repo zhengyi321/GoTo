@@ -44,33 +44,103 @@ public class MainActivity extends AppCompatActivity {
 
     private LayoutInflater inflater;
 
-
+    /*侧滑菜单设置*/
     @BindView(R.id.rly_main_leftmenu_setting)
     RelativeLayout rlyMainLeftMenuSetting;
+    @OnClick(R.id.rly_main_leftmenu_setting)
+    public void rlyMainLeftMenuSettingOnClick(){
+        Intent intent = new Intent(this,SettingActivity.class);
+        startActivity(intent);
+    }
+    /*侧滑菜单设置*/
+
+    /*活动页面*/
     @BindView(R.id.rly_main_leftmenu_activity)
     RelativeLayout rlyMainLeftMenuActivity;
+    @OnClick(R.id.rly_main_leftmenu_activity)
+    public void rlyMainLeftMenuActivityOnClick(){
+        Intent intent = new Intent(this,ActivityActivity.class);
+        startActivity(intent);
+    }
+    /*活动页面*/
+    /*我的订单*/
     @BindView(R.id.rly_main_leftmenu_myorder)
     RelativeLayout rlyMainLeftMenuMyOrder;
+    @OnClick(R.id.rly_main_leftmenu_myorder)
+    public void rlyMainLeftMenuMyOrderOnclick(){
+        Intent intent = new Intent(this,MyOrderActivity.class);
+        startActivity(intent);
+    }
+    /*我的订单*/
+    /*我的钱包*/
     @BindView(R.id.rly_main_leftmenu_mywallet)
     RelativeLayout rlyMainLeftMenuMyWallet;
+    @OnClick(R.id.rly_main_leftmenu_mywallet)
+    public void rlyMainLeftMenuMyWalletOnclick(){
+        Intent intent = new Intent(this,MyWalletActivity.class);
+        startActivity(intent);
+    }
+    /*
+    我的钱包*/
+    /*地址管理*/
     @BindView(R.id.rly_main_leftmenu_addressmanage)
     RelativeLayout rlyMainLeftMenuAddressManage;
+    @OnClick(R.id.rly_main_leftmenu_addressmanage)
+    public void rlyMainLeftMenuAddressManageOnclick(){
+        Intent intent = new Intent(this,AddressManageActivity.class);
+        startActivity(intent);
+    }
+
+    /*地址管理*/
+
+/*消息中心*/
+
+    @OnClick(R.id.rly_main_leftmenu_message)
+    public void rlyMainLeftMenuMessageOnclick(){
+        Intent intent = new Intent(this,MessageCenterActivity.class);
+        startActivity(intent);
+    }
+
+    /*消息中心*/
     @BindView(R.id.rly_main_leftmenu_message)
     RelativeLayout rlyMainLeftMenuMessage;
     @BindView(R.id.rly_main_topbar_leftmenu)
     RelativeLayout rlyLeftMenu;
+
+    /*登录*/
     @BindView(R.id.lly_main_leftmenu_login)
     LinearLayout llyMainLeftMenuLogin;
+    @OnClick(R.id.lly_main_leftmenu_login)
+    public void llyMainLeftMenuLoginOnclick(){
+        String isLogin = xcCacheManager.readCache("loginStatus");
+        if((isLogin != null)&&(isLogin.equals("yes"))){
+
+        }else {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+    }
+    /*登录*/
     @BindView(R.id.dly_main_activity)
     DrawerLayout dlyMainActivity;
+    /*退出登录*/
+    @BindView(R.id.rly_main_leftmenu_exitlogin)
+    RelativeLayout rlyMainLeftMenuExitLogin;
+    @OnClick(R.id.rly_main_leftmenu_exitlogin)
+    public void rlyMainLeftMenuExitLoginOnclick(){
+        exitLogin();
+    }
+    /*退出登录*/
    /* @BindView(R.id.civ_main_leftmenu_headimg)
     ImageView civMainLeftMenuHeadImg;*/
+    /*登录头像 名称*/
     @BindView(R.id.civ_main_leftmenu_headimg)
     CircleImageView civMainLeftMenuHeadImg;
-
-
     @BindView(R.id.tv_main_leftmenu_name)
     TextView tvMainLeftMenuName;
+    /*登录头像 名称*/
+
+
     private XCCacheManager xcCacheManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,90 +206,55 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-/*侧滑菜单设置*/
-
-    @OnClick(R.id.rly_main_leftmenu_setting)
-    public void rlyMainLeftMenuSettingOnClick(){
-        Intent intent = new Intent(this,SettingActivity.class);
-        startActivity(intent);
-    }
-
-/*侧滑菜单设置*/
-
-
-/*活动页面*/
-
-    @OnClick(R.id.rly_main_leftmenu_activity)
-    public void rlyMainLeftMenuActivityOnClick(){
-        Intent intent = new Intent(this,ActivityActivity.class);
-        startActivity(intent);
-    }
-
-/*活动页面*/
 
 
 
-/*我的订单*/
-
-    @OnClick(R.id.rly_main_leftmenu_myorder)
-    public void rlyMainLeftMenuMyOrderOnclick(){
-        Intent intent = new Intent(this,MyOrderActivity.class);
-        startActivity(intent);
-    }
-
-/*我的订单*/
 
 
 
-/*我的钱包*/
-
-    @OnClick(R.id.rly_main_leftmenu_mywallet)
-    public void rlyMainLeftMenuMyWalletOnclick(){
-        Intent intent = new Intent(this,MyWalletActivity.class);
-        startActivity(intent);
-    }
-/*
-我的钱包*/
-
-
-/*地址管理*/
-
-    @OnClick(R.id.rly_main_leftmenu_addressmanage)
-    public void rlyMainLeftMenuAddressManageOnclick(){
-        Intent intent = new Intent(this,AddressManageActivity.class);
-        startActivity(intent);
-    }
-
-/*地址管理*/
-
-
-/*消息中心*/
-
-    @OnClick(R.id.rly_main_leftmenu_message)
-    public void rlyMainLeftMenuMessageOnclick(){
-        Intent intent = new Intent(this,MessageCenterActivity.class);
-        startActivity(intent);
-    }
-
-/*消息中心*/
 
 
 
-/*登录*/
 
-    @OnClick(R.id.lly_main_leftmenu_login)
-    public void llyMainLeftMenuLoginOnclick(){
-        String isLogin = xcCacheManager.readCache("loginStatus");
-        if((isLogin != null)&&(isLogin.equals("yes"))){
 
-        }else {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+
+    /*登陆以后初始化名字*/
+    private void initAfterLogin(){
+        try{
+            String loginStatus = xcCacheManager.readCache("loginStatus");
+            if(loginStatus.equals("yes")) {
+                String userName = xcCacheManager.readCache("userName");
+            /*Toast.makeText(this,"userName:"+userName,Toast.LENGTH_LONG).show();*/
+                if (userName != null) {
+                    tvMainLeftMenuName.setText(userName);
+                    String headImgUrl = xcCacheManager.readCache("headUrl");
+                    if ((headImgUrl != null) && (!headImgUrl.isEmpty())) {
+                        Toast.makeText(this, "headimgurl:" + headImgUrl, Toast.LENGTH_LONG).show();
+                        FinalBitmap finalBitMap = null;
+                        finalBitMap = FinalBitmap.create(MainActivity.this);
+                        finalBitMap.display(civMainLeftMenuHeadImg, headImgUrl);
+                    /*ImageUtils imageUtils = new ImageUtils();
+                    Bitmap bitmap = imageUtils.getbitmap(headImgUrl);
+                    civMainLeftMenuHeadImg.setImageBitmap(bitmap);*/
+
+                    }
+                /*Toast.makeText(this,"onResume"+userLogin.getUserName(),Toast.LENGTH_LONG).show();*/
+                }
+            }
+        }catch (Exception e){
+
         }
     }
+    /*登陆以后初始化名字*/
 
-/*登录*/
-
+    /*退出登录后的名字和头像*/
+    private void exitLogin(){
+        xcCacheManager.writeCache("loginStatus","no");
+        xcCacheManager.writeCache("usid","");
+       tvMainLeftMenuName.setText("请登录");
+        civMainLeftMenuHeadImg.setImageResource(R.drawable.gotohead);
+    }
+    /*退出登录后的名字和头像*/
 
     protected void onStop(){
         super.onStop();
@@ -236,27 +271,7 @@ public class MainActivity extends AppCompatActivity {
         memoryUtils.cleanMemoryNoText(this);*/
     }
 
-    /*登陆以后初始化名字*/
-    private void initAfterLogin(){
-        String userName = xcCacheManager.readCache("userName");
-        /*Toast.makeText(this,"userName:"+userName,Toast.LENGTH_LONG).show();*/
-        if(userName != null){
-            tvMainLeftMenuName.setText(userName);
-            String headImgUrl = xcCacheManager.readCache("headUrl");
-            if((headImgUrl != null) &&(!headImgUrl.isEmpty())){
-                Toast.makeText(this,"headimgurl:"+headImgUrl,Toast.LENGTH_LONG).show();
-                FinalBitmap finalBitMap=null;
-                finalBitMap=FinalBitmap.create(MainActivity.this);
-                finalBitMap.display(civMainLeftMenuHeadImg, headImgUrl);
-                /*ImageUtils imageUtils = new ImageUtils();
-                Bitmap bitmap = imageUtils.getbitmap(headImgUrl);
-                civMainLeftMenuHeadImg.setImageBitmap(bitmap);*/
 
-            }
-            /*Toast.makeText(this,"onResume"+userLogin.getUserName(),Toast.LENGTH_LONG).show();*/
-        }
-    }
-    /*登陆以后初始化名字*/
 }
 
 

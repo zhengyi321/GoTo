@@ -102,7 +102,15 @@ public class PopupOnClickEvents {
         });
 
     }
+    OnGoodsWeightSelectListener onGoodsWeightSelectListener;
+    public interface OnGoodsWeightSelectListener{
+        public void select();
+    }
+    public void setOnGoodsWeightSelectListener(OnGoodsWeightSelectListener onGoodsWeightSelectListener1){
+        this.onGoodsWeightSelectListener = onGoodsWeightSelectListener1;
+    }
     public void GoodsWeightSelect(LinearLayout layout, final TextView textView){
+
 
         final GoodsWeightPopup goodsWeightPopup = new GoodsWeightPopup(activity);
         setBackgroundAlpha(0.5f);
@@ -112,6 +120,9 @@ public class PopupOnClickEvents {
 
             @Override
             public void OnClick(String value) {
+                if(onGoodsWeightSelectListener != null){
+                    onGoodsWeightSelectListener.select();
+                }
                 textView.setText(value);
             }
         });
@@ -134,6 +145,7 @@ public class PopupOnClickEvents {
                 }).setPositiveButton("确认",new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
                         dissmissDialog();
                     }
                 }).setCallBackListener(new ShouDongShuRuDialog.DialogCallBackListener() {

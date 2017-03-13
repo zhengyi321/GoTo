@@ -33,6 +33,7 @@ import tianhao.agoto.ThirdPay.WeiXin.Constants;
 import tianhao.agoto.ThirdPay.WeiXin.asyncTask.WXPayTask;
 import tianhao.agoto.ThirdPay.WeiXin.bean.Order;
 import tianhao.agoto.ThirdPay.ZhiFuBao.ZhiFuBaoUtil;
+import tianhao.agoto.Utils.PhoneFormatCheckUtils;
 
 
 /**
@@ -42,7 +43,7 @@ import tianhao.agoto.ThirdPay.ZhiFuBao.ZhiFuBaoUtil;
 public class PayConfirmPopup extends PopupWindow {
 
     private HelpMeSendBuyNetWorks helpMeSendBuyNetWorks;
-
+    private PhoneFormatCheckUtils phoneFormatCheckUtils = new PhoneFormatCheckUtils();
     /*跑腿费用*/
     @BindView(R.id.tv_popup_thirdpay_payconfirm_fee)
     TextView tvPopupThirdPayPayConfirmFee;
@@ -234,51 +235,145 @@ public class PayConfirmPopup extends PopupWindow {
             return;
         }
         if(orderDetail.getUserUsid() == null || orderDetail.getUserUsid().isEmpty()  ){
-            Toast.makeText(activity,"请登录1",Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity,"请登录",Toast.LENGTH_SHORT).show();
             return;
         }
-        if((goodsName!= null)&&(price != null)) {
-            price = price.substring(1,price.length());
-            zhiFuBaoUtil.payV2(mPopView, goodsName, price);
-            zhiFuBaoUtil.setOnPaySuccessfulListener(new ZhiFuBaoUtil.OnPaySuccessfulListener() {
-                @Override
-                public void isSuccessful(boolean isSuccessful) {
-                    /*Toast.makeText(activity," 我成功啦 isSuccessful:"+isSuccessful,Toast.LENGTH_LONG).show();*/
-                    if(!isSuccessful){
-                        helpMeSendBuyNetWorks = new HelpMeSendBuyNetWorks();
-                        Map<String,String> paramMap = new HashMap<String, String>();
-                        paramMap.put("userUsid",orderDetail.getUserUsid());
-                        paramMap.put("clientaddrAddr",orderDetail.getClientaddrAddr());
-                        paramMap.put("clientaddrAddr1",orderDetail.getClientaddrAddr1());
-                        paramMap.put("orderHeight",orderDetail.getOrderHeight());
-                        paramMap.put("orderName",orderDetail.getOrderName());
-                        paramMap.put("orderTimeliness",orderDetail.getOrderTimeliness());
-                        paramMap.put("orderRemark",orderDetail.getOrderRemark());
-                        paramMap.put("orderOrderprice",orderDetail.getOrderOrderprice());
-                        paramMap.put("orderMileage",orderDetail.getOrderMileage());
-                        paramMap.put("clientaddrArea",orderDetail.getClientaddrArea());
-                        paramMap.put("detailsGoodsname",orderDetail.getDetailsGoodsname());
-                        helpMeSendBuyNetWorks.orderUpdate(paramMap,new Observer<HelpMeBuyBean>() {
-                                @Override
-                                public void onCompleted() {
-                                    Toast.makeText(activity," onCompleted isSuccessful:",Toast.LENGTH_LONG).show();
-                                }
+        if((goodsName!= null)&&(price != null)&&(price.length()> 1)) {
 
-                                @Override
-                                public void onError(Throwable e) {
-                                    Toast.makeText(activity," onError isSuccessful:"+e,Toast.LENGTH_LONG).show();
-                                }
-
-                                @Override
-                                public void onNext(HelpMeBuyBean helpMeBuyBean) {
-                                    Toast.makeText(activity," 我成功啦111 isSuccessful:"+helpMeBuyBean.getOrderNo(),Toast.LENGTH_LONG).show();
-                                }
-                        });
-                    };
+            /*int index = price.indexOf("￥");*/
+            String first = price.substring(0,1);
+            if(!phoneFormatCheckUtils.IsIntNumber(first)) {
+                price = price.substring(1, price.length());
+                int index = price.indexOf(".");
+                if (index > 0) {
+                    price = price.substring(0, index);
                 }
-            });
+            }
+            pOrderToNet();
+
+
+
         }
     }
     /*支付宝支付*/
+
+    /*下单给后台*/
+    private void pOrderToNet(){
+        try {
+            /*判断物件重量*/
+            String weight = orderDetail.getOrderHeight();
+            int indexW = weight.indexOf("k");
+            if(indexW > 0){
+                weight = weight.substring(0,indexW);
+                if(phoneFormatCheckUtils.isDouble(weight)){
+                    orderDetail.setOrderHeight(weight);
+                }else{
+                    orderDetail.setOrderHeight("0");
+                }
+            }else{
+                orderDetail.setOrderHeight("0");
+            }
+            /*判断物件重量*/
+            helpMeSendBuyNetWorks = new HelpMeSendBuyNetWorks();
+            Map<String, String> paramMap = new HashMap<String, String>();
+            paramMap.put("userUsid", orderDetail.getUserUsid());
+            paramMap.put("clientaddrAddr", orderDetail.getClientaddrAddr());
+            paramMap.put("clientaddrAddr1", orderDetail.getClientaddrAddr1());
+            paramMap.put("orderHeight", orderDetail.getOrderHeight());
+            paramMap.put("orderName", orderDetail.getOrderName());
+            paramMap.put("orderTimeliness", orderDetail.getOrderTimeliness());
+            paramMap.put("orderRemark", orderDetail.getOrderRemark());
+            orderDetail.setOrderOrderprice(price);
+            if (phoneFormatCheckUtils.isDouble(price)) {
+
+                paramMap.put("orderOrderprice", price);
+            } else {
+                paramMap.put("orderOrderprice", "0");
+            }
+            /*Toast.makeText(activity,"this is price:"+paramMap.get("orderOrderprice"),Toast.LENGTH_SHORT).show();*/
+            if (phoneFormatCheckUtils.isDouble(orderDetail.getOrderMileage())) {
+                paramMap.put("orderMileage", orderDetail.getOrderMileage()+".0");
+            } else {
+                paramMap.put("orderMileage", "0");
+            }
+            paramMap.put("clientaddrArea", orderDetail.getClientaddrArea());
+            paramMap.put("detailsGoodsname", orderDetail.getDetailsGoodsname());
+            System.out.println("userUsid=" + orderDetail.getUserUsid() + "&" + "clientaddrAddr=" + orderDetail.getClientaddrAddr() + "&" + "clientaddrAddr1=" + orderDetail.getClientaddrAddr1() + "&" + "orderHeight=" + orderDetail.getOrderHeight() + "&" + "orderName=" + orderDetail.getOrderName() + "&"
+                    + "orderTimeliness=" + orderDetail.getOrderTimeliness() + "&" + "orderRemark=" + orderDetail.getOrderRemark() + "&" + "orderOrderprice=" + orderDetail.getOrderOrderprice() + "&" + "orderMileage=" + orderDetail.getOrderMileage() + "&" + "clientaddrArea=" + orderDetail.getClientaddrArea() + "&"
+                    + "detailsGoodsname=" + orderDetail.getDetailsGoodsname()
+            );
+            helpMeSendBuyNetWorks.orderUpdate(paramMap, new Observer<HelpMeBuyBean>() {
+                @Override
+                public void onCompleted() {
+                    /*Toast.makeText(activity, " onCompleted isSuccessful:", Toast.LENGTH_LONG).show();*/
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    /*Toast.makeText(activity, " onError isSuccessful:" + e, Toast.LENGTH_LONG).show();*/
+                }
+
+                @Override
+                public void onNext(final HelpMeBuyBean helpMeBuyBean) {
+                    /*Toast.makeText(activity, " onCompleted isSuccessful:", Toast.LENGTH_SHORT).show();*/
+                    goodsName = helpMeBuyBean.getOrderNo();
+                    /*Toast.makeText(activity, " onCompleted mPopView:"+goodsName+price, Toast.LENGTH_LONG).show();*/
+                    zhiFuBaoUtil.payV2(mPopView, goodsName, price);
+                    /*去支付金钱*/
+                    zhiFuBaoUtil.setOnPaySuccessfulListener(new ZhiFuBaoUtil.OnPaySuccessfulListener() {
+                        @Override
+                        public void isSuccessful(boolean isSuccessful) {
+                    /*Toast.makeText(activity," 我成功啦 isSuccessful:"+isSuccessful,Toast.LENGTH_LONG).show();*/
+                            if (isSuccessful) {
+                                if (helpMeBuyBean.getPaystatusPaystatus().equals("有待支付")) {
+                                    helpMeSendBuyNetWorks.orderPay(3, helpMeBuyBean.getOrderNo(), new Observer<BaseBean>() {
+                                        @Override
+                                        public void onCompleted() {
+
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+
+                                        }
+
+                                        @Override
+                                        public void onNext(BaseBean baseBean) {
+                                            Toast.makeText(activity, "" + baseBean.getResult(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } else if (helpMeBuyBean.getPaystatusPaystatus().equals("支付失败")) {
+                                    helpMeSendBuyNetWorks.orderPay(2, helpMeBuyBean.getOrderNo(), new Observer<BaseBean>() {
+                                        @Override
+                                        public void onCompleted() {
+
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+
+                                        }
+
+                                        @Override
+                                        public void onNext(BaseBean baseBean) {
+                                            Toast.makeText(activity, "" + baseBean.getResult(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            }
+
+                        }
+                    });
+                    /*去支付金钱*/
+                    /*Toast.makeText(activity," 我成功啦111 isSuccessful:"+helpMeBuyBean.getOrderNo(),Toast.LENGTH_LONG).show();*/
+                }
+            });
+        }catch (Exception e){
+            Toast.makeText(activity,"下单失败",Toast.LENGTH_SHORT).show();
+        }
+
+    }
+    /*下单给后台*/
+
 
 }

@@ -26,7 +26,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
-import tianhao.agoto.Adapter.PersonAdapter;
 import tianhao.agoto.Adapter.SwipFlingRecyclerViewAdapter;
 import tianhao.agoto.Common.DialogAlterView.LikeIosStyle.CustomDialog;
 import tianhao.agoto.Common.Widget.RecyclerView.EasyRecyclerView.EasyRecyclerView;
@@ -248,7 +247,7 @@ public class SwipFlingBean {
     public void initRecycleView(){
 
 /*        ervShoppingListContentPiperCardItemGoods.setLayoutManager(new LinearLayoutManager(context));
-        ervShoppingListContentPiperCardItemGoods.setAdapter(adapter = new PersonAdapter(context));*/
+       */
        /* GoodsBean bean = new GoodsBean();*/
       /*  recyclerViewAdapter = new SwipFlingRecyclerViewAdapter(context,goodsBeanList);*/
        /* recyclerViewAdapter.addData(bean);*/

@@ -3,17 +3,41 @@ package tianhao.agoto.Activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.navi.BaiduMapNavigation;
+import com.baidu.mapapi.search.route.BikingRouteLine;
+import com.baidu.mapapi.search.route.BikingRoutePlanOption;
+import com.baidu.mapapi.search.route.BikingRouteResult;
+import com.baidu.mapapi.search.route.DrivingRouteResult;
+import com.baidu.mapapi.search.route.IndoorRouteResult;
+import com.baidu.mapapi.search.route.MassTransitRouteResult;
+import com.baidu.mapapi.search.route.OnGetRoutePlanResultListener;
+import com.baidu.mapapi.search.route.PlanNode;
+import com.baidu.mapapi.search.route.RoutePlanSearch;
+import com.baidu.mapapi.search.route.TransitRouteResult;
+import com.baidu.mapapi.search.route.WalkingRouteResult;
 
 import java.security.PublicKey;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.BindView;
 import butterknife.OnClick;
+import tianhao.agoto.Bean.GoodsBean;
+import tianhao.agoto.Bean.OrderDetail;
 import tianhao.agoto.Common.DialogPopupWindow.PopupOnClickEvents;
+import tianhao.agoto.Common.Widget.DB.XCCacheManager.xccache.XCCacheManager;
 import tianhao.agoto.R;
+import tianhao.agoto.Utils.PhoneFormatCheckUtils;
+import tianhao.agoto.Utils.PriceUtil;
 
 /**
  *
@@ -25,6 +49,18 @@ public class HelpMeSendActivity extends Activity {
 
 
     PopupOnClickEvents popupOnClickEvents = new PopupOnClickEvents(this);
+    PhoneFormatCheckUtils phoneFormatCheckUtils = new PhoneFormatCheckUtils();
+    /*缓存*/
+    private XCCacheManager xcCacheManager;
+    /*缓存*/
+    private OrderDetail orderDetail;
+    /*距离*/
+    private int dis = 0;
+    /*距离*/
+    private String goodsName="",price="";
+    /*百度骑行引擎*/
+    private RoutePlanSearch mSearch;
+    /*百度骑行引擎*/
     /*帮我送*/
     @BindView(R.id.lly_helpmesend)
     LinearLayout llyHelpMeSend;
@@ -55,14 +91,23 @@ public class HelpMeSendActivity extends Activity {
 
 
     /*物品重量*/
+    @BindView(R.id.tv_helpmesend_content_goodsweight)
+    TextView tvHelpMeSendContentGoodsWeight;
     @BindView(R.id.lly_helpmesend_content_weight)
     LinearLayout llyHelpMeSendContentWeight;
     @OnClick(R.id.lly_helpmesend_content_weight)
+
     public void llyHelpMeSendContentWeightOnclick(){
         popupOnClickEvents.GoodsWeightSelect(llyHelpMeSend,tvHelpMeSendContentGoodsWeight);
+        popupOnClickEvents.setOnGoodsWeightSelectListener(new PopupOnClickEvents.OnGoodsWeightSelectListener() {
+            @Override
+            public void select() {
+                /*Toast.makeText(getBaseContext(),"here is onclick",Toast.LENGTH_SHORT).show();*/
+                startBikeNaviSearch();
+            }
+        });
     }
-    @BindView(R.id.tv_helpmesend_content_goodsweight)
-    TextView tvHelpMeSendContentGoodsWeight;
+
 
     /*物品重量*/
 
@@ -93,12 +138,35 @@ public class HelpMeSendActivity extends Activity {
         popupOnClickEvents.TimeSelect(llyHelpMeSend,tvHelpMeSendContentRecTime);
     }
     /*收件时间*/
+    /*备注*/
+    @BindView(R.id.et_helpmesend_content_remark)
+    EditText etHelpMeSendContentRemark;
+    /*备注*/
+    /*底部栏的该付款*/
+    @BindView(R.id.tv_helpmesend_bottombar_price)
+    TextView tvHelpMeSendBottomBarPrice;
+    /*底部栏的该付款*/
 
+    /*底部栏支付*/
+    @BindView(R.id.rly_helpmesend_bottombar_payconfirm)
+    RelativeLayout rlyHelpMeSendBottomBarPayConfirm;
+    @OnClick(R.id.rly_helpmesend_bottombar_payconfirm)
+    public void rlyHelpMeSendBottomBarPayConfirmOnclick(){
+
+
+        PopupOnClickEvents popupOnClickEvents = new PopupOnClickEvents(this);
+        initOrderDetail();
+        popupOnClickEvents.PayConfirm(llyHelpMeSend,orderDetail);
+    }
+    /*底部栏支付*/
 
     private final int RESULT_SENDER = 10;
     private final int RESULT_RECEIVER = 11;
 
-    private Double blat,rlat,blon,rlon;
+    private Double blat=0.0;
+    private Double rlat=0.0;
+    private Double blon=0.0;
+    private Double rlon=0.0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,6 +175,7 @@ public class HelpMeSendActivity extends Activity {
     }
     private void init(){
         ButterKnife.bind(this);
+        initRoutePlanDisNavi();
     }
     /*后退到主界面*/
     @OnClick(R.id.rly_helpmesend_topbar_leftmenu)
@@ -160,8 +229,8 @@ public class HelpMeSendActivity extends Activity {
             String nameCall=b.getString("nameCall");//str即为回传的值
             String address=b.getString("address");//str即为回传的值
             String telphone = b.getString("tel");
-            String lat = b.getString("blat");
-            String lon = b.getString("blon");
+            String lat = b.getString("lat");
+            String lon = b.getString("lon");
 
             if(isSender){
                 if((lat != null) && (lon != null)) {
@@ -180,11 +249,192 @@ public class HelpMeSendActivity extends Activity {
                     rlon = Double.parseDouble(lon);
                 }
             }
+            /*Toast.makeText(this,"this is helpmesend:lat"+lat+",lon:"+lon,Toast.LENGTH_SHORT).show();*/
         }
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*百度骑行导航初始化http://lbsyun.baidu.com/index.php?title=androidsdk/guide/bikenavi   http://wiki.lbsyun.baidu.com/cms/androidsdk/doc/v4_2_1/index.html
+   * http://lbsyun.baidu.com/index.php?title=androidsdk/guide/tool里面的步行导航中有骑行导航  再加上doc文档即可解决
+   * */
+    private void initRoutePlanDisNavi(){
+        mSearch = RoutePlanSearch.newInstance();
+        mSearch.setOnGetRoutePlanResultListener(new OnGetRoutePlanResultListener(){
+
+            @Override
+            public void onGetWalkingRouteResult(WalkingRouteResult walkingRouteResult) {
+
+            }
+
+            @Override
+            public void onGetTransitRouteResult(TransitRouteResult transitRouteResult) {
+
+            }
+
+            @Override
+            public void onGetMassTransitRouteResult(MassTransitRouteResult massTransitRouteResult) {
+
+            }
+
+            @Override
+            public void onGetDrivingRouteResult(DrivingRouteResult drivingRouteResult) {
+
+            }
+
+            @Override
+            public void onGetIndoorRouteResult(IndoorRouteResult indoorRouteResult) {
+
+            }
+
+            @Override
+            public void onGetBikingRouteResult(BikingRouteResult bikingRouteResult) {
+                if(bikingRouteResult != null){
+                    List<BikingRouteLine> bikingRouteLineList = bikingRouteResult.getRouteLines();
+                    if(bikingRouteLineList != null) {
+                        int count = bikingRouteLineList.size();
+                        int min = bikingRouteLineList.get(0).getDistance();
+                        for (int i = 0; i < count; i++) {
+                            if (min > bikingRouteLineList.get(i).getDistance()) {
+                                min = bikingRouteLineList.get(i).getDistance();
+                            }
+                            continue;
+                        }
+                        dis = min/1000;
+
+                        /*Toast.makeText(getBaseContext(),"两地骑行距离onGetBikingRouteResult:"+min,Toast.LENGTH_LONG).show();*/
+                        getPrice();
+                        /*Toast.makeText(getBaseContext(),"here is onGetBikingRouteResult:"+dis,Toast.LENGTH_SHORT).show();*/
+                    }
+                }
+            }
+        });
+
+
+    }
+    /*获取价格*/
+    private void getPrice(){
+        PriceUtil priceUtil = new PriceUtil(this);
+
+        tvHelpMeSendContentSendDis.setText(""+dis+"km");
+
+        if((tvHelpMeSendContentGoodsWeight.getText().toString() != null)&&(!tvHelpMeSendContentGoodsWeight.getText().toString().isEmpty())) {
+            String weight = tvHelpMeSendContentGoodsWeight.getText().toString();
+            int index = weight.indexOf("k");
+            if(index >0){
+                weight = weight.substring(0,index);
+                if(phoneFormatCheckUtils.isDouble(weight)){
+                    float tempWeight = Float.parseFloat(weight);
+                    price = priceUtil.gotoHelpMeSendlFee(dis, tempWeight);
+                }else {
+                    Toast.makeText(this, "请正确输入重量", Toast.LENGTH_SHORT).show();
+                }
+            }else{
+                if(phoneFormatCheckUtils.isDouble(weight)){
+                    float tempWeight = Float.parseFloat(weight);
+                    price = priceUtil.gotoHelpMeSendlFee(dis, tempWeight);
+                }else {
+                    Toast.makeText(this, "请正确输入重量", Toast.LENGTH_SHORT).show();
+                }
+            }
+            /*float weight = Float.parseFloat(weigh);*/
+
+            /*Toast.makeText(getBaseContext(),"here is getPrice:"+price,Toast.LENGTH_SHORT).show();*/
+        }
+        tvHelpMeSendBottomBarPrice.setVisibility(View.VISIBLE);
+        /*Toast.makeText(getBaseContext(),"here is getPrice tvHelpMeSendBottomBarPrice:"+price,Toast.LENGTH_SHORT).show();*/
+        tvHelpMeSendBottomBarPrice.setText(price);
+    }
+    /*获取价格*/
+    /*开始骑行路线规划*/
+    private void startBikeNaviSearch(){
+        /*Toast.makeText(getBaseContext(),"两地骑行距离startBikeNaviSearchBegin:"+blat+" "+blon+" "+rlat+" "+rlon,Toast.LENGTH_SHORT).show();*/
+        if((blat != 0) &&(blon != 0)&&(rlat !=0)&&(rlon != 0)) {
+            /*Toast.makeText(getBaseContext(),"两地骑行距离startBikeNaviSearchMiddle",Toast.LENGTH_SHORT).show();*/
+            LatLng blal = new LatLng(blat, blon);
+            LatLng elal = new LatLng(rlat, rlon);
+            PlanNode stNode = PlanNode.withLocation(blal);
+            PlanNode enNode = PlanNode.withLocation(elal);
+            mSearch.bikingSearch((new BikingRoutePlanOption())
+                    .from(stNode)
+                    .to(enNode));
+        }
+    }
+    /*开始骑行路线规划*/
+
+    /*百度骑行导航初始化http://lbsyun.baidu.com/index.php?title=androidsdk/guide/bikenavi   http://wiki.lbsyun.baidu.com/cms/androidsdk/doc/v4_2_1/index.html*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private void initOrderDetail(){
+        orderDetail = new OrderDetail();
+
+        xcCacheManager = XCCacheManager.getInstance(this);
+        String usid = xcCacheManager.readCache("usid");
+        /*Toast.makeText(this,"usid:"+usid,Toast.LENGTH_LONG).show();*/
+        orderDetail.setUserUsid(usid);
+        System.out.println(orderDetail.getUserUsid());
+        orderDetail.setClientaddrAddr(tvHelpMeSendContentSenderName.getText().toString() + " "+tvHelpMeSendContentSenderTel.getText().toString() + " "+tvHelpMeSendContentSenderAddr.getText().toString());
+        orderDetail.setClientaddrAddr1(tvHelpMeSendContentReceiverName.getText().toString()+" "+tvHelpMeSendContentReceiverTel.getText().toString()+" "+tvHelpMeSendContentReceiverAddr.getText().toString());
+        orderDetail.setOrderOrderprice(price);
+
+        orderDetail.setOrderMileage(""+dis);
+
+        orderDetail.setOrderName(tvHelpMeSendContentGoodsType.getText().toString());
+        orderDetail.setOrderTimeliness(tvHelpMeSendContentRecTime.getText().toString());
+        orderDetail.setOrderRemark(etHelpMeSendContentRemark.getText().toString());
+        /*Toast.makeText(this,"helpmesend:"+tvHelpMeSendContentGoodsWeight.getText().toString(),Toast.LENGTH_SHORT).show();*/
+
+        orderDetail.setOrderHeight(tvHelpMeSendContentGoodsWeight.getText().toString());
+
+    }
+
+
+    protected void onResume(){
+        super.onResume();
+        /*Toast.makeText(this,"here is onResume",Toast.LENGTH_SHORT).show();*/
+        startBikeNaviSearch();
+    }
+    protected void onStart(){
+        super.onStart();
+        /*Toast.makeText(this,"here is onResume",Toast.LENGTH_SHORT).show();*/
+        startBikeNaviSearch();
+    }
     protected void onStop(){
         super.onStop();
 
+
+    }
+
+    protected void onDestroy(){
+        super.onDestroy();
+        BaiduMapNavigation.finish(this);
+        mSearch.destroy();
     }
 }

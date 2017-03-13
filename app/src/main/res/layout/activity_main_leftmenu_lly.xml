@@ -30,7 +30,7 @@
                 android:id="@+id/civ_main_leftmenu_headimg"
                 android:layout_width="@dimen/activity_main_leftmenu_headImage_size"
                 android:layout_height="@dimen/activity_main_leftmenu_headImage_size"
-                android:src="@drawable/headimagetest"
+                android:src="@drawable/gotohead"
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="@dimen/activity_main_leftmenu_paddingleft_right_size"
                 android:scaleType="fitXY"
@@ -301,8 +301,9 @@
                 />
         </RelativeLayout>
         <!--设置-->
-        <!--官方热线-->
+        <!--退出登录-->
         <RelativeLayout
+            android:id="@+id/rly_main_leftmenu_exitlogin"
             android:layout_width="match_parent"
             android:layout_height="@dimen/zero"
             android:layout_weight="1"
@@ -322,7 +323,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/activity_main_leftmenu_ico_height"
                 android:textColor="@color/colorMainActivityLeftMenuWordBg"
-                android:text="@string/hotTelForGov"
+                android:text="@string/exitLogin"
                 android:textSize="@dimen/activity_main_leftmenu_menu_word_textsize"
                 android:layout_centerInParent="true"
                 android:layout_toRightOf="@id/iv_main_leftmenu_govtel"
@@ -342,7 +343,7 @@
                 android:layout_marginRight="@dimen/activity_main_leftmenu_paddingleft_right_size"
                 />
         </RelativeLayout>
-        <!--官方热线-->
+        <!--退出登录-->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/zero"

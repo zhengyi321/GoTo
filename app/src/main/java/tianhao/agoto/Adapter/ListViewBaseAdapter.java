@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.List;
 
 import tianhao.agoto.Bean.GoodsBean;
-import tianhao.agoto.Bean.SwipFlingBean;
 import tianhao.agoto.R;
 
 /**

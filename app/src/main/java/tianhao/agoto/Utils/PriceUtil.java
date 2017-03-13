@@ -1,6 +1,8 @@
 package tianhao.agoto.Utils;
 
+import android.app.Activity;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.Date;
 
@@ -9,7 +11,10 @@ import java.util.Date;
  */
 
 public class PriceUtil {
-
+    private Activity activity;
+    public PriceUtil(Activity activity1){
+        activity = activity1;
+    }
    /* 走兔代购价格表:时间10点-21点  代购数量为1件物品的时候:3km以内10元、3+n km价格10+2n ：n小于等于17km、超20km价格为2*(10+2n)。代购数量为1+m件的时候：3km以内10+3m元、3+n km价格10+3m+2n ：n小于等于17km、超20km价格为2*(10+3m+2n)
                     时间为21点到临晨1点  代购数量为1件物品的时候:3km以内10*2元、3+n km价格（10+2n）*2 ：n小于等于17km、超20km价格为2*(10+2n)*2。代购数量为1+m件的时候：3km以内（10+3m）*2元、3+n km价格（10+3m+2n）*2 ：n小于等于17km、超20km价格为2*(10+3m+2n)*2*/
     public String gotoHelpMeBuylFee(float dis,int num){
@@ -24,7 +29,7 @@ public class PriceUtil {
             if(num == 1){
                 if(dis <= 3) {
                     price += "10";
-                }else if((dis >= 3)&&(dis <= 2)){
+                }else if((dis >= 3)&&(dis <= 20)){
                     float fee = 10 + 2*(dis -3);
                     price +=  ""+fee;
                 }else if(dis > 20){
@@ -67,6 +72,8 @@ public class PriceUtil {
                     price += ""+fee;
                 }
             }
+        }else if((hour > 1)&&(hour < 10)){
+            Toast.makeText(activity,"尊敬的客户，我们兔子还没有出门呢（快递员还没有上班，10点开始上班）",Toast.LENGTH_LONG).show();
         }
         Log.i("gotoHelpMeBuylFee",""+price);
         return price;
@@ -85,57 +92,66 @@ public class PriceUtil {
         String price = "￥";
         TimeUtil timeUtil = new TimeUtil();
         int hour = timeUtil.getHour(new Date());
+        Log.i("gotoHelpMeSendlFee",""+hour);
         if(hour < 0){
             return "";
         }
-        Log.i("gotoHelpMeSendlFee",""+hour);
+
         if((hour >=10)&&(hour <=21)){
             if(weight <= 10){
                 if(dis <= 3) {
-                    price = "7";
+                    price += "7";
                 }else if((dis >= 3)&&(dis <= 20)){
                     float fee = 7 + 2*(dis -3);
-                    price =  ""+fee;
+                    price +=  ""+fee;
                 }else if(dis > 20){
                     float fee =2*(7 + 2*(dis -3));
-                    price = ""+fee;
+                    price += ""+fee;
                 }
             }else if(weight > 10){
                 if(dis <= 3) {
                     float fee = 7 + ((weight -10)*2);
-                    price = ""+fee;
+                    price += ""+fee;
                 }else if((dis >= 3)&&(dis <= 20)){
                     float fee = 7 +((weight -10)*2) + (2*(dis -3));
-                    price =  ""+fee;
+                    price +=  ""+fee;
                 }else if(dis > 20){
                     float fee =2*(7 + ((weight -10)*2) + (2*(dis -3)));
-                    price = ""+fee;
+                    price += ""+fee;
                 }
             }
         }else if((hour > 21)||(hour <= 1)){
-            if(dis <= 3) {
-                float fee = 7*2;
-                price = ""+fee;
-            }else if((dis >= 3)&&(dis <= 20)){
-                float fee = (7 + 2*(dis -3))*2;
-                price =  ""+fee;
-            }else if(dis > 20){
-                float fee =2*(7 + 2*(dis -3))*2;
-                price = ""+fee;
-            }
-        }else if(weight > 10){
-            if(dis <= 3) {
-                float fee = (7 + ((weight -10)*2))*2;
-                price = ""+fee;
-            }else if((dis >= 3)&&(dis <= 20)){
-                float fee = (7 +((weight -10)*2) + (2*(dis -3)))*2;
-                price =  ""+fee;
-            }else if(dis > 20){
-                float fee =2*(7 + ((weight -10)*2) + (2*(dis -3)))*2;
-                price = ""+fee;
-            }
 
+
+            if(weight <= 10) {
+                if (dis <= 3) {
+                    float fee = 7 * 2;
+                    price += "" + fee;
+                } else if ((dis >= 3) && (dis <= 20)) {
+                    float fee = (7 + 2 * (dis - 3)) * 2;
+                    price += "" + fee;
+                } else if (dis > 20) {
+                    float fee = 2 * (7 + 2 * (dis - 3)) * 2;
+                    price += "" + fee;
+                }
+            }else if(weight > 10){
+
+                    if(dis <= 3) {
+                        float fee = (7 + ((weight -10)*2))*2;
+                        price += ""+fee;
+                    }else if((dis >= 3)&&(dis <= 20)){
+                        float fee = (7 +((weight -10)*2) + (2*(dis -3)))*2;
+                        price +=  ""+fee;
+                    }else if(dis > 20){
+                        float fee =2*(7 + ((weight -10)*2) + (2*(dis -3)))*2;
+                        price += ""+fee;
+                    }
+
+            }
+        }else if((hour > 1)&&(hour < 10)){
+            Toast.makeText(activity,"尊敬的客户，我们兔子还没有出门呢（快递员还没有上班，10点开始上班）",Toast.LENGTH_LONG).show();
         }
+
         Log.i("gotoHelpMeSendlFee",""+price);
         return price;
     }

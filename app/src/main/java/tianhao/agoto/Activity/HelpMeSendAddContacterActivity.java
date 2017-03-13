@@ -106,7 +106,7 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
 
     @BindView(R.id.rly_helpmesendadd_contacter_addresssearch)
     RelativeLayout rlyHelpMeSendAddContacterAddressSearch;
-    private double lat,lon;
+    private double lat = 0,lon = 0;
 
     @BindView(R.id.tv_helpmesendadd_contacter_contentname)
     TextView tvHelpMeSendAddContacterContentName;
@@ -568,9 +568,8 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
             String latt = b.getString("lat");
             String lonn = b.getString("lon");
             if((latt != null) && (lonn != null)) {
-                lat = Double.parseDouble(latt);
-                lon = Double.parseDouble(lonn);
-                location(lat, lon);
+
+                location(Double.parseDouble(latt), Double.parseDouble(lonn));
                 tvHelpMeSendAddContacterContentAddr.setText(address);
             }
         }
@@ -693,6 +692,8 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
 
     /**经纬度地址动画显示在屏幕中间  有关mark网站的出处http://blog.csdn.net/callmesen/article/details/40540895**/
     private void location(double latitude,double longitude){
+        lat = latitude;
+        lon = longitude;
         mBaiduMap.clear();
         LatLng ll = new LatLng(latitude, longitude);
         //定义地图状态
@@ -702,7 +703,9 @@ public class HelpMeSendAddContacterActivity extends Activity implements BaiduMap
                 .build();
         //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
-        mBaiduMap.animateMapStatus(mMapStatusUpdate);
+        if(mMapStatusUpdate != null) {
+            mBaiduMap.animateMapStatus(mMapStatusUpdate);
+        }
         //准备 marker   的图片  定位图标
         /*BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.search_map);*/
         TextView textView = new TextView(this);

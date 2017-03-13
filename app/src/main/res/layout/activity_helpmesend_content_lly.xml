@@ -550,6 +550,7 @@
                 >
                 <!--edittext焦点问题就是在父控件里假如focusable 和focusableintouchmod属性 输入从开始处开始必须gravity=start-->
                 <EditText
+                    android:id="@+id/et_helpmesend_content_remark"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginRight="@dimen/activity_helpmebuy_content_shoppingorder_edittext_margin_right_size"

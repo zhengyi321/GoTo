@@ -278,13 +278,14 @@ public class HelpMeBuyActivity extends Activity  {
     }
     /*获取价格*/
     private void getPrice(){
-        PriceUtil priceUtil = new PriceUtil();
+        PriceUtil priceUtil = new PriceUtil(this);
         float dist = dis/1000;
         price = priceUtil.gotoHelpMeBuylFee(dist,helpMeBuyShoppingMenuRecyclerViewAdapter.getItemCount());
         tvHelpMeBuyBottomBarFee.setVisibility(View.VISIBLE);
         tvHelpMeBuyBottomBarFee.setText(price);
     }
     /*获取价格*/
+    /*开始骑行路线规划*/
     private void startBikeNaviSearch(){
         /*Toast.makeText(getBaseContext(),"两地骑行距离startBikeNaviSearchBegin:"+blat+" "+blon+" "+rlat+" "+rlon,Toast.LENGTH_SHORT).show();*/
         if((blat != 0) &&(blon != 0)&&(rlat !=0)&&(rlon != 0)) {
@@ -298,7 +299,7 @@ public class HelpMeBuyActivity extends Activity  {
                     .to(enNode));
         }
     }
-
+    /*开始骑行路线规划*/
 
     /*百度骑行导航初始化http://lbsyun.baidu.com/index.php?title=androidsdk/guide/bikenavi   http://wiki.lbsyun.baidu.com/cms/androidsdk/doc/v4_2_1/index.html*/
 
@@ -390,7 +391,7 @@ public class HelpMeBuyActivity extends Activity  {
         }
     }
     /*帮我买购物清单*/
- /*购买地址*/
+    /*购买地址*/
     @OnClick(R.id.lly_helpmebuy_sellerdetail)
     public void llyHelpMeBuySellerDetailOnclick(){
         Intent intent = new Intent(this,HelpMeBuyAddShopDetailActivity.class);
@@ -524,11 +525,11 @@ public class HelpMeBuyActivity extends Activity  {
 
         xcCacheManager = XCCacheManager.getInstance(this);
         String usid = xcCacheManager.readCache("usid");
-        Toast.makeText(this,"usid:"+usid,Toast.LENGTH_LONG).show();
+        /*Toast.makeText(this,"usid:"+usid,Toast.LENGTH_LONG).show();*/
         orderDetail.setUserUsid(usid);
         System.out.println(orderDetail.getUserUsid());
-        orderDetail.setClientaddrAddr(tvHelpMeBuyContentAddress.getText().toString() + " "+tvHelpMeBuyContentAddressDetail.getText().toString());
-        orderDetail.setClientaddrAddr1(tvHelpMeBuyContentReceiveName.getText().toString()+" "+tvHelpMeBuyContentReceiveTel.getText().toString()+" "+tvHelpMeBuyContentReceiveAddressDetail.getText().toString());
+        orderDetail.setClientaddrAddr(tvHelpMeBuyContentAddress.getText().toString() + ";"+tvHelpMeBuyContentAddressDetail.getText().toString());
+        orderDetail.setClientaddrAddr1(tvHelpMeBuyContentReceiveName.getText().toString()+";"+tvHelpMeBuyContentReceiveTel.getText().toString()+";"+tvHelpMeBuyContentReceiveAddressDetail.getText().toString());
         String remark = "";
         if((addRemarkList != null)&&(addRemarkList.size() > 0)) {
             for (int i=0; i<addRemarkList.size();i++){

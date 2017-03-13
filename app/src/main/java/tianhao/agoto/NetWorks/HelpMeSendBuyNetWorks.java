@@ -32,18 +32,31 @@ public class HelpMeSendBuyNetWorks extends BaseNetWork{
         /*用户注册*/
         //GET请求
 
+        /*订单提交*/
         @GET("orders/appsave.do")
         Observable<HelpMeBuyBean> orderUpdate(@QueryMap Map<String, String> param);
+        /*订单提交*/
+        /*支付*/
+        @GET("addrs/apppaysave.do")
+        Observable<BaseBean> orderPay(@Query("paystatusPaystatus") int payStatus,@Query("orderNo") String orderNo);
+        /*支付*/
+
     /*        @GET("orders/appsave.do")
         Observable<HelpMeBuyBean> orderUpdate(@Query("userUsid") String usid, @Query("clientaddrAddr") String address, @Query("clientaddrAddr1") String address1, @Query("orderHeight") String orderHeight, @Query("orderName") String orderName, @Query("orderTimeliness") String orderTimeliness, @Query("orderRemark") String orderRemark, @Query("orderOrderprice") String orderOrderprice, @Query("orderMileage") String orderMileage, @Query("clientaddrArea") String clientaddrArea, @Query("detailsGoodsname") String detailsGoodsname
     */
 
 
     }
-
+    /*订单提交*/
     public  void orderUpdate(@QueryMap Map<String, String> param, Observer<HelpMeBuyBean> observer){
         setSubscribe(service.orderUpdate( param),observer);
     }
+    /*订单提交*/
+    /*订单支付*/
+    public void orderPay( int payStatus, String orderNo,Observer<BaseBean> observer){
+        setSubscribe(service.orderPay(payStatus,orderNo),observer);
+    }
+    /*订单支付*/
     /*public  void orderUpdate( String usid, String address, String address1, String orderHeight, String orderName, String orderTimeliness, String orderRemark, String orderOrderprice, String orderMileage, String clientaddrArea, String detailsGoodsname, Observer<HelpMeBuyBean> observer){
         setSubscribe(service.orderUpdate(  usid,  address,  address1,  orderHeight,  orderName,  orderTimeliness,  orderRemark,  orderOrderprice,  orderMileage,  clientaddrArea,  detailsGoodsname),observer);
     }*/

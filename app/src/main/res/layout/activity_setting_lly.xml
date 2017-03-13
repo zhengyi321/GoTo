@@ -11,5 +11,5 @@
         >
     <include layout="@layout/activity_setting_content_lly"/>
     </RelativeLayout>
-    <include layout="@layout/activity_setting_bottombar_rly"/>
+   <!-- <include layout="@layout/activity_setting_bottombar_rly"/>-->
 </LinearLayout>

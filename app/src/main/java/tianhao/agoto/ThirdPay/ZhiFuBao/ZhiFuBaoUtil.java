@@ -154,7 +154,7 @@ public class ZhiFuBaoUtil {
          * orderInfo的获取必须来自服务端；
          */
         boolean rsa2 = (RSA2_PRIVATE.length() > 0);
-        price = "0.01";
+        /*price = "0.01";*/
         Map<String, String> params = OrderInfoUtil2_0.buildOrderParamMap(APPID, rsa2,goodsName,price);
         String orderParam = OrderInfoUtil2_0.buildOrderParam(params);
 
