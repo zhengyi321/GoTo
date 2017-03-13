@@ -13,13 +13,13 @@
         >
 
     </ImageView>
-    <tianhao.agoto.Common.Widget.ViewPager.MyViewPager
+    <android.support.v4.view.ViewPager
         android:id="@+id/mvp_splash_content"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_centerInParent="true"
         >
-    </tianhao.agoto.Common.Widget.ViewPager.MyViewPager>
+    </android.support.v4.view.ViewPager>
     <LinearLayout
         android:id="@+id/lly_splash_content"
         android:layout_width="match_parent"

@@ -44,6 +44,18 @@ public class SplashViewPageAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup parent, int position) {
+
+     /*   switch (position){
+            case 0:
+                dataList.get(position).setImageResource(R.drawable.splash1);
+                break;
+            case 1:
+                dataList.get(position).setImageResource(R.drawable.splash2);
+                break;
+            case 2:
+                dataList.get(position).setImageResource(R.drawable.splash3);
+                break;
+            }*/
         /*Widget widget;
 
 
@@ -70,13 +82,13 @@ public class SplashViewPageAdapter extends PagerAdapter {
                 }
             });
         }*/
-        ImageView v= dataList.get(position);
-        parent.addView(v,0);
-            return v;
+
+        parent.addView(dataList.get(position),0);
+            return dataList.get(position);
     }
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((dataList.get(position)));
+        container.removeView((dataList.get(position%dataList.size())));
     }
     public class Widget{
         @BindView(R.id.iv_splash_vp_item)
