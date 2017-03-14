@@ -9,4 +9,5 @@
         android:background="@drawable/splash1"
         android:scaleType="fitXY"
         />
+
 </RelativeLayout>

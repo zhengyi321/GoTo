@@ -2,7 +2,6 @@ package tianhao.agoto.Common.DialogPopupWindow;
 
 import android.app.Activity;
 import android.content.Context;
-import android.database.Observable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +11,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.tencent.mm.sdk.modelpay.PayReq;
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,9 +24,7 @@ import tianhao.agoto.Bean.HelpMeBuyBean;
 import tianhao.agoto.Bean.OrderDetail;
 import tianhao.agoto.NetWorks.HelpMeSendBuyNetWorks;
 import tianhao.agoto.R;
-import tianhao.agoto.ThirdPay.WeiXin.Constants;
-import tianhao.agoto.ThirdPay.WeiXin.asyncTask.WXPayTask;
-import tianhao.agoto.ThirdPay.WeiXin.bean.Order;
+import tianhao.agoto.ThirdPay.WeiXin.WeChatPayService;
 import tianhao.agoto.ThirdPay.ZhiFuBao.ZhiFuBaoUtil;
 import tianhao.agoto.Utils.PhoneFormatCheckUtils;
 
@@ -121,8 +114,19 @@ public class PayConfirmPopup extends PopupWindow {
     private View mPopView;
     private Activity activity;
     /*微信支付*/
-    private PayReq req;
-     IWXAPI msgApi/* = WXAPIFactory.createWXAPI(activity, null)*/;
+    /**
+     * 订单ID
+     */
+    private String orderId ="223324";
+
+    /**
+     * 最后需要支付的金额
+     */
+    private String fastAmount ="10";
+    /**
+     * 不同类型的订单
+     */
+    int type = 10;
     /*微信支付*/
     private ZhiFuBaoUtil zhiFuBaoUtil;
     private String goodsName,price;
@@ -133,7 +137,6 @@ public class PayConfirmPopup extends PopupWindow {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mPopView= inflater.inflate(R.layout.dialogpopup_payconfirm_lly, null);
         this.activity = activity;
-        msgApi = WXAPIFactory.createWXAPI(activity, "wxf180adf1575a69e0");
         goodsName = "走兔";
         orderDetail = orderDetail1;
         if(orderDetail.getOrderOrderprice() != null) {
@@ -200,32 +203,10 @@ public class PayConfirmPopup extends PopupWindow {
 
     /*微信支付*/
     public void wxPay(){
-        /*Toast.makeText(activity, "测试", Toast.LENGTH_SHORT).show();*/
-        req = new PayReq();
-        Constants constants = new Constants();
-        msgApi.registerApp(constants.APP_ID);
-        Order order = new Order();
-        order.setAppId("wxf180adf1575a69e0");
-        order.setBody("会员充值中心");
-        order.setParaTradeNo(System.currentTimeMillis()+"");
-        order.setTotalFee(0.1);
-        order.setAttach("json");//附加参数
-        order.setNofityUrl("http://www.baidu.com");//支付成功服务端回调通知的地址
-        order.setDeviceInfo("");
-        PayReq request = new PayReq();
-        request.appId = "wxf180adf1575a69e0";
-        request.partnerId = "1900000109";
-        request.prepayId= "1101000000140415649af9fc314aa427";
-        request.packageValue = "Sign=WXPay";
-        request.nonceStr= "1101000000140429eb40476f8896f4c9";
-        request.timeStamp= "1398746574";
-        request.sign= "7FFECB600D7157C5AA49810D2D8F28BC2811827B";
-        msgApi.sendReq(req);
-       /* req.appId = "wxf180adf1575a69e0";
-
-
-        msgApi.sendReq(req);*/
-        /*new WXPayTask(activity).execute(order);*/
+        Toast.makeText(activity,"this is wxpay",Toast.LENGTH_SHORT).show();
+        String body = "测试商品不描述";
+        WeChatPayService weChatPay = new WeChatPayService(activity,type, orderId, body, fastAmount);
+        weChatPay.pay();
     }
     /*微信支付*/
     /*支付宝支付*/

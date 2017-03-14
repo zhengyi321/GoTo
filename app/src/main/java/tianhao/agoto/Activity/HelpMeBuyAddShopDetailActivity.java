@@ -620,8 +620,12 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
                 .build();
         //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
-        if(mMapStatusUpdate != null) {
-            mBaiduMap.animateMapStatus(mMapStatusUpdate);
+        try {
+            if(mMapStatusUpdate != null) {
+                mBaiduMap.animateMapStatus(mMapStatusUpdate);
+            }
+        }catch (Exception e){
+
         }
         //准备 marker   的图片  定位图标
         /*BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.search_map);*/

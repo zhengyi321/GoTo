@@ -161,8 +161,15 @@
 
 
 
-
-
+        <!-- 微信支付回调界面 -->
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:screenOrientation="behind" >
+        </activity>
+        <!-- 微信支付回调界面 -->
 
 
         <!--支付宝-->

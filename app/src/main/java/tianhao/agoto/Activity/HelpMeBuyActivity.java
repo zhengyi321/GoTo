@@ -203,7 +203,7 @@ public class HelpMeBuyActivity extends Activity  {
     private RoutePlanSearch mSearch;
     BikeNaviLauchParam param;
     private final String LTAG = "BaiduQiXing导航引擎";
-    private static boolean isPermissionRequested = false;
+
     /*百度骑行引擎*/
 
     private String goodsName,price;
@@ -727,7 +727,6 @@ public class HelpMeBuyActivity extends Activity  {
     }
     protected void onPause(){
         super.onPause();
-
     }
     protected void onStop(){
         super.onStop();

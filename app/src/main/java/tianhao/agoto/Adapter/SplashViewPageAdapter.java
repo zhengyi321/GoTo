@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 
 import com.mob.tools.gui.ViewPagerAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -24,11 +25,12 @@ import tianhao.agoto.R;
 
 public class SplashViewPageAdapter extends PagerAdapter {
 
-    private List<ImageView> dataList ;
+    private List<View> dataList;
     private Activity activity;
-    public SplashViewPageAdapter(Activity activity1,List<ImageView> dataList1){
+    public SplashViewPageAdapter(Activity activity1,List<View> dataList1){
         activity = activity1;
-        dataList = dataList1;
+
+        dataList=dataList1;
     }
 
     @Override
@@ -44,7 +46,6 @@ public class SplashViewPageAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup parent, int position) {
-
      /*   switch (position){
             case 0:
                 dataList.get(position).setImageResource(R.drawable.splash1);
@@ -88,14 +89,8 @@ public class SplashViewPageAdapter extends PagerAdapter {
     }
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((dataList.get(position%dataList.size())));
+        container.removeView((dataList.get(position)));
     }
-    public class Widget{
-        @BindView(R.id.iv_splash_vp_item)
-        ImageView ivSplashVpItem;
-        public Widget(View view){
-            ButterKnife.bind(this,view);
-        }
-    }
+
 
 }
