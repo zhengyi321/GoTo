@@ -131,6 +131,8 @@ public class WeChatPayService {
 
 	/**
 	 * 发送支付请求
+	 *
+	 * https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=4_3
 	 * @param prepayId 预付Id
 	 */
 	private void sendPayReq(String prepayId) {
