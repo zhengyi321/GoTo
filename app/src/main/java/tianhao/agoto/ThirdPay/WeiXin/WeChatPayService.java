@@ -152,9 +152,11 @@ public class WeChatPayService {
 		signParams.add(new BasicNameValuePair("prepayid", req.prepayId));
 		signParams.add(new BasicNameValuePair("timestamp", req.timeStamp));
 
-		String stringA="appid="+req.appId+"&noncestr="+req.nonceStr+"&package="+req.packageValue+"&prepayid="+req.prepayId+"&partnerid="+req.prepayId+"&timestamp="+req.timeStamp;
-		String stringSignTemp=stringA + "&key=AtYI3984uwOn9635ypOE7291oeBn8428";
+		String stringA="appid="+req.appId+"&noncestr="+req.nonceStr+"&package="+req.packageValue+"&partnerid="+req.prepayId+"&prepayid="+req.prepayId+"&timestamp="+req.timeStamp;
+		String stringSignTemp= stringA + "&key=AtYI3984uwOn9635ypOE7291oeBn8428";
+		Toast.makeText(context,"stringSignTemp:"+stringSignTemp,Toast.LENGTH_SHORT).show();
 		String sign=MD5(stringSignTemp).toUpperCase();
+		Toast.makeText(context,"sign:"+sign,Toast.LENGTH_SHORT).show();
 		req.sign = sign;
 		signParams.add(new BasicNameValuePair("sign", req.sign));
 		// 传递的额外信息,字符串信息,自定义格式
