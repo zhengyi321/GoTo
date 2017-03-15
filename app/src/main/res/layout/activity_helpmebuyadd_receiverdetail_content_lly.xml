@@ -10,9 +10,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/zero"
+        android:layout_height="45dp"
         android:orientation="horizontal"
-        android:layout_weight="1"
         android:background="@color/colorActivityAddressManageAddContacterContentWhiteBg"
         >
         <RelativeLayout
@@ -36,14 +35,15 @@
             android:layout_height="match_parent"
             android:layout_weight="1.5"
             >
-            <TextView
-                android:id="@+id/tv_helpmebuyadd_receiverdetail_content_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <EditText
+                android:id="@+id/et_helpmebuyadd_receiverdetail_content_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:textColor="@color/colorActivityAddressManageAddContacterContentBlackWordBg"
                 android:textSize="15sp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
+                android:background="@null"
                 />
             <!--<TextView
                 android:layout_width="wrap_content"
@@ -78,14 +78,15 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             >
-            <TextView
-                android:id="@+id/tv_helpmebuyadd_receiverdetail_content_tel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <EditText
+                android:id="@+id/et_helpmebuyadd_receiverdetail_content_tel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:textColor="@color/colorActivityAddressManageAddContacterContentBlackWordBg"
                 android:textSize="15sp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
+                android:background="@null"
                 />
             <!--<TextView
                 android:layout_width="wrap_content"
@@ -129,9 +130,8 @@
     <LinearLayout
         android:id="@+id/lly_helpmebuyadd_receiverdetail_addresssearch"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/zero"
+        android:layout_height="45dp"
         android:orientation="horizontal"
-        android:layout_weight="1"
         android:background="@color/colorActivityAddressManageAddContacterContentWhiteBg"
         >
         <RelativeLayout

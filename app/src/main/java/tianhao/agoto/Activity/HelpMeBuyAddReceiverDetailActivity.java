@@ -132,10 +132,10 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
     /*手机通讯录*/
     @BindView(R.id.rly_helpmebuyadd_receiverdetail_addcontacter)
     RelativeLayout rlyHelpMeBuyAddReceiverDetailAddContacter;
-    @BindView(R.id.tv_helpmebuyadd_receiverdetail_content_name)
-    TextView tvHelpMeBuyAddReceiverDetailContentName;
-    @BindView(R.id.tv_helpmebuyadd_receiverdetail_content_tel)
-    TextView tvHelpMeBuyAddReceiverDetailContentTel;
+    @BindView(R.id.et_helpmebuyadd_receiverdetail_content_name)
+    EditText etHelpMeBuyAddReceiverDetailContentName;
+    @BindView(R.id.et_helpmebuyadd_receiverdetail_content_tel)
+    EditText etHelpMeBuyAddReceiverDetailContentTel;
 
     /*手机通讯录*/
     /*返回*/
@@ -199,8 +199,8 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
     @OnClick(R.id.rly_helpmebuyadd_receiverdetail_topbar_rightmenu)
     public void rlyHelpMeBuyAddReceiverDetailTopBarRightMenuOnclick(){
         Bundle bundle = new Bundle();
-        bundle.putString("nameCall",tvHelpMeBuyAddReceiverDetailContentName.getText().toString());
-        bundle.putString("tel",tvHelpMeBuyAddReceiverDetailContentTel.getText().toString());
+        bundle.putString("nameCall",etHelpMeBuyAddReceiverDetailContentName.getText().toString());
+        bundle.putString("tel",etHelpMeBuyAddReceiverDetailContentTel.getText().toString());
         bundle.putString("address",tvHelpMeBuyAddReceiverDetailContentAddress.getText().toString());
         bundle.putString("rlat", "" + rlat);
         bundle.putString("rlon", "" + rlon);
@@ -234,14 +234,14 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
                  } else {
                      hasPhone = "false";
                  }
-                 tvHelpMeBuyAddReceiverDetailContentName.setText(name);
+                 etHelpMeBuyAddReceiverDetailContentName.setText(name);
                  if (Boolean.parseBoolean(hasPhone)) {
                      int contactId = c.getInt(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
                      Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
                      while (phones.moveToNext()) {
                          phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                          if (phoneNumber != null) {
-                             tvHelpMeBuyAddReceiverDetailContentTel.setText(phoneNumber);
+                             etHelpMeBuyAddReceiverDetailContentTel.setText(phoneNumber);
                          }
                      }
                      phones.close();
@@ -755,10 +755,14 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
                 .target(ll)
                 /*.zoom(40)*/
                 .build();
-        //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
-        MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
-        if(mMapStatusUpdate != null) {
-            mBaiduMap.animateMapStatus(mMapStatusUpdate);
+        try {
+            //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
+            MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
+            if (mMapStatusUpdate != null) {
+                mBaiduMap.animateMapStatus(mMapStatusUpdate);
+            }
+        }catch (Exception e){
+
         }
         //准备 marker   的图片  定位图标
         /*BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.search_map);*/
