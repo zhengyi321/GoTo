@@ -20,7 +20,7 @@
     <string name="app_finish">完成</string>
     <string name="app_find">查找</string>
     <string name="app_edit">编辑</string>
-
+    <string name="errcode_unsupported">不支持错误</string>
     <!-- applet -->
     <string name="applet_secimg_title">填写验证码</string>
     <string name="applet_secimg_change">换一张图片</string>

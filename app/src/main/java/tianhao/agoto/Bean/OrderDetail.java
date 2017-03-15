@@ -6,39 +6,39 @@ package tianhao.agoto.Bean;
 
 public class OrderDetail {
     /*用户id*/
-    private String userUsid = "";
+    private String userUsid = " ";
     /*用户id*/
     /*寄件信息:姓名＋详细地址＋联系方式*/
-    private String clientaddrAddr= "";
+    private String clientaddrAddr= " ";
     /*寄件信息:姓名＋详细地址＋联系方式*/
     /*收件信息:姓名＋详细地址＋联系方式*/
-    private String clientaddrAddr1= "";
+    private String clientaddrAddr1= " ";
     /*收件信息:姓名＋详细地址＋联系方式*/
     /*重量*/
-    private String orderHeight= "";
+    private String orderHeight= " ";
     /*重量*/
     /*物品种类*/
-    private String orderName= "";
+    private String orderName= " ";
     /*物品种类*/
     /*收件时间*/
-    private String orderTimeliness= "";
+    private String orderTimeliness= " ";
     /*收件时间*/
     /*备注*/
-    private String orderRemark= "";
+    private String orderRemark= " ";
     /*备注*/
     /*价格*/
-    private String orderOrderprice= "";
+    private String orderOrderprice= " ";
     /*价格*/
     /*里程*/
 
 
-    private String orderMileage= "";
+    private String orderMileage= " ";
     /*里程*/
     /*区域(镇名)*/
-    private String clientaddrArea= "";
+    private String clientaddrArea= " ";
     /*区域(镇名)*/
     /*清单*/
-    private String detailsGoodsname= "";
+    private String detailsGoodsname= " ";
     /*清单*/
 
     public String getUserUsid() {

@@ -11,12 +11,17 @@ import java.net.MalformedURLException;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -80,16 +85,17 @@ public class WeChatPayService {
 		this.out_trade_no = out_trade_no;
 		this.body = body;
 		this.total_fee = total_fee;
-		this.api = WXAPIFactory.createWXAPI(context, WeChatConstans.APP_ID,
-				false);
-		api.registerApp(WeChatConstans.APP_ID);
+		/*this.api = WXAPIFactory.createWXAPI(context, WeChatConstans.APP_ID,
+				false);*/
+		this.api = WXAPIFactory.createWXAPI(context,null);
+
 	}
 
 	public void pay() {
 		// 检测是否安装了微信
 		boolean isWeChat = api.getWXAppSupportAPI() >= Build.PAY_SUPPORTED_SDK_INT;
 		if (isWeChat) {
-			Toast.makeText(context,"have wx",Toast.LENGTH_SHORT).show();
+			/*Toast.makeText(context,"have wx",Toast.LENGTH_SHORT).show();*/
 			new GetPrepayIdTask().execute();
 		}
 	}
@@ -131,7 +137,7 @@ public class WeChatPayService {
 
 	/**
 	 * 发送支付请求
-	 *
+	 *http://blog.csdn.net/supercopa/article/details/52249084
 	 * https://pay.weixin.qq.com/wiki/doc/api/app/app.php?chapter=4_3
 	 * @param prepayId 预付Id
 	 */
@@ -140,10 +146,11 @@ public class WeChatPayService {
 		req.appId = WeChatConstans.APP_ID;
 		req.partnerId = WeChatConstans.PARTNER_ID;
 		req.prepayId = prepayId;
+		req.packageValue = "Sign=WXPay";
 		req.nonceStr = genNonceStr();
 		req.timeStamp = String.valueOf(genTimeStamp());
-		req.packageValue = "Sign=WXPay";
-		Log.i("this is pay prepayId","appId:"+req.appId+" partnerId:"+req.partnerId+" prepayId:"+req.prepayId+" nonceStr:"+req.nonceStr+" timeStamp:"+req.timeStamp+" packageValue:"+req.packageValue);
+
+		/*Log.i("this is pay prepayId","appId:"+req.appId+" partnerId:"+req.partnerId+" prepayId:"+req.prepayId+" nonceStr:"+req.nonceStr+" timeStamp:"+req.timeStamp+" packageValue:"+req.packageValue);*/
 		List<NameValuePair> signParams = new LinkedList<NameValuePair>();
 		signParams.add(new BasicNameValuePair("appid", req.appId));
 		signParams.add(new BasicNameValuePair("noncestr", req.nonceStr));
@@ -151,19 +158,25 @@ public class WeChatPayService {
 		signParams.add(new BasicNameValuePair("partnerid", req.partnerId));
 		signParams.add(new BasicNameValuePair("prepayid", req.prepayId));
 		signParams.add(new BasicNameValuePair("timestamp", req.timeStamp));
-
-		String stringA="appid="+req.appId+"&noncestr="+req.nonceStr+"&package="+req.packageValue+"&prepayid="+req.prepayId+"&partnerid="+req.prepayId+"&timestamp="+req.timeStamp;
-		String stringSignTemp=stringA + "&key=AtYI3984uwOn9635ypOE7291oeBn8428";
-		String sign=MD5(stringSignTemp).toUpperCase();
-		req.sign = sign;
-		signParams.add(new BasicNameValuePair("sign", req.sign));
+		String stringA="appid="+req.appId+"&noncestr="+req.nonceStr+"&package="+req.packageValue+"&partnerid="+req.partnerId+"&prepayid="+req.prepayId+"&timestamp="+req.timeStamp;
+		String stringSignTemp=stringA + "&key="+WeChatConstans.PARTNER_KEY;
+		Log.i("sign",stringSignTemp);
+	/*	String stringA="appid="+req.appId+"&noncestr="+req.nonceStr+"&package="+req.packageValue+"&partnerid="+req.partnerId+"&prepayid="+req.prepayId+"&timestamp="+req.timeStamp;
+		String stringSignTemp=stringA + "&key="+WeChatConstans.PARTNER_KEY;
+		Log.i("sign",stringSignTemp);
+		String characterEncoding = "UTF-8";
+		String sign= "";
+		sign = MD5Util.MD5Encode(stringSignTemp,characterEncoding).toUpperCase();*/
+		req.sign = genPackageSign(signParams);
+		Log.i("sign",req.sign );
 		// 传递的额外信息,字符串信息,自定义格式
 		// req.extData = type +"#" + out_trade_no + "#" +total_fee;
 		// 微信支付结果界面对调起支付Activity的处理
 		// APPCache.payActivity.put("调起支付的Activity",(调起支付的Activity)context);
 		// 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
 		/*api.registerApp(WeChatConstans.APP_ID);*/
-		api.sendReq(req);
+		api.registerApp(WeChatConstans.APP_ID);
+		api.sendReq(req);//不断出现-1的解决方法是卸载微信重装 或者清空微信
 		// 支付完成后微信会回调 wxapi包下 WXPayEntryActivity 的public void onResp(BaseResp
 		// resp)方法，所以后续操作，放在这个回调函数中操作就可以了
 	}
@@ -191,7 +204,7 @@ public class WeChatPayService {
 		packageParams.add(new BasicNameValuePair("out_trade_no", out_trade_no));
 		// 提交用户端ip
 		packageParams.add(new BasicNameValuePair("spbill_create_ip",
-				getV4IP()));
+				getIPAddress()));
 		BigDecimal totalFeeBig = new BigDecimal(total_fee);
 		int totalFee = totalFeeBig.multiply(new BigDecimal(100)).intValue();
 		// 总金额，单位为 分 !
@@ -209,7 +222,7 @@ public class WeChatPayService {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		Toast.makeText(context,"this is null",Toast.LENGTH_SHORT).show();
+		/*Toast.makeText(context,"this is null",Toast.LENGTH_SHORT).show();*/
 		return null;
 	}
 
@@ -328,5 +341,11 @@ public class WeChatPayService {
 	private long genTimeStamp() {
 		return System.currentTimeMillis() / 1000;
 	}
+
+
+
+
+
+
 
 }

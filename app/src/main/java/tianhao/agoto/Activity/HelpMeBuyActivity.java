@@ -23,6 +23,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.baidu.location.Poi;
 import com.baidu.mapapi.bikenavi.BikeNavigateHelper;
 import com.baidu.mapapi.bikenavi.adapter.IBEngineInitListener;
 import com.baidu.mapapi.bikenavi.adapter.IBRoutePlanListener;
@@ -116,11 +121,11 @@ public class HelpMeBuyActivity extends Activity  {
     /*价格*/
 
     /*购买地址*/
-    @BindView(R.id.tv_helpmebuy_content_address)
-    TextView tvHelpMeBuyContentAddress;
+    @BindView(R.id.tv_helpmebuy_content_buy_address)
+    TextView tvHelpMeBuyContentBuyAddress;
     /*购买详细地址*/
-    @BindView(R.id.tv_helpmebuy_content_addressdetail)
-    TextView tvHelpMeBuyContentAddressDetail;
+    @BindView(R.id.tv_helpmebuy_content_buy_addressdetail)
+    TextView tvHelpMeBuyContentBuyAddressDetail;
 
     /*收件人姓名*/
     @BindView(R.id.tv_helpmebuy_content_receivename)
@@ -203,11 +208,16 @@ public class HelpMeBuyActivity extends Activity  {
     private RoutePlanSearch mSearch;
     BikeNaviLauchParam param;
     private final String LTAG = "BaiduQiXing导航引擎";
-
+    private String usid = "";
+    private String userName = "";
     /*百度骑行引擎*/
-
+    /*当登录的时候 百度自动定位*/
+    private LocationClient locationClient=null;
+    private BDLocationListener locationListener= new MyLocationListener();
+    /*当登录的时候 百度自动定位*/
     private String goodsName,price;
     private int dis = 0;
+    private boolean isFirstLocation = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -216,11 +226,58 @@ public class HelpMeBuyActivity extends Activity  {
     }
     private void init(){
         ButterKnife.bind(this);
-
+        initIsLogin();
         initShoppingMenu(goodsBeanList);
         initRoutePlanDisNavi();
     }
+    private void initIsLogin(){
+        xcCacheManager = XCCacheManager.getInstance(this);
+        usid = xcCacheManager.readCache("usid");
+        userName = xcCacheManager.readCache("userName");
+        if(usid == null){
+            usid = "";
+        }
+        if(userName == null){
+            userName = "";
+        }
+        if(!usid.isEmpty()){
+            tvHelpMeBuyContentReceiveName.setText("尊敬的先生/女士");
+            tvHelpMeBuyContentReceiveTel.setText(userName);
+            locationClient=new LocationClient(getApplicationContext());
+            locationClient.registerLocationListener(locationListener);
+            initLocation();
+            locationClient.start();
+        }
+    }
+    private void initLocation(){
+        LocationClientOption option=new LocationClientOption();
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+        option.setCoorType("bd09ll");
+//        int span=1000;
+//        option.setScanSpan(span);
+        option.setIsNeedAddress(true);
+        option.setOpenGps(true);
+        option.setLocationNotify(true);
+        option.setIsNeedLocationDescribe(true);
+        option.setIsNeedLocationPoiList(true);
+        option.setIgnoreKillProcess(false);
+        option.setEnableSimulateGps(false);
+        locationClient.setLocOption(option);
+    }
 
+    /**接收异步返回的定位结果**/
+    public class MyLocationListener implements BDLocationListener{
+
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            //Receive Location
+            if(isFirstLocation) {
+                tvHelpMeBuyContentReceiveAddressDetail.setText(location.getAddrStr() + location.getLocationDescribe());
+                isFirstLocation = false;
+            }
+            /*showCurrentPosition(location);*/
+        }
+    }
     /*百度骑行导航初始化http://lbsyun.baidu.com/index.php?title=androidsdk/guide/bikenavi   http://wiki.lbsyun.baidu.com/cms/androidsdk/doc/v4_2_1/index.html
     * http://lbsyun.baidu.com/index.php?title=androidsdk/guide/tool里面的步行导航中有骑行导航  再加上doc文档即可解决
     * */
@@ -423,8 +480,8 @@ public class HelpMeBuyActivity extends Activity  {
                     blon = Double.parseDouble(lon);
 
                 }
-                tvHelpMeBuyContentAddress.setText(nameCall);
-                tvHelpMeBuyContentAddressDetail.setText(address);
+                tvHelpMeBuyContentBuyAddress.setText(nameCall);
+                tvHelpMeBuyContentBuyAddressDetail.setText(address);
 
                 break;
             case RESULT_RECE:
@@ -514,21 +571,24 @@ public class HelpMeBuyActivity extends Activity  {
     public void rlyHelpMeBuyBottomToPayOnclick(){
        /* Intent intent = new Intent(this, PayConfirmPopup.class);
         startActivity(intent);*/
+        initOrderDetail();
+
+        if (orderDetail.getUserUsid().isEmpty() || orderDetail.getClientaddrAddr().isEmpty() || orderDetail.getClientaddrAddr1().isEmpty() || orderDetail.getDetailsGoodsname().isEmpty()) {
+            Toast.makeText(this, "信息输入不全", Toast.LENGTH_LONG).show();
+            return;
+        }
         PopupOnClickEvents popupOnClickEvents = new PopupOnClickEvents(this);
         goodsName = "走兔订单号";
-        initOrderDetail();
+
         popupOnClickEvents.PayConfirm(llyHelpMeBuy,orderDetail);
     }
 
     private void initOrderDetail(){
         orderDetail = new OrderDetail();
-
-        xcCacheManager = XCCacheManager.getInstance(this);
-        String usid = xcCacheManager.readCache("usid");
         /*Toast.makeText(this,"usid:"+usid,Toast.LENGTH_LONG).show();*/
         orderDetail.setUserUsid(usid);
         System.out.println(orderDetail.getUserUsid());
-        orderDetail.setClientaddrAddr(tvHelpMeBuyContentAddress.getText().toString() + ";"+tvHelpMeBuyContentAddressDetail.getText().toString());
+        orderDetail.setClientaddrAddr(tvHelpMeBuyContentBuyAddress.getText().toString() + ";"+tvHelpMeBuyContentReceiveAddressDetail.getText().toString());
         orderDetail.setClientaddrAddr1(tvHelpMeBuyContentReceiveName.getText().toString()+";"+tvHelpMeBuyContentReceiveTel.getText().toString()+";"+tvHelpMeBuyContentReceiveAddressDetail.getText().toString());
         String remark = "";
         if((addRemarkList != null)&&(addRemarkList.size() > 0)) {
@@ -569,6 +629,13 @@ public class HelpMeBuyActivity extends Activity  {
         if(cbHelpMeBuyContentNoChilli.isChecked()){
             cbHelpMeBuyContentNoChilli.setTextColor(getResources().getColor(R.color.red));
             checkList.add("不辣");
+
+            cbHelpMeBuyContentSpecialChilli.setChecked(false);
+            cbHelpMeBuyContentSpecialChilli.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
+            cbHelpMeBuyContentMediaChilli.setChecked(false);
+            cbHelpMeBuyContentMediaChilli.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
+            cbHelpMeBuyContentSmallChilli.setChecked(false);
+            cbHelpMeBuyContentSmallChilli.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
         }else{
             cbHelpMeBuyContentNoChilli.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
             checkList.remove("nochilli");
@@ -580,6 +647,12 @@ public class HelpMeBuyActivity extends Activity  {
         if(cbHelpMeBuyContentSmallChilli.isChecked()){
             cbHelpMeBuyContentSmallChilli.setTextColor(getResources().getColor(R.color.red));
             checkList.add("微辣");
+            cbHelpMeBuyContentSpecialChilli.setChecked(false);
+            cbHelpMeBuyContentSpecialChilli.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
+            cbHelpMeBuyContentMediaChilli.setChecked(false);
+            cbHelpMeBuyContentMediaChilli.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
+            cbHelpMeBuyContentNoChilli.setChecked(false);
+            cbHelpMeBuyContentNoChilli.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
         }else{
             cbHelpMeBuyContentSmallChilli.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
             checkList.remove("微辣");
@@ -591,6 +664,13 @@ public class HelpMeBuyActivity extends Activity  {
         if(cbHelpMeBuyContentMediaChilli.isChecked()){
             cbHelpMeBuyContentMediaChilli.setTextColor(getResources().getColor(R.color.red));
             checkList.add("中辣");
+
+            cbHelpMeBuyContentSpecialChilli.setChecked(false);
+            cbHelpMeBuyContentSpecialChilli.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
+            cbHelpMeBuyContentSmallChilli.setChecked(false);
+            cbHelpMeBuyContentSmallChilli.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
+            cbHelpMeBuyContentNoChilli.setChecked(false);
+            cbHelpMeBuyContentNoChilli.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
         }else{
             cbHelpMeBuyContentMediaChilli.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
             checkList.remove("中辣");
@@ -602,8 +682,15 @@ public class HelpMeBuyActivity extends Activity  {
         if(cbHelpMeBuyContentSpecialChilli.isChecked()){
             cbHelpMeBuyContentSpecialChilli.setTextColor(getResources().getColor(R.color.red));
             checkList.add("特辣");
+            cbHelpMeBuyContentMediaChilli.setChecked(false);
+            cbHelpMeBuyContentMediaChilli.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
+            cbHelpMeBuyContentSmallChilli.setChecked(false);
+            cbHelpMeBuyContentSmallChilli.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
+            cbHelpMeBuyContentNoChilli.setChecked(false);
+            cbHelpMeBuyContentNoChilli.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
         }else{
             cbHelpMeBuyContentSpecialChilli.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
+
             checkList.remove("特辣");
         }
     };
@@ -613,6 +700,9 @@ public class HelpMeBuyActivity extends Activity  {
         if(cbHelpMeBuyContentHaveOnion.isChecked()){
             cbHelpMeBuyContentHaveOnion.setTextColor(getResources().getColor(R.color.red));
             checkList.add("放葱");
+
+            cbHelpMeBuyContentNoOnion.setChecked(false);
+            cbHelpMeBuyContentNoOnion.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
         }else{
             cbHelpMeBuyContentHaveOnion.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
             checkList.remove("放葱");
@@ -625,6 +715,8 @@ public class HelpMeBuyActivity extends Activity  {
         if(cbHelpMeBuyContentNoOnion.isChecked()){
             cbHelpMeBuyContentNoOnion.setTextColor(getResources().getColor(R.color.red));
             checkList.add("不放葱");
+            cbHelpMeBuyContentHaveOnion.setChecked(false);
+            cbHelpMeBuyContentHaveOnion.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
         }else{
             cbHelpMeBuyContentNoOnion.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
             checkList.remove("不放葱");
@@ -637,6 +729,8 @@ public class HelpMeBuyActivity extends Activity  {
         if(cbHelpMeBuyContentHaveCaraway.isChecked()){
             cbHelpMeBuyContentHaveCaraway.setTextColor(getResources().getColor(R.color.red));
             checkList.add("放香菜");
+            cbHelpMeBuyContentNoCaraway.setChecked(false);
+            cbHelpMeBuyContentNoCaraway.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
         }else{
             cbHelpMeBuyContentHaveCaraway.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
             checkList.remove("放香菜");
@@ -649,6 +743,9 @@ public class HelpMeBuyActivity extends Activity  {
         if(cbHelpMeBuyContentNoCaraway.isChecked()){
             cbHelpMeBuyContentNoCaraway.setTextColor(getResources().getColor(R.color.red));
             checkList.add("不放香菜");
+
+            cbHelpMeBuyContentHaveCaraway.setChecked(false);
+            cbHelpMeBuyContentHaveCaraway.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
         }else{
             cbHelpMeBuyContentNoCaraway.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
             checkList.remove("不放香菜");
@@ -661,6 +758,8 @@ public class HelpMeBuyActivity extends Activity  {
         if(cbHelpMeBuyContentHaveVinegar.isChecked()){
             cbHelpMeBuyContentHaveVinegar.setTextColor(getResources().getColor(R.color.red));
             checkList.add("放醋");
+            cbHelpMeBuyContentNoVinegar.setChecked(false);
+            cbHelpMeBuyContentNoVinegar.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
         }else{
             cbHelpMeBuyContentHaveVinegar.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
             checkList.remove("放醋");
@@ -673,6 +772,8 @@ public class HelpMeBuyActivity extends Activity  {
         if(cbHelpMeBuyContentNoVinegar.isChecked()){
             cbHelpMeBuyContentNoVinegar.setTextColor(getResources().getColor(R.color.red));
             checkList.add("不放醋");
+            cbHelpMeBuyContentHaveVinegar.setChecked(false);
+            cbHelpMeBuyContentHaveVinegar.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
         }else{
             cbHelpMeBuyContentNoVinegar.setTextColor(getResources().getColor(R.color.colorHelpMeBuyActivityBottomPayWordBlackBg));
             checkList.remove("不放醋");
@@ -727,12 +828,15 @@ public class HelpMeBuyActivity extends Activity  {
     }
     protected void onPause(){
         super.onPause();
+
     }
     protected void onStop(){
         super.onStop();
+
     }
     protected void onDestroy(){
         super.onDestroy();
+        locationClient.unRegisterLocationListener(locationListener);
         BaiduMapNavigation.finish(this);
         mSearch.destroy();
         Log.d(LTAG, "引擎初始化成功");
