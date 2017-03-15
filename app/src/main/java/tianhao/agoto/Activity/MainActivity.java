@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout rlyMainLeftMenuActivity;
     @OnClick(R.id.rly_main_leftmenu_activity)
     public void rlyMainLeftMenuActivityOnClick(){
-        Intent intent = new Intent(this,ActivityActivity.class);
+        Intent intent = new Intent(this,MessageCenterActivity.class);
         startActivity(intent);
     }
     /*活动页面*/
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout rlyMainLeftMenuMyWallet;
     @OnClick(R.id.rly_main_leftmenu_mywallet)
     public void rlyMainLeftMenuMyWalletOnclick(){
-        Intent intent = new Intent(this,MyWalletActivity.class);
+        Intent intent = new Intent(this,MessageCenterActivity.class);
         startActivity(intent);
     }
     /*
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
     /*地址管理*/
 
-/*消息中心*/
+    /*消息中心*/
 
     @OnClick(R.id.rly_main_leftmenu_message)
     public void rlyMainLeftMenuMessageOnclick(){
@@ -265,13 +265,20 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onResume(){
         super.onResume();
+        Thread1 thread = new Thread1();
+        thread.start();
 
-        initAfterLogin();
  /*       MemoryUtils memoryUtils = new MemoryUtils();
         memoryUtils.cleanMemoryNoText(this);*/
     }
 
+    class Thread1 extends Thread{
 
+        public void run() {
+            initAfterLogin();
+
+        }
+    };
 }
 
 

@@ -199,7 +199,7 @@ public class HourMinTimePopup extends PopupWindow {
         hourList = new ArrayList<String>();
         this.selectHour = "00";
         hourList.clear();
-        for(int i=0;i<24;i++)
+        for(int i=10;i<24;i++)
         {
             if(i <10)
             {
@@ -208,6 +208,7 @@ public class HourMinTimePopup extends PopupWindow {
                 hourList.add("" + i);
             }
         }
+        hourList.add("00");
     }
     private void initMin(){
         minList = new ArrayList<String>();
@@ -247,8 +248,8 @@ public class HourMinTimePopup extends PopupWindow {
             @Override
             public void onChanged(WheelView wheel, int oldValue, int newValue) {
                 String currentDay = mDayAdapter.getItemText(wheel.getCurrentItem()).toString();
-                selectDay = currentDay;
                 setTextviewSize(currentDay,mDayAdapter);
+                selectDay = currentDay;
                 setDay(currentDay);
                 initHour();
                 hourAdapter = new CalendarTextAdapter(activity,hourList,0,maxTextSize,minTextSize);

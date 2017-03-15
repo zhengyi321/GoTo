@@ -15,8 +15,9 @@
         <ImageView
             android:layout_width="@dimen/activity_userreg_head_ico_width"
             android:layout_height="@dimen/activity_userreg_head_ico_height"
-            android:background="@drawable/headimage"
+            android:background="@drawable/grayhead"
             android:layout_centerInParent="true"
+            android:scaleType="fitXY"
             />
     </RelativeLayout>
 

@@ -8,7 +8,7 @@
     android:id="@+id/activity_altertel_topbar_lly"
     >
     <RelativeLayout
-        android:id="@+id/rly_addressmanage_topbar_leftmenu"
+        android:id="@+id/rly_messagecenter_topbar_leftmenu"
         android:layout_width="@dimen/zero"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"

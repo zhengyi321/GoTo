@@ -84,6 +84,7 @@
 
         <!--收费标准-->
         <RelativeLayout
+            android:id="@+id/rly_setting_feestandard"
             android:layout_width="match_parent"
             android:layout_height="@dimen/activity_setting_item_height"
             >
@@ -121,6 +122,7 @@
         >
         <!--给予好评-->
         <RelativeLayout
+            android:id="@+id/rly_setting_goodscomment"
             android:layout_width="match_parent"
             android:layout_height="@dimen/activity_setting_item_height"
             >

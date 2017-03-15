@@ -69,10 +69,11 @@ import tianhao.agoto.R;
 import tianhao.agoto.Utils.SystemUtils;
 
 /**
+ * http://lbsyun.baidu.com/index.php?title=androidsdk/guide/retrieval
  * Created by zhyan on 2017/2/19.
  */
 
-public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap.OnMapStatusChangeListener,OnGetGeoCoderResultListener {
+public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap.OnMapStatusChangeListener,OnGetGeoCoderResultListener,OnGetPoiSearchResultListener {
 
     /*viewpage recycleview 历史记录 收藏地址 功能 begin*/
     @BindView(R.id.tv_helpmebuyaddselleraddress_tabbar_history)
@@ -128,6 +129,10 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
     private GeoCoder search=null;
     private String city;
     /*地名转换经纬度*/
+    /*关键字poi检索*/
+    private PoiSearch poiSearch;
+    /*关键字poi检索*/
+
     /*百度地图定位 end2*/
     private final int RESULT_OK = 10;//startactivityforresult
     private final int RESULT_SEARCH = 15;
@@ -244,27 +249,20 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
         initRecycleView(0,dataList);
     }
 
+    @Override
+    public void onGetPoiResult(PoiResult poiResult) {
 
+    }
 
+    @Override
+    public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
 
+    }
 
+    @Override
+    public void onGetPoiIndoorResult(PoiIndoorResult poiIndoorResult) {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 
 
     /**
@@ -481,7 +479,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
 
 
     private void initBaiDuMap(){
-
+        initPoiSearch();
         mBaiduMap = mMapView.getMap();
         locationClient=new LocationClient(getApplicationContext());
         locationClient.registerLocationListener(locationListener);
@@ -493,6 +491,24 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
         /**根据经纬度得到屏幕中心点地址**/
         search.setOnGetGeoCodeResultListener(this);
     }
+    /*poi城市内检索*/
+    private void initPoiSearch(){
+        poiSearch = PoiSearch.newInstance();
+        poiSearch.setOnGetPoiSearchResultListener(this);
+    }
+    private void poiBeginSearch(String address,String keyword){
+        String defaultCity = "温州市";
+        int indexCity = address.indexOf("市");
+        if(indexCity > 0) {
+            defaultCity = address.substring(0,indexCity);
+
+        }
+        poiSearch.searchInCity((new PoiCitySearchOption())
+                .city(defaultCity)
+                .keyword(keyword)
+                .pageNum(30));
+    }
+    /*poi城市内检索*/
     /**配置定位SDK参数**/
     private void initLocation(){
         LocationClientOption option=new LocationClientOption();
@@ -783,6 +799,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements BaiduMap
         search.destroy();
         isFirst = true;
         mMapView.onDestroy();
+        poiSearch.destroy();
         locationClient.unRegisterLocationListener(locationListener);
         if(locationClient!=null){
             locationClient.stop();

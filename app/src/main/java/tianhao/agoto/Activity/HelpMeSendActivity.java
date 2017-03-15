@@ -11,6 +11,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.navi.BaiduMapNavigation;
 import com.baidu.mapapi.search.route.BikingRouteLine;
@@ -152,14 +156,24 @@ public class HelpMeSendActivity extends Activity {
     RelativeLayout rlyHelpMeSendBottomBarPayConfirm;
     @OnClick(R.id.rly_helpmesend_bottombar_payconfirm)
     public void rlyHelpMeSendBottomBarPayConfirmOnclick(){
-
+        initOrderDetail();
+        if (orderDetail.getUserUsid().isEmpty() || orderDetail.getClientaddrAddr().isEmpty() || orderDetail.getClientaddrAddr1().isEmpty() || orderDetail.getOrderHeight().isEmpty()|| orderDetail.getDetailsGoodsname().isEmpty()|| orderDetail.getOrderTimeliness().isEmpty()) {
+            Toast.makeText(this, "信息输入不全", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         PopupOnClickEvents popupOnClickEvents = new PopupOnClickEvents(this);
-        initOrderDetail();
+
         popupOnClickEvents.PayConfirm(llyHelpMeSend,orderDetail);
     }
     /*底部栏支付*/
-
+    private String usid = "";
+    private String userName = "";
+    /*当登录的时候 百度自动定位*/
+    private LocationClient locationClient=null;
+    private BDLocationListener locationListener= new MyLocationListener();
+    private boolean isFirstLocation = true;
+    /*当登录的时候 百度自动定位*/
     private final int RESULT_SENDER = 10;
     private final int RESULT_RECEIVER = 11;
 
@@ -175,8 +189,60 @@ public class HelpMeSendActivity extends Activity {
     }
     private void init(){
         ButterKnife.bind(this);
+        initIsLogin();
         initRoutePlanDisNavi();
     }
+    private void initIsLogin(){
+        xcCacheManager = XCCacheManager.getInstance(this);
+        usid = xcCacheManager.readCache("usid");
+        userName = xcCacheManager.readCache("userName");
+        if(usid == null){
+            usid = "";
+        }
+        if(userName == null){
+            userName = "";
+        }
+        if(!usid.isEmpty()){
+            tvHelpMeSendContentSenderName.setText("尊敬的先生/女士");
+            tvHelpMeSendContentSenderTel.setText(userName);
+            locationClient=new LocationClient(getApplicationContext());
+            locationClient.registerLocationListener(locationListener);
+            initLocation();
+            locationClient.start();
+        }
+    }
+    private void initLocation(){
+        LocationClientOption option=new LocationClientOption();
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+        option.setCoorType("bd09ll");
+//        int span=1000;
+//        option.setScanSpan(span);
+        option.setIsNeedAddress(true);
+        option.setOpenGps(true);
+        option.setLocationNotify(true);
+        option.setIsNeedLocationDescribe(true);
+        option.setIsNeedLocationPoiList(true);
+        option.setIgnoreKillProcess(false);
+        option.setEnableSimulateGps(false);
+        locationClient.setLocOption(option);
+    }
+
+    /**接收异步返回的定位结果**/
+    public class MyLocationListener implements BDLocationListener {
+
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            //Receive Location
+            if(isFirstLocation) {
+                tvHelpMeSendContentSenderAddr.setText(location.getAddrStr() + location.getLocationDescribe());
+                blat = location.getLatitude();
+                blon = location.getLongitude();
+                isFirstLocation = false;
+            }
+            /*showCurrentPosition(location);*/
+        }
+    }
+
     /*后退到主界面*/
     @OnClick(R.id.rly_helpmesend_topbar_leftmenu)
     public void rlyHelpMeBuyTopBarLeftMenuOnclick(){
@@ -397,6 +463,9 @@ public class HelpMeSendActivity extends Activity {
 
         xcCacheManager = XCCacheManager.getInstance(this);
         String usid = xcCacheManager.readCache("usid");
+        if(usid == null){
+            usid = "";
+        }
         /*Toast.makeText(this,"usid:"+usid,Toast.LENGTH_LONG).show();*/
         orderDetail.setUserUsid(usid);
         System.out.println(orderDetail.getUserUsid());

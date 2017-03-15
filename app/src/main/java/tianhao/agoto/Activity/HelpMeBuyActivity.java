@@ -273,6 +273,8 @@ public class HelpMeBuyActivity extends Activity  {
             //Receive Location
             if(isFirstLocation) {
                 tvHelpMeBuyContentReceiveAddressDetail.setText(location.getAddrStr() + location.getLocationDescribe());
+                rlat = location.getLatitude();
+                rlon = location.getLongitude();
                 isFirstLocation = false;
             }
             /*showCurrentPosition(location);*/
@@ -836,7 +838,9 @@ public class HelpMeBuyActivity extends Activity  {
     }
     protected void onDestroy(){
         super.onDestroy();
-        locationClient.unRegisterLocationListener(locationListener);
+        if(!usid.isEmpty()) {
+            locationClient.unRegisterLocationListener(locationListener);
+        }
         BaiduMapNavigation.finish(this);
         mSearch.destroy();
         Log.d(LTAG, "引擎初始化成功");

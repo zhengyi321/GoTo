@@ -7,8 +7,9 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/zero"
         android:layout_weight="1"
+        android:background="@drawable/content_is_building"
         >
-        <include layout="@layout/activity_messagecenter_content_lly"/>
+       <!-- <include layout="@layout/activity_messagecenter_content_lly"/>-->
 
     </LinearLayout>
 </LinearLayout>
