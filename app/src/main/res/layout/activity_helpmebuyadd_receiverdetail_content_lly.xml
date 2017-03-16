@@ -165,6 +165,7 @@
                 android:background="@null"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
+                android:maxLines="2"
                 />
             <!--<EditText
                 android:id="@+id/et_helpmebuyadd_receiverdetail_contentaddress"
@@ -198,11 +199,11 @@
     <!--地址-->
     <!--百度地图-->
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/zero"
-        android:orientation="horizontal"
-        android:layout_weight="7"
+
+        android:layout_weight="7.5"
         >
         <com.baidu.mapapi.map.MapView
             android:id="@+id/mv_helpmebuyadd_receiverdetail_content"
@@ -215,8 +216,14 @@
              android:layout_height="match_parent">
 
          </com.baidu.mapapi.map.MapView>-->
-
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/iv_helpmebuyadd_receiverdetail_centerloc"
+            android:layout_width="16dp"
+            android:layout_height="19dp"
+            android:background="@drawable/search_map"
+            android:layout_centerInParent="true"
+            />
+    </RelativeLayout>
     <!--百度地图-->
 
     <LinearLayout

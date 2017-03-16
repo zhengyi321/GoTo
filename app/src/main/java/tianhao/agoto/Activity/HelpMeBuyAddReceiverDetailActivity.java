@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Matrix;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -49,6 +51,7 @@ import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.PoiInfo;
@@ -64,7 +67,7 @@ import com.baidu.mapapi.search.poi.PoiDetailResult;
 import com.baidu.mapapi.search.poi.PoiIndoorResult;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
-
+import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +82,7 @@ import tianhao.agoto.Utils.SystemUtils;
  * Created by admin on 2017/2/28.
  */
 
-public class HelpMeBuyAddReceiverDetailActivity extends Activity implements BaiduMap.OnMapStatusChangeListener,OnGetGeoCoderResultListener {
+public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGetGeoCoderResultListener {
 
     /*viewpage recycleview 历史记录 收藏地址 功能 begin*/
     @BindView(R.id.tv_helpmebuyadd_receiverdetail_tabbar_history)
@@ -106,26 +109,24 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
     /*百度地图定位 begin2*/
     @BindView(R.id.mv_helpmebuyadd_receiverdetail_content)
     MapView mMapView;
+    @BindView(R.id.iv_helpmebuyadd_receiverdetail_centerloc)
+    ImageView ivHelpMeBuyAddReceiverDetailCenterLoc;
     private BaiduMap mBaiduMap;
     private LocationClient locationClient=null;
     private BDLocationListener locationListener= new MyLocationListener();
-    private double latitude,latitudeLocation;
-    private double longitude,longitudeLocation;
+
     private String addressLocation = "";
     private Boolean isFirst = true;
-
+    private LocationMode mCurrentMode;
 /*
     @BindView(R.id.rly_helpmebuyadd_receiverdetail_addresssearch)
     RelativeLayout rlyHelpMeBuyAddReceiverDetailAddressSearch;
 */
 
-
     /*地名转换经纬度*/
     @BindView(R.id.tv_helpmebuyadd_receiverdetail_contentaddress)
     TextView tvHelpMeBuyAddReceiverDetailContentAddress;
     private GeoCoder search=null;
-
-
     /*地名转换经纬度*/
     /*百度地图定位 end2*/
     @BindView(R.id.lly_helpmebuyadd_receiverdetail_addresssearch)
@@ -151,7 +152,9 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
     private final int RESULT_SEARCH = 15;
     private final int RESULT_CONTACTER = 12;
     private Double rlat,rlon;
-
+    private LatLng currentPt = new LatLng(0,0);
+    private  final int accuracyCircleFillColor = 0xAAFFFF88;
+    private  final int accuracyCircleStrokeColor = 0xAA00FF00;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -285,9 +288,8 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
             String lat = b.getString("lat");
             String lon = b.getString("lon");
             if ((lat != null) && (lon != null)) {
-                rlat = Double.parseDouble(lat);
-                rlon = Double.parseDouble(lon);
-                location(rlat, rlon);
+                LatLng latLng = new LatLng(Double.parseDouble(lat),Double.parseDouble(lon));
+                location(latLng);
                 tvHelpMeBuyAddReceiverDetailContentAddress.setText(address);
             }
         }
@@ -595,40 +597,54 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
     private void initBaiDuMap(){
 
         mBaiduMap = mMapView.getMap();
+        search= GeoCoder.newInstance();
+        /**根据经纬度得到屏幕中心点地址**/
+        search.setOnGetGeoCodeResultListener(this);
+        initOverlyWithMapView();
         //设置缩放级别，默认级别为12
         MapStatusUpdate mapstatusUpdate = MapStatusUpdateFactory.zoomTo(12);;
-        mBaiduMap.setMapStatus(mapstatusUpdate);
         //普通地图
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
         locationClient=new LocationClient(getApplicationContext());
         locationClient.registerLocationListener(locationListener);
         initLocation();
         locationClient.start();
-        /**滑屏触发地图状态改变监听器**/
-        mBaiduMap.setOnMapStatusChangeListener(this);
-        search= GeoCoder.newInstance();
-        /**根据经纬度得到屏幕中心点地址**/
-        search.setOnGetGeoCodeResultListener(this);
-    }
 
+
+    }
+    /*地图移动坐标不动*/
+    private void initOverlyWithMapView(){
+        mBaiduMap.setOnMapTouchListener(new BaiduMap.OnMapTouchListener() {
+            @Override
+            public void onTouch(MotionEvent motionEvent) {
+                /*Toast.makeText(getBaseContext(),"here is ontouch",Toast.LENGTH_SHORT).show();*/
+                //http://blog.csdn.net/sjf0115/article/details/7306284 获取控件在屏幕上的坐标
+                int[] location = new int[2];
+                ivHelpMeBuyAddReceiverDetailCenterLoc.getLocationOnScreen(location);
+                int x = location[0];
+                int y = location[1];
+                Point point = new Point(x,y);
+                /*Toast.makeText(getBaseContext(),"x:"+x+"y:"+y,Toast.LENGTH_SHORT).show();*/
+                //http://blog.csdn.net/sjf0115/article/details/7306284 获取控件在屏幕上的坐标
+                currentPt = mBaiduMap.getProjection().fromScreenLocation(point);
+                search.reverseGeoCode(new ReverseGeoCodeOption().location(currentPt));
+                rlat = currentPt.latitude;
+                rlon = currentPt.longitude;
+
+            }
+        });
+
+    }
+    /*地图移动坐标不动*/
 
     /**配置定位SDK参数**/
     private void initLocation(){
         LocationClientOption option=new LocationClientOption();
-        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-
-        /*int span=1000;
-        option.setScanSpan(span);*/
-      /*  option.setOpenGps(true);*/
-/*        option.setLocationNotify(true);
-        option.setIsNeedLocationDescribe(true);*/
-       /* option.setIsNeedLocationPoiList(true);
-        option.setIgnoreKillProcess(false);
-        option.setEnableSimulateGps(false);*/
-        option.setCoorType("bd09ll");// 设置定位结果类型
-        option.setScanSpan(5000);// 设置发起定位请求的间隔时间,ms
-        option.setIsNeedAddress(true);// 返回的定位结果包含地址信息
-        option.setNeedDeviceDirect(true);// 设置返回结果包含手机的方向
+        option.setOpenGps(true); // 打开gps
+        option.setCoorType("bd09ll"); // 设置坐标类型
+        option.setIsNeedAddress(true);//返回地址
+        option.setIsNeedLocationDescribe(true);//返回地址周边描述
+        option.setEnableSimulateGps(false);
         locationClient.setLocOption(option);
     }
 
@@ -639,7 +655,9 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
         @Override
         public void onReceiveLocation(BDLocation location) {
             //Receive Location
-
+            if (location == null || mMapView == null) {
+                return;
+            }
             if(isFirst){
                 showCurrentPosition(location);
                 isFirst = false;
@@ -652,66 +670,51 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
     /**定位**/
     private void showCurrentPosition(BDLocation location){
 
-        mBaiduMap.setMyLocationEnabled(true);
+        TextView textView = new TextView(this);
+        Drawable drawable1 = getResources().getDrawable(R.drawable.arrow);
+        drawable1.setBounds(0, 0, 35, 45);//第一0是距左边距离，第二0是距上边距离，40分别是长宽
+        textView.setCompoundDrawables(drawable1,null,null,null);
+        BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory.fromView(textView);
+        /*定位蓝色点*/
+        MyLocationData locData = new MyLocationData.Builder()
+                .accuracy(location.getRadius())
+                // 此处设置开发者获取到的方向信息，顺时针0-360
+                .direction(100).latitude(location.getLatitude())
+                .longitude(location.getLongitude()).build();
+        mBaiduMap.setMyLocationData(locData);
+        mCurrentMode = MyLocationConfiguration.LocationMode.NORMAL;
+        mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
+                mCurrentMode, true, mCurrentMarker,
+                accuracyCircleFillColor, accuracyCircleStrokeColor));
+        /*定位蓝色点*/
+        LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
+        location(latLng);
+
         /*etHelpMeBuyAddSellerAddressContentAddress.setText(location.getAddrStr() + location.getBuildingName() +location.getFloor()+location.getStreet()+location.getStreetNumber());*/
-        latitudeLocation=location.getLatitude();
-        longitudeLocation=location.getLongitude();
-        addressLocation=location.getAddrStr();
-        MyLocationData locationData=new MyLocationData.Builder()
-                /*.accuracy(location.getRadius())*/
-                /*.direction(100)*/.latitude(latitudeLocation)
-                .longitude(longitudeLocation).build();
-        mBaiduMap.setMyLocationData(locationData);
-        location(latitudeLocation, longitudeLocation);
+        addressLocation=location.getAddrStr()+" "+location.getLocationDescribe();
+        tvHelpMeBuyAddReceiverDetailContentAddress.setText(addressLocation);
     }
 
 
     /**经纬度地址动画显示在屏幕中间  有关mark网站的出处http://blog.csdn.net/callmesen/article/details/40540895**/
-    private void location(double latitude,double longitude){
+    private void location(LatLng latLng){
         /*只要调用画面 就能赋值*/
-        rlat = latitude;
-        rlon = longitude;
-        /*只要调用画面 就能赋值*/
-        mBaiduMap.clear();
-        LatLng ll = new LatLng(latitude, longitude);
+        rlat = latLng.latitude;
+        rlon = latLng.longitude;
+
+        /*无论哪个调用此动画 都将经纬度赋值*/
+       /* mBaiduMap.clear();*/
         //定义地图状态
-        MapStatus mMapStatus = new MapStatus.Builder()
-                .target(ll)
-                /*.zoom(40)*/
-                .build();
-        try {
-            //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
-            MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
-            if (mMapStatusUpdate != null) {
+        MapStatus.Builder builder = new MapStatus.Builder();
+        builder.target(latLng).zoom(18.0f);
+        mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(builder.build()));
+        //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
 
-                mBaiduMap.animateMapStatus(mMapStatusUpdate);
-            }
-        }catch (Exception e){
-        }
-        //准备 marker   的图片  定位图标
-        /*BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.search_map);*/
-        TextView textView = new TextView(this);
-        Drawable drawable1 = getResources().getDrawable(R.drawable.search_map);
-        drawable1.setBounds(0, 0, 20, 25);//第一0是距左边距离，第二0是距上边距离，40分别是长宽
-        textView.setCompoundDrawables(drawable1,null,null,null);
-        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromView(textView);
-        /*BitmapDescriptor bitmap = null;*/
-//准备 marker option 添加 marker 使用
-        MarkerOptions markerOptions = new MarkerOptions().icon(bitmapDescriptor).position(ll).zIndex(12).period(10);
-//获取添加的 marker 这样便于后续的操作
-
-
-            // 生长动画
-        /*markerOptions.animateType(MarkerAnimateType.grow);*/
-        mBaiduMap.addOverlay(markerOptions);
-        markerOptions.animateType(MarkerAnimateType.grow);
     }
     @Override
     public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
         if (geoCodeResult.getLocation() != null) {
-            latitudeLocation = geoCodeResult.getLocation().latitude;
-            longitudeLocation = geoCodeResult.getLocation().longitude;
-            location(latitudeLocation, longitudeLocation);
+            location(geoCodeResult.getLocation());
         }
     }
 
@@ -723,32 +726,15 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements Baid
         }
      /*   mBaiduMap.clear();
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(result.getLocation()));*/
-        LatLng latLng = result.getLocation();
+
         addressLocation = result.getAddress();
         /*if(isFirst) {*/
         tvHelpMeBuyAddReceiverDetailContentAddress.setText(addressLocation+"  "+result.getSematicDescription());
-        location(latLng.latitude,latLng.longitude);
+
 
     }
 
-    @Override
-    public void onMapStatusChangeStart(MapStatus mapStatus) {
 
-    }
-
-    @Override
-    public void onMapStatusChange(MapStatus mapStatus) {
-
-    }
-
-    @Override
-    public void onMapStatusChangeFinish(MapStatus mapStatus) {
-        latitude = mapStatus.target.latitude;
-        longitude = mapStatus.target.longitude;
-        LatLng ptCenter = new LatLng(latitude, longitude);
-        /*设置反地理编码位置坐标 http://wiki.lbsyun.baidu.com/cms/androidsdk/doc/v4_2_1/index.html*/
-        search.reverseGeoCode(new ReverseGeoCodeOption().location(ptCenter));
-    }
 
 
 

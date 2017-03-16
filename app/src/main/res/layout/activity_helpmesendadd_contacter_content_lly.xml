@@ -205,7 +205,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/zero"
         android:orientation="horizontal"
-        android:layout_weight="7"
+        android:layout_weight="7.5"
         >
         <com.baidu.mapapi.map.MapView
             android:id="@+id/mv_helpmesendadd_contacter_content"
@@ -218,7 +218,13 @@
              android:layout_height="match_parent">
 
          </com.baidu.mapapi.map.MapView>-->
-
+        <ImageView
+            android:id="@+id/iv_helpmesendadd_contacter_centerloc"
+            android:layout_width="16dp"
+            android:layout_height="19dp"
+            android:background="@drawable/search_map"
+            android:layout_centerInParent="true"
+            />
     </LinearLayout>
     <!--百度地图-->
 
