@@ -438,13 +438,14 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
         search= GeoCoder.newInstance();
         /**根据经纬度得到屏幕中心点地址**/
         search.setOnGetGeoCodeResultListener(this);
+        mBaiduMap.setMyLocationEnabled(true);
         //设置缩放级别，默认级别为12
-        MapStatusUpdate mapstatusUpdate = MapStatusUpdateFactory.zoomTo(12);;
+        initOverlyWithMapView();
         //普通地图
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
         locationClient=new LocationClient(getApplicationContext());
         locationClient.registerLocationListener(locationListener);
-        initOverlyWithMapView();
+
         initLocation();
         locationClient.start();
 

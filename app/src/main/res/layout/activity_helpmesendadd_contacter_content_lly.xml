@@ -201,10 +201,9 @@
     <!--地址-->
     <!--百度地图-->
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/zero"
-        android:orientation="horizontal"
         android:layout_weight="7.5"
         >
         <com.baidu.mapapi.map.MapView
@@ -225,7 +224,7 @@
             android:background="@drawable/search_map"
             android:layout_centerInParent="true"
             />
-    </LinearLayout>
+    </RelativeLayout>
     <!--百度地图-->
 
     <LinearLayout

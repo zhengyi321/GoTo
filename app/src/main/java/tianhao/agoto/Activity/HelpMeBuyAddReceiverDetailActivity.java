@@ -602,7 +602,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
         search.setOnGetGeoCodeResultListener(this);
         initOverlyWithMapView();
         //设置缩放级别，默认级别为12
-        MapStatusUpdate mapstatusUpdate = MapStatusUpdateFactory.zoomTo(12);;
+        mBaiduMap.setMyLocationEnabled(true);
         //普通地图
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
         locationClient=new LocationClient(getApplicationContext());
@@ -672,7 +672,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
 
         TextView textView = new TextView(this);
         Drawable drawable1 = getResources().getDrawable(R.drawable.arrow);
-        drawable1.setBounds(0, 0, 35, 45);//第一0是距左边距离，第二0是距上边距离，40分别是长宽
+        drawable1.setBounds(0, 0,40, 45);//第一0是距左边距离，第二0是距上边距离，40分别是长宽
         textView.setCompoundDrawables(drawable1,null,null,null);
         BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory.fromView(textView);
         /*定位蓝色点*/
@@ -682,7 +682,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
                 .direction(100).latitude(location.getLatitude())
                 .longitude(location.getLongitude()).build();
         mBaiduMap.setMyLocationData(locData);
-        mCurrentMode = MyLocationConfiguration.LocationMode.NORMAL;
+        mCurrentMode = LocationMode.NORMAL;
         mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
                 mCurrentMode, true, mCurrentMarker,
                 accuracyCircleFillColor, accuracyCircleStrokeColor));

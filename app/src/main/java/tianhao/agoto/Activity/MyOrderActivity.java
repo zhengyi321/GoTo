@@ -26,6 +26,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.BindView;
 import butterknife.OnClick;
+import tianhao.agoto.Common.Widget.RecyclerView.EasyRecyclerView.EasyRecyclerView;
 import tianhao.agoto.R;
 import tianhao.agoto.Utils.SystemUtils;
 
@@ -97,9 +98,18 @@ public class MyOrderActivity extends Activity {
         listViews.add(mInflater.inflate(R.layout.activity_myorder_content_tab_vp_item_lv, null));
         vpMyOrder.setAdapter(new MyPagerAdapter(listViews));
         vpMyOrder.setCurrentItem(0);
-        vpMyOrder.setOnPageChangeListener(new MyOnPageChangeListener());
+        vpMyOrder.addOnPageChangeListener(new MyOnPageChangeListener());
     }
 
+    /*初始化 订单查询 或者待评价*/
+   public class initRVItemViews{
+       @BindView(R.id.erv_myorder_content_tab_vp_item)
+       EasyRecyclerView ervMyOrderContentTabVPItem;
+       public initRVItemViews(View view){
+           ButterKnife.bind(this,view);
+       }
+   }
+    /*初始化 订单查询 或者待评价*/
     /**
      * 初始化动画
      */
@@ -221,8 +231,8 @@ public class MyOrderActivity extends Activity {
 
     @OnClick(R.id.rly_myorder_topbar_rightmenu)
     public void rlyMyOrderTopBarRightMenuOnclick(){
-        Intent intent = new Intent(this,OrderCheckActivity.class);
-        startActivity(intent);
+      /*  Intent intent = new Intent(this,OrderCheckActivity.class);
+        startActivity(intent);*/
     }
     /**
      * 头标点击监听

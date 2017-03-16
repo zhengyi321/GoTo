@@ -116,8 +116,7 @@ dependencies {
     compile files('libs/jpush-android_v3.0.1.jar')
     /*极光推送*/
     /*Mob免费短信验证码http://www.mob.com/downloads/*/
-    compile files('libs/MobCommons-2016.1201.1839.jar')
-    compile files('libs/MobTools-2016.1201.1839.jar')
+
     compile name: 'SMSSDK-2.1.3', ext: 'aar'
     compile name: 'SMSSDKGUI-2.1.3', ext: 'aar'
     /*Mob免费短信验证码http://www.mob.com/downloads/*/

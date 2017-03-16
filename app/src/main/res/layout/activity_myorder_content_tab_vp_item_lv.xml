@@ -5,14 +5,15 @@
     android:background="@color/colorActivityMyOrderContentBlackBg"
     android:orientation="vertical" >
 
-        <ListView
+        <tianhao.agoto.Common.Widget.RecyclerView.EasyRecyclerView.EasyRecyclerView
+            android:id="@+id/erv_myorder_content_tab_vp_item"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:scrollbars="vertical"
             >
 
-        </ListView>
+        </tianhao.agoto.Common.Widget.RecyclerView.EasyRecyclerView.EasyRecyclerView>
 
         <!--        <Button
                 android:id="@+id/btn"

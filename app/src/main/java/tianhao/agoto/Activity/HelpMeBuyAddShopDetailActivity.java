@@ -542,7 +542,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
     private void showCurrentPosition(BDLocation location){
         TextView textView = new TextView(this);
         Drawable drawable1 = getResources().getDrawable(R.drawable.arrow);
-        drawable1.setBounds(0, 0, 35, 45);//第一0是距左边距离，第二0是距上边距离，40分别是长宽
+        drawable1.setBounds(0, 0, 40, 45);//第一0是距左边距离，第二0是距上边距离，40分别是长宽
         textView.setCompoundDrawables(drawable1,null,null,null);
         BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory.fromView(textView);
         /*定位蓝色点*/
