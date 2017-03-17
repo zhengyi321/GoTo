@@ -354,5 +354,7 @@
 
 
     <!--PopupWindow-->
-
+    <!--XRecycleView-->
+    <dimen name="textandiconmargin">10dp</dimen>
+    <!--XRecycleView-->
 </resources>

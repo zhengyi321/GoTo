@@ -29,9 +29,12 @@ import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
+import rx.Observer;
+import tianhao.agoto.Bean.BaseBean;
 import tianhao.agoto.Common.Widget.DB.XCCacheManager.xccache.XCCacheManager;
 import tianhao.agoto.Common.Widget.ImageView.CircleImageView;
 import tianhao.agoto.Fragment.MainFragment;
+import tianhao.agoto.NetWorks.UserSettingNetWorks;
 import tianhao.agoto.R;
 import tianhao.agoto.Common.Widget.DB.ContactInjfoDao;
 import tianhao.agoto.Utils.ImageUtils;
@@ -128,7 +131,25 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout rlyMainLeftMenuExitLogin;
     @OnClick(R.id.rly_main_leftmenu_exitlogin)
     public void rlyMainLeftMenuExitLoginOnclick(){
-        exitLogin();
+        UserSettingNetWorks userSettingNetWorks = new UserSettingNetWorks();
+        userSettingNetWorks.userExit(new Observer<BaseBean>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(BaseBean baseBean) {
+                Toast.makeText(getBaseContext(),baseBean.getResult(),Toast.LENGTH_SHORT).show();
+                exitLogin();
+            }
+        });
+
     }
     /*退出登录*/
    /* @BindView(R.id.civ_main_leftmenu_headimg)
@@ -226,10 +247,11 @@ public class MainActivity extends AppCompatActivity {
                 String userName = xcCacheManager.readCache("userName");
             /*Toast.makeText(this,"userName:"+userName,Toast.LENGTH_LONG).show();*/
                 if (userName != null) {
+                    /*if()*/
                     tvMainLeftMenuName.setText(userName);
                     String headImgUrl = xcCacheManager.readCache("headUrl");
                     if ((headImgUrl != null) && (!headImgUrl.isEmpty())) {
-                        Toast.makeText(this, "headimgurl:" + headImgUrl, Toast.LENGTH_LONG).show();
+                        /*Toast.makeText(this, "headimgurl:" + headImgUrl, Toast.LENGTH_LONG).show();*/
                         FinalBitmap finalBitMap = null;
                         finalBitMap = FinalBitmap.create(MainActivity.this);
                         finalBitMap.display(civMainLeftMenuHeadImg, headImgUrl);

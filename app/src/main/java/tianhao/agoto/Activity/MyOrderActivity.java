@@ -5,28 +5,35 @@ import java.util.List;
 
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.BindView;
 import butterknife.OnClick;
+import rx.Observer;
+import tianhao.agoto.Adapter.MyOrderListRVAdapter;
+import tianhao.agoto.Bean.MyOrderBean;
+import tianhao.agoto.Common.Widget.DB.XCCacheManager.xccache.XCCacheManager;
 import tianhao.agoto.Common.Widget.RecyclerView.EasyRecyclerView.EasyRecyclerView;
+import tianhao.agoto.Common.Widget.XRecycleView.XRecyclerView;
+import tianhao.agoto.NetWorks.OrderNetWorks;
 import tianhao.agoto.R;
 import tianhao.agoto.Utils.SystemUtils;
 
@@ -58,7 +65,7 @@ public class MyOrderActivity extends Activity {
     RelativeLayout rlyMyOrderTopBarRightMenu;
 
 
-    private List<View> listViews; // Tab页面列表
+    public List<View> listViews; // Tab页面列表
     private int offset = 0;// 动画图片偏移量
     private int currIndex = 0;// 当前页卡编号
     private int bmpW;// 动画图片宽度
@@ -94,20 +101,65 @@ public class MyOrderActivity extends Activity {
     private void InitViewPager() {
         listViews = new ArrayList<View>();
         LayoutInflater mInflater = getLayoutInflater();
-        listViews.add(mInflater.inflate(R.layout.activity_myorder_content_tab_vp_item_lv_item, null));
-        listViews.add(mInflater.inflate(R.layout.activity_myorder_content_tab_vp_item_lv, null));
+        listViews.add(mInflater.inflate(R.layout.activity_myorder_content_tab_vp_item_rv, null));
+        listViews.add(mInflater.inflate(R.layout.activity_myorder_content_tab_vp_item_rv, null));
         vpMyOrder.setAdapter(new MyPagerAdapter(listViews));
         vpMyOrder.setCurrentItem(0);
-        vpMyOrder.addOnPageChangeListener(new MyOnPageChangeListener());
+        InitRVItemViews initRVItemViews = new InitRVItemViews(listViews.get(0));
+        initRVItemViews.initRV(listViews.get(0));
+        vpMyOrder.addOnPageChangeListener(new MyOnPageChangeListener(listViews));
     }
 
     /*初始化 订单查询 或者待评价*/
-   public class initRVItemViews{
+     public class InitRVItemViews{
        @BindView(R.id.erv_myorder_content_tab_vp_item)
-       EasyRecyclerView ervMyOrderContentTabVPItem;
-       public initRVItemViews(View view){
+       XRecyclerView xrvMyOrderContentTabVPItem;
+
+        private MyOrderListRVAdapter myOrderListRVAdapter;
+        private List<MyOrderBean> myOrderBeanList = new ArrayList<>();
+        private void initRV(View view){
+            /*myOrderBeanList.add(new MyOrderBean());*/
+            myOrderListRVAdapter = new MyOrderListRVAdapter(view.getContext(),myOrderBeanList);
+            xrvMyOrderContentTabVPItem.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
+            xrvMyOrderContentTabVPItem.setAdapter(myOrderListRVAdapter);
+            xrvMyOrderContentTabVPItem.setLoadingMoreEnabled(false);
+            xrvMyOrderContentTabVPItem.setPullRefreshEnabled(false);
+
+
+        }
+       public InitRVItemViews(View view){
            ButterKnife.bind(this,view);
+           initRV(view);
+           initMyOrderFromNet();
        }
+        private void initMyOrderFromNet(){
+            XCCacheManager xcCacheManager = XCCacheManager.getInstance(getBaseContext());
+            String usid = xcCacheManager.readCache("usid");
+            if((usid != null)&&(!usid.isEmpty())) {
+                /*Toast.makeText(getBaseContext(),"usid:"+usid,Toast.LENGTH_SHORT).show();*/
+                Log.i("usid",usid);
+                OrderNetWorks orderNetWorks = new OrderNetWorks();
+                orderNetWorks.getMyOrderList(usid, new Observer<List<MyOrderBean>>() {
+                    @Override
+                    public void onCompleted() {
+                        /*Toast.makeText(getBaseContext(),"orderbeanlist:OK",Toast.LENGTH_SHORT).show();*/
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        /*Toast.makeText(getBaseContext(),"orderbeanlist:"+e,Toast.LENGTH_SHORT).show();*/
+                    }
+
+                    @Override
+                    public void onNext(List<MyOrderBean> orderBeanList1) {
+                        /*Toast.makeText(getBaseContext(),"orderbeanlist:"+orderBeanList1.get(0).getClientaddrAddr(),Toast.LENGTH_SHORT).show();*/
+
+                        myOrderListRVAdapter.setMyOrderBeanList(orderBeanList1);
+                    }
+                });
+            }
+        }
+
    }
     /*初始化 订单查询 或者待评价*/
     /**
@@ -244,6 +296,12 @@ public class MyOrderActivity extends Activity {
      */
     public class MyOnPageChangeListener implements OnPageChangeListener {
 
+        private List<View> viewList;
+        public MyOnPageChangeListener(List<View> viewList1){
+            viewList = viewList1;
+        }
+
+
         int one = offset * 2 + bmpW;// 页卡1 -> 页卡2 偏移量
         int two = one * 2;// 页卡1 -> 页卡3 偏移量
 
@@ -270,17 +328,20 @@ public class MyOrderActivity extends Activity {
             animation.setFillAfter(true);// True:图片停在动画结束位置
             animation.setDuration(200);
             ivMyOrderTabGreenBottom.startAnimation(animation);
-            switch (arg0){
-                case 0:
-                    tvMyOrderAllOrder.setTextColor(getResources().getColor(R.color.colorActivityMyOrderTabSwitchGreenBg));
-                    tvMyOrderWaitForSay.setTextColor(getResources().getColor(R.color.colorActivityMyOrderTabSwitchUnSelectedWordGrayBg));
-                    break;
-                case 1:
-                    tvMyOrderAllOrder.setTextColor(getResources().getColor(R.color.colorActivityMyOrderTabSwitchUnSelectedWordGrayBg));
-                    tvMyOrderWaitForSay.setTextColor(getResources().getColor(R.color.colorActivityMyOrderTabSwitchGreenBg));
+            if((viewList != null)&&(viewList.size() > 1)) {
+                switch (arg0) {
+                    case 0:
+                        tvMyOrderAllOrder.setTextColor(getResources().getColor(R.color.colorActivityMyOrderTabSwitchGreenBg));
+                        tvMyOrderWaitForSay.setTextColor(getResources().getColor(R.color.colorActivityMyOrderTabSwitchUnSelectedWordGrayBg));
+                        InitRVItemViews initRVItemViews = new InitRVItemViews(viewList.get(0));
+                        break;
+                    case 1:
+                        tvMyOrderAllOrder.setTextColor(getResources().getColor(R.color.colorActivityMyOrderTabSwitchUnSelectedWordGrayBg));
+                        tvMyOrderWaitForSay.setTextColor(getResources().getColor(R.color.colorActivityMyOrderTabSwitchGreenBg));
+                        InitRVItemViews initRVItemView = new InitRVItemViews(viewList.get(1));
+                        break;
 
-                    break;
-
+                }
             }
         }
 

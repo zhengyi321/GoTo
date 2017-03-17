@@ -22,7 +22,7 @@ import tianhao.agoto.Common.Widget.SlideShowView.listener.OnItemSelectedListener
 
 public class InitLoop {
 
-    int[] pics = new int[] { R.drawable.ad1, R.drawable.ad2, R.drawable.ad3};
+    int[] pics = new int[] { R.drawable.ad2, R.drawable.timg2, R.drawable.timg3,R.drawable.timg4};
     //	static int[] pics = new int[] { R.drawable.pic_1, R.drawable.pic_2};
     long interval=3*1000;//广告切换间隔时间（毫秒）
     private ArrayList<View> views = new ArrayList<View>();
