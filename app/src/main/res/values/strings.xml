@@ -278,6 +278,7 @@
     <string name="setDefaultAddress">设置为默认地址</string>
     <string name="historyRecord">历史记录</string>
     <string name="collectAddress">收藏地址</string>
+    <string name="nearAddress">附近地址</string>
     <string name="waitforsay">等待评价</string>
     <string name="orderStatus">订单状态</string>
     <string name="orderDetail">订单详情</string>
@@ -337,7 +338,7 @@
     <string name="haveVinegar">放醋</string>
     <string name="noVinegar">不放醋</string>
     <string name="manualInput">手动输入</string>
-
+    <string name="companyCustomTel">0577-62670222</string>
     <!--友盟第三方登录 qq 微信-->
     <string name="userid_found">用户信息已存在，正在跳转登录操作…</string>
     <string name="logining">使用%s帐号登录中…</string>

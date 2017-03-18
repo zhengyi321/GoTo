@@ -95,8 +95,8 @@
             android:layout_height="match_parent"
             android:layout_weight="4.5"
             >
-            <TextView
-                android:id="@+id/tv_helpmebuyaddselleraddress_content_address"
+            <EditText
+                android:id="@+id/et_helpmebuyaddselleraddress_content_address"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textColor="@color/colorActivityAddressManageAddContacterContentBlackWordBg"
@@ -104,7 +104,9 @@
                 android:background="@null"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:maxLines="2"
+
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
                 />
             <!--<EditText
                 android:id="@+id/et_helpmebuyaddselleraddress_content_address"
@@ -179,6 +181,42 @@
             android:layout_height="@dimen/activity_helpmebuyaddselleraddress_tabbar_height"
             android:background="@color/colorActivityMyOrderContentBlackBg" >
 
+
+            <!--收藏地址-->
+            <RelativeLayout
+                android:id="@+id/rly_helpmebuyaddselleraddress_tabbar_nearaddress"
+                android:layout_width="@dimen/zero"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                >
+                <TextView
+                    android:id="@+id/tv_helpmebuyaddselleraddress_tabbar_nearaddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textSize="14sp"
+                    android:text="@string/nearAddress"
+                    android:textColor="@color/colorActivityMyOrderTabSwitchSelectedWordGreenBg" />
+                <!--<TextView
+                    android:id="@+id/tv_helpmebuyaddselleraddress_tabbar_collectaddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textSize="14sp"
+                    android:text="@string/nearAddress"
+                    android:textColor="@color/colorActivityMyOrderTabSwitchSelectedWordGreenBg" />-->
+                <ImageView
+                    android:id="@+id/iv_helpmebuyaddselleraddress_tabbar_nearaddress"
+                    android:layout_width="@dimen/activity_helpmesendaddcontacter_tabbar_ico_collect_width"
+                    android:layout_height="@dimen/activity_helpmesendaddcontacter_tabbar_ico_collect_height"
+                    android:src="@drawable/collectaddressnormal"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@id/tv_helpmebuyaddselleraddress_tabbar_nearaddress"
+                    android:layout_marginRight="@dimen/activity_helpmesendaddcontacter_tabbar_ico_margin_left_right_size"
+                    />
+            </RelativeLayout>
+            <!--收藏地址-->
+
             <!--历史记录-->
 
             <RelativeLayout
@@ -195,7 +233,7 @@
                     android:layout_centerInParent="true"
                     android:text="@string/historyRecord"
                     android:textSize="14sp"
-                    android:textColor="@color/colorActivityMyOrderTabSwitchSelectedWordGreenBg" />
+                    android:textColor="@color/colorActivityMyOrderTabSwitchUnSelectedWordGrayBg" />
                 <ImageView
                     android:id="@+id/iv_helpmebuyaddselleraddress_tabbar_history"
                     android:layout_width="@dimen/activity_helpmesendaddcontacter_tabbar_ico_width"
@@ -207,32 +245,7 @@
                     />
             </RelativeLayout>
             <!--历史记录-->
-            <!--收藏地址-->
-            <RelativeLayout
-                android:id="@+id/rly_helpmebuyaddselleraddress_tabbar_collectaddress"
-                android:layout_width="@dimen/zero"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                >
-                <TextView
-                    android:id="@+id/tv_helpmebuyaddselleraddress_tabbar_collectaddress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:textSize="14sp"
-                    android:text="@string/collectAddress"
-                    android:textColor="@color/colorActivityMyOrderTabSwitchUnSelectedWordGrayBg" />
-                <ImageView
-                    android:id="@+id/iv_helpmebuyaddselleraddress_tabbar_collectaddress"
-                    android:layout_width="@dimen/activity_helpmesendaddcontacter_tabbar_ico_collect_width"
-                    android:layout_height="@dimen/activity_helpmesendaddcontacter_tabbar_ico_collect_height"
-                    android:src="@drawable/collectaddressnormal"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@id/tv_helpmebuyaddselleraddress_tabbar_collectaddress"
-                    android:layout_marginRight="@dimen/activity_helpmesendaddcontacter_tabbar_ico_margin_left_right_size"
-                    />
-            </RelativeLayout>
-            <!--收藏地址-->
+
         </LinearLayout>
         <ImageView
             android:id="@+id/iv_helpmebuyaddselleraddress_tab_greenbottom"

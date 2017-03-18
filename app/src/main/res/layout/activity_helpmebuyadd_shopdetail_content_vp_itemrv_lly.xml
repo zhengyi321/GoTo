@@ -3,12 +3,12 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorHelpMeBuyAddSellerAddressActivityTabBarBlackBg">
-    <android.support.v7.widget.RecyclerView
+    <tianhao.agoto.Common.Widget.XRecycleView.XRecyclerView
         android:id="@+id/rv_helpmebuyaddselleraddress_vp_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         >
 
-    </android.support.v7.widget.RecyclerView>
+    </tianhao.agoto.Common.Widget.XRecycleView.XRecyclerView>
 </LinearLayout>

@@ -97,18 +97,18 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
     TextView tvHelpMeBuyAddSellerAddressTabBarHistory;
     @BindView(R.id.iv_helpmebuyaddselleraddress_tabbar_history)
     ImageView ivHelpMeBuyAddSellerAddressTabBarHistory;
-    @BindView(R.id.tv_helpmebuyaddselleraddress_tabbar_collectaddress)
-    TextView tvHelpMeBuyAddSellerAddressTabBarCollectAddress;
-    @BindView(R.id.iv_helpmebuyaddselleraddress_tabbar_collectaddress)
-    ImageView ivHelpMeBuyAddSellerAddressTabBarCollectAddress;
+    @BindView(R.id.tv_helpmebuyaddselleraddress_tabbar_nearaddress)
+    TextView tvHelpMeBuyAddSellerAddressTabBarNearAddress;
+    @BindView(R.id.iv_helpmebuyaddselleraddress_tabbar_nearaddress)
+    ImageView ivHelpMeBuyAddSellerAddressTabBarNearAddress;
     @BindView(R.id.iv_helpmebuyaddselleraddress_tab_greenbottom)
     ImageView ivHelpMeBuyAddSellerAddressTabGreenBottom;
     @BindView(R.id.vp_helpmebuyaddselleraddress_content)
     ViewPager vpHelpMeBuyAddSellerAddressContent;
     @BindView(R.id.rly_helpmebuyaddselleraddress_tabbar_history)
     RelativeLayout rlyHelpMeBuyAddSellerAddressTabBarHistory;
-    @BindView(R.id.rly_helpmebuyaddselleraddress_tabbar_collectaddress)
-    RelativeLayout rlyHelpMeBuyAddSellerAddressTabBarCollectAddress;
+    @BindView(R.id.rly_helpmebuyaddselleraddress_tabbar_nearaddress)
+    RelativeLayout rlyHelpMeBuyAddSellerAddressTabBarNearAddress;
     private int offset = 0;// 动画图片偏移量
     private int currIndex = 0;// 当前页卡编号
     private List<View> viewList; // Tab页面列表
@@ -136,15 +136,14 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
     private String addressLocation = "";
     private Boolean isFirst = true;
     private double blat,blon;
-
-/*    @BindView(R.id.rly_helpmebuyaddselleraddress_addresssearch)
-    RelativeLayout rlyHelpMeBuyAddSellerAddressAddressSearch;*/
+    @BindView(R.id.rly_helpmebuyaddselleraddress_addresssearch)
+    RelativeLayout rlyHelpMeBuyAddSellerAddressAddressSearch;
     @BindView(R.id.lly_helpmebuyadd_shopdetail_searchaddress)
     LinearLayout llyHelpMeBuyAddShopDetailSearchAddress;
 
     /*地名转换经纬度*/
-    @BindView(R.id.tv_helpmebuyaddselleraddress_content_address)
-    TextView tvHelpMeBuyAddSellerAddressContentAddress;
+    @BindView(R.id.et_helpmebuyaddselleraddress_content_address)
+    EditText etHelpMeBuyAddSellerAddressContentAddress;
 
     private String city;
     /*地名转换经纬度*/
@@ -160,6 +159,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
     private LocationMode mCurrentMode;
     private LatLng currentPt = new LatLng(0,0);
     private Marker mMarkerA;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -178,7 +178,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
     public void rlyHelpMeBuyAddSellerAddressTopBarRightMenuOnclick(){
         Bundle bundle = new Bundle();
         bundle.putString("nameCall",etHelpMeBuyAddSellerAddressContentNameCall.getText().toString());
-        bundle.putString("address",tvHelpMeBuyAddSellerAddressContentAddress.getText().toString());
+        bundle.putString("address",etHelpMeBuyAddSellerAddressContentAddress.getText().toString());
         bundle.putString("blat", "" + blat);
         bundle.putString("blon", "" + blon);
         Intent intent = new Intent();
@@ -220,15 +220,15 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
      */
     private void InitTabBg(Boolean isFirst) {
         if(isFirst) {
-            tvHelpMeBuyAddSellerAddressTabBarHistory.setTextColor(getResources().getColor(R.color.colorHelpMeBuyAddSellerAddressActivityTabBarGreenBg));
-            ivHelpMeBuyAddSellerAddressTabBarHistory.setImageResource(R.drawable.historyrecordselect);
-            tvHelpMeBuyAddSellerAddressTabBarCollectAddress.setTextColor(getResources().getColor(R.color.colorHelpMeBuyAddSellerAddressActivityTabBarGrayBg));
-            ivHelpMeBuyAddSellerAddressTabBarCollectAddress.setImageResource(R.drawable.collectaddressnormal);
+            tvHelpMeBuyAddSellerAddressTabBarNearAddress.setTextColor(getResources().getColor(R.color.colorHelpMeBuyAddSellerAddressActivityTabBarGreenBg));
+            ivHelpMeBuyAddSellerAddressTabBarNearAddress.setImageResource(R.drawable.historyrecordselect);
+            tvHelpMeBuyAddSellerAddressTabBarHistory.setTextColor(getResources().getColor(R.color.colorHelpMeBuyAddSellerAddressActivityTabBarGrayBg));
+            ivHelpMeBuyAddSellerAddressTabBarNearAddress.setImageResource(R.drawable.collectaddressnormal);
         }else{
             tvHelpMeBuyAddSellerAddressTabBarHistory.setTextColor(getResources().getColor(R.color.colorHelpMeBuyAddSellerAddressActivityTabBarGrayBg));
             ivHelpMeBuyAddSellerAddressTabBarHistory.setImageResource(R.drawable.historyrecordnormal);
-            tvHelpMeBuyAddSellerAddressTabBarCollectAddress.setTextColor(getResources().getColor(R.color.colorHelpMeBuyAddSellerAddressActivityTabBarGreenBg));
-            ivHelpMeBuyAddSellerAddressTabBarCollectAddress.setImageResource(R.drawable.collectaddressselect);
+            tvHelpMeBuyAddSellerAddressTabBarNearAddress.setTextColor(getResources().getColor(R.color.colorHelpMeBuyAddSellerAddressActivityTabBarGreenBg));
+            ivHelpMeBuyAddSellerAddressTabBarNearAddress.setImageResource(R.drawable.collectaddressselect);
         }
     }
 
@@ -461,8 +461,8 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
         vpHelpMeBuyAddSellerAddressContent.setCurrentItem(0);
     }
 
-    @OnClick(R.id.rly_helpmebuyaddselleraddress_tabbar_collectaddress)
-    public void rlyHelpMeBuyAddSellerAddressTabBarCollectAddressOnclick(){
+    @OnClick(R.id.rly_helpmebuyaddselleraddress_tabbar_nearaddress)
+    public void rlyHelpMeBuyAddSellerAddressTabBarNearAddressOnclick(){
         vpHelpMeBuyAddSellerAddressContent.setCurrentItem(1);
 
     }
@@ -477,6 +477,8 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
 
 
     private void initBaiDuMap(){
+        /*监听输入框的变化*/
+        /*监听输入框的变化*/
         initPoiSearch();
         mBaiduMap = mMapView.getMap();
         // 开启定位图层
@@ -504,7 +506,9 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
     /*poi附近检索*/
     private void poiBeginSearch(LatLng latLng){
         /*Toast.makeText(getBaseContext(),"poiBeginSearch",Toast.LENGTH_SHORT).show();*/
-        etHelpMeBuyAddSellerAddressContentNameCall.setOnEditorActionListener(new MyEditorActionListener(latLng));
+        etHelpMeBuyAddSellerAddressContentNameCall.setOnEditorActionListener(new MyEditorActionListener(latLng,true));
+        etHelpMeBuyAddSellerAddressContentAddress.setOnEditorActionListener(new MyEditorActionListener(latLng,false));
+
 
     }
 
@@ -562,7 +566,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
         poiBeginSearch(latLng);
         /*etHelpMeBuyAddSellerAddressContentAddress.setText(location.getAddrStr() + location.getBuildingName() +location.getFloor()+location.getStreet()+location.getStreetNumber());*/
         addressLocation=location.getAddrStr()+" "+location.getLocationDescribe();
-        tvHelpMeBuyAddSellerAddressContentAddress.setText(addressLocation);
+        etHelpMeBuyAddSellerAddressContentAddress.setText(addressLocation);
 
         /*initOverly(latLng);*/
 
@@ -575,51 +579,72 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
     }
     /*地图移动坐标不动*/
     private void initOverlyWithMapView(){
-        mBaiduMap.setOnMapTouchListener(new BaiduMap.OnMapTouchListener() {
-            @Override
-            public void onTouch(MotionEvent motionEvent) {
-                /*Toast.makeText(getBaseContext(),"here is ontouch",Toast.LENGTH_SHORT).show();*/
-                //http://blog.csdn.net/sjf0115/article/details/7306284 获取控件在屏幕上的坐标
-                int[] location = new int[2];
-                ivHelpMeBuyAddShopdetailContentCenterLoc.getLocationOnScreen(location);
-                int x = location[0];
-                int y = location[1];
-                Point point = new Point(x,y);
-                /*Toast.makeText(getBaseContext(),"x:"+x+"y:"+y,Toast.LENGTH_SHORT).show();*/
-                //http://blog.csdn.net/sjf0115/article/details/7306284 获取控件在屏幕上的坐标
-                currentPt = mBaiduMap.getProjection().fromScreenLocation(point);
-                mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(currentPt));
-                blat = currentPt.latitude;
-                blon = currentPt.longitude;
-                poiBeginSearch(currentPt);
-            }
-        });
+
+            mBaiduMap.setOnMapTouchListener(new BaiduMap.OnMapTouchListener() {
+                @Override
+                public void onTouch(MotionEvent motionEvent) {
+                /*滑动动作的时候设置为滑动状态*/
+
+                /*滑动动作的时候设置为滑动状态*/
+            /*Toast.makeText(getBaseContext(),"here is ontouch",Toast.LENGTH_SHORT).show();*/
+                    //http://blog.csdn.net/sjf0115/article/details/7306284 获取控件在屏幕上的坐标
+                    int[] location = new int[2];
+                    ivHelpMeBuyAddShopdetailContentCenterLoc.getLocationOnScreen(location);
+                    int x = location[0];
+                    int y = location[1];
+                    Point point = new Point(x, y);
+            /*Toast.makeText(getBaseContext(),"x:"+x+"y:"+y,Toast.LENGTH_SHORT).show();*/
+                    //http://blog.csdn.net/sjf0115/article/details/7306284 获取控件在屏幕上的坐标
+                    currentPt = mBaiduMap.getProjection().fromScreenLocation(point);
+                    mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(currentPt));
+                    blat = currentPt.latitude;
+                    blon = currentPt.longitude;
+                    poiBeginSearch(currentPt);
+
+                }
+            });
+
 
     }
     /*地图移动坐标不动*/
     /*软键盘监听*/
     public class MyEditorActionListener implements OnEditorActionListener{
-
+            private boolean isNameCall;
             private LatLng latLng;
-            public MyEditorActionListener (LatLng lal){
+            public MyEditorActionListener (LatLng lal,Boolean isName){
 
+                isNameCall = isName;
                 latLng = lal;
             }
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if(isNameCall) {
+                    String keyword = "";
+                    keyword = v.getText().toString();
+                    //写你要做的事情
+                    /*Toast.makeText(getBaseContext(), "" + keyword, Toast.LENGTH_SHORT).show();*/
+                    poiSearch.searchNearby((new PoiNearbySearchOption())
+                            .location(latLng)
+                            .radius(600000)
+                            .keyword(keyword)
+                            .pageNum(0).pageCapacity(30));
+                }else{
+                    String address = "";
+                    address = v.getText().toString();
+                    int index = address.indexOf("市");
+                    if(index > 0){
+                        String city = address.substring(0,index);
+                        address = address.substring(index,address.length());
+                        mSearch.geocode(new GeoCodeOption().city(city).address(address));
+                    }else{
+                        mSearch.geocode(new GeoCodeOption().city("温州市").address(address));
+                    }
+                    /*beginSearchLalByAddress(address);*/
+                }
+                    hideInput(HelpMeBuyAddShopDetailActivity.this);//隐藏软键盘
 
-                String keyword = "";
-                keyword = v.getText().toString();
-                //写你要做的事情
-                Toast.makeText(getBaseContext(),""+keyword,Toast.LENGTH_SHORT).show();
-                poiSearch.searchNearby((new PoiNearbySearchOption())
-                        .location(latLng)
-                        .radius(600000)
-                        .keyword(keyword)
-                        .pageNum(0).pageCapacity(30));
-                hideInput(HelpMeBuyAddShopDetailActivity.this);//隐藏软键盘
                 return true;
             }
             return false;
@@ -717,7 +742,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
                             blat = poiInfoList.get(i).location.latitude;
                             blon = poiInfoList.get(i).location.longitude;
                             InfoWindow mInfoWindow = new InfoWindow(button, ll, -47);
-                            tvHelpMeBuyAddSellerAddressContentAddress.setText(poiInfoList.get(i).address);
+                            etHelpMeBuyAddSellerAddressContentAddress.setText(poiInfoList.get(i).address);
                             mBaiduMap.showInfoWindow(mInfoWindow);
                         }
                     }
@@ -728,6 +753,28 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
         }
 
     }
+
+    /*监听地址输入框*/
+
+    /*监听地址输入框*/
+
+    /*根据地名开始查找经纬度*/
+    private void beginSearchLalByAddress(String address){
+       /* String address = etHelpMeBuyAddSellerAddressContentAddress.getText().toString();*/
+        int index = address.indexOf("市");
+        if(index > 0){
+            String city = address.substring(0,index);
+            address = address.substring(index,address.length());
+            mSearch.geocode(new GeoCodeOption().city(city).address(address));
+        }else{
+            mSearch.geocode(new GeoCodeOption().city("温州市").address(address));
+        }
+    }
+
+    /*根据地名开始查找经纬度*/
+
+
+
     /*搜索附近的关键词*/
     @Override
     public void onGetPoiResult(PoiResult result) {
@@ -753,8 +800,10 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
     @Override
     public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
         if (geoCodeResult.getLocation() != null) {
+            /*直接定位到具体地址*/
             location( geoCodeResult.getLocation());
-            Toast.makeText(getBaseContext(),"onGetGeoCodeResult",Toast.LENGTH_SHORT).show();
+            /*直接定位到具体地址*/
+            /*Toast.makeText(getBaseContext(),"onGetGeoCodeResult",Toast.LENGTH_SHORT).show();*/
         }
     }
     /*根据经纬度获取具体地址*/
@@ -767,7 +816,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
 
         LatLng latLng = result.getLocation();
         addressLocation = result.getAddress()+ "  " + result.getSematicDescription();
-        tvHelpMeBuyAddSellerAddressContentAddress.setText(addressLocation );
+        etHelpMeBuyAddSellerAddressContentAddress.setText(addressLocation );
     }
        /*根据经纬度获取具体地址*/
     /*根据经纬度搜索地址*/
@@ -778,8 +827,8 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
     /*手指在地图上的动作来改变地名*/
     /*获取手指在地图上的经纬度*/
 
-    @OnClick(R.id.lly_helpmebuyadd_shopdetail_searchaddress)
-    public void llyHelpMeBuyAddSellerAddressAddressSearchOnclick(){
+    @OnClick(R.id.rly_helpmebuyaddselleraddress_addresssearch)
+    public void rlyHelpMeBuyAddSellerAddressAddressSearchOnclick(){
         Intent intent = new Intent(this,BaiduAddressSearchSuggestActivity.class);
         startActivityForResult(intent,RESULT_SEARCH);
     }
@@ -790,13 +839,13 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
                 String address=b.getString("address");//str即为回传的值
                 String lat = b.getString("lat");
                 String lon = b.getString("lon");
-                Toast.makeText(getBaseContext(),"RESULT_SEARCH:"+lat+" "+lon,Toast.LENGTH_SHORT).show();
+                /*Toast.makeText(getBaseContext(),"RESULT_SEARCH:"+lat+" "+lon,Toast.LENGTH_SHORT).show();*/
                 if((lat != null) && (lon != null)) {
                      /*blat = Double.parseDouble(lat);
                      blon = Double.parseDouble(lon);*/
                     LatLng ll = new LatLng(Double.parseDouble(lat), Double.parseDouble(lon));
                     location(ll);
-                    tvHelpMeBuyAddSellerAddressContentAddress.setText(address);
+                    etHelpMeBuyAddSellerAddressContentAddress.setText(address);
                 }
 
 

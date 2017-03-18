@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import tianhao.agoto.Bean.OrderDetail;
+import tianhao.agoto.Common.DialogAlterView.LikeIosStyle.CompanyCustomTelDialog;
 import tianhao.agoto.Common.DialogAlterView.LikeIosStyle.ShouDongShuRuDialog;
 
 /**
@@ -21,6 +22,7 @@ import tianhao.agoto.Common.DialogAlterView.LikeIosStyle.ShouDongShuRuDialog;
 public class PopupOnClickEvents {
     private Activity activity;
     private ShouDongShuRuDialog shouDongShuRuDialog;
+
     public PopupOnClickEvents(Activity activity1){
         activity = activity1;
     }
@@ -57,6 +59,8 @@ public class PopupOnClickEvents {
             }
         });
     }
+
+    /*物品种类选择*/
     public void GoodsTypeSelect(LinearLayout layout, final TextView textView){
 
         final GoodsTypePopup goodsTypePopup = new GoodsTypePopup(activity);
@@ -102,6 +106,8 @@ public class PopupOnClickEvents {
         });
 
     }
+    /*物品种类选择*/
+    /*物品重量选择*/
     OnGoodsWeightSelectListener onGoodsWeightSelectListener;
     public interface OnGoodsWeightSelectListener{
         public void select();
@@ -168,6 +174,11 @@ public class PopupOnClickEvents {
         if (shouDongShuRuDialog != null && shouDongShuRuDialog.isShowing())
             shouDongShuRuDialog.dismiss();
     }
+    /*物品重量选择*/
+
+
+
+
     /**
      * 设置添加屏幕的背景透明度
      *

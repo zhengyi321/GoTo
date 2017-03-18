@@ -70,6 +70,7 @@
         android:paddingTop="@dimen/activity_main_content_service_item_each_other_margin_size"
         >
         <RelativeLayout
+            android:id="@+id/rly_main_content_reminder"
             android:layout_width="@dimen/zero"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -84,6 +85,7 @@
                 />
         </RelativeLayout>
         <RelativeLayout
+            android:id="@+id/rly_main_content_suggest"
             android:layout_width="@dimen/zero"
             android:layout_height="match_parent"
             android:layout_weight="1"

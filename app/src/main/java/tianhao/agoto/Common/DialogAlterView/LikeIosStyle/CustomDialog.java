@@ -111,7 +111,7 @@ public class CustomDialog extends Dialog {
             /*LayoutInflater mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);*/
             /*final CustomDialog mCustomDialog = new CustomDialog(mContext, R.style.CustomDialog);//默认调用带style的构造*/
             final CustomDialog mCustomDialog = new CustomDialog(context, R.style.MyDialogStyle);//默认调用带style的构造
-            mCustomDialog.setCanceledOnTouchOutside(false);//默认点击布局外不能取消dialog
+            mCustomDialog.setCanceledOnTouchOutside(true);//默认点击布局外不能取消dialog
             View view = mInflater.inflate(R.layout.dialog_add_goods_lly, null);
             mCustomDialog.addContentView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             /*mCustomDialog.addContentView(view, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));*/
