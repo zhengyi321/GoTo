@@ -76,6 +76,9 @@ public class PriceUtil {
             Toast.makeText(activity,"尊敬的客户，我们兔子还没有出门呢（快递员还没有上班，10点开始上班）",Toast.LENGTH_LONG).show();
         }
         Log.i("gotoHelpMeBuylFee",""+price);
+        if(price.length() < 2){
+            price = "";
+        }
         return price;
     }
 
@@ -153,6 +156,9 @@ public class PriceUtil {
         }
 
         Log.i("gotoHelpMeSendlFee",""+price);
+        if(price.length() < 2){
+            price = "";
+        }
         return price;
     }
 }

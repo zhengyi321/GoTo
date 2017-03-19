@@ -3,6 +3,7 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="@dimen/activity_helpmebuy_bottombar_zhifu_height">
     <RelativeLayout
+        android:id="@+id/rly_helpmebuy_bottombar_fee"
         android:layout_width="@dimen/zero"
         android:layout_height="match_parent"
         android:layout_weight="1.5"

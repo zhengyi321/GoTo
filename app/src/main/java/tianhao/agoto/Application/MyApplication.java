@@ -9,7 +9,7 @@ import cn.jpush.android.api.JPushInterface;
 import cn.sharesdk.framework.ShareSDK;
 
 /**
- *
+ *非常好用的插件http://blog.csdn.net/liang5630/article/details/46366901/
  */
 public class MyApplication extends Application {
 

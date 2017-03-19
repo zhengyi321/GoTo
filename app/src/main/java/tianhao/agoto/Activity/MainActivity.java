@@ -38,6 +38,7 @@ import tianhao.agoto.NetWorks.UserSettingNetWorks;
 import tianhao.agoto.R;
 import tianhao.agoto.Common.Widget.DB.ContactInjfoDao;
 import tianhao.agoto.Utils.ImageUtils;
+import tianhao.agoto.Utils.PhoneFormatCheckUtils;
 
 /*
 
@@ -242,12 +243,21 @@ public class MainActivity extends AppCompatActivity {
     /*登陆以后初始化名字*/
     private void initAfterLogin(){
         try{
+
             String loginStatus = xcCacheManager.readCache("loginStatus");
             if(loginStatus.equals("yes")) {
+
                 String userName = xcCacheManager.readCache("userName");
-            /*Toast.makeText(this,"userName:"+userName,Toast.LENGTH_LONG).show();*/
+
                 if (userName != null) {
+                    /*Toast.makeText(this,"initAfterLogin:",Toast.LENGTH_LONG).show();*/
                     /*if()*/
+                    PhoneFormatCheckUtils phoneFormatCheckUtils = new PhoneFormatCheckUtils();
+                    if((phoneFormatCheckUtils.isChinaPhoneLegal(userName))&&(userName.length() > 9)){
+                        String tempBeg = userName.substring(0,3);
+                        String tempEnd = userName.substring(userName.length()-4,userName.length());
+                        userName = tempBeg+"****"+tempEnd;
+                    }
                     tvMainLeftMenuName.setText(userName);
                     String headImgUrl = xcCacheManager.readCache("headUrl");
                     if ((headImgUrl != null) && (!headImgUrl.isEmpty())) {
@@ -297,6 +307,7 @@ public class MainActivity extends AppCompatActivity {
     class Thread1 extends Thread{
 
         public void run() {
+        /*    Toast.makeText(getBaseContext(),"threadBrun:",Toast.LENGTH_LONG).show();*/
             initAfterLogin();
 
         }

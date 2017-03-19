@@ -372,6 +372,11 @@
             android:screenOrientation="portrait"
             android:hardwareAccelerated="false"
             />
+        <activity
+            android:name=".Activity.ShouFeiBiaoZhunActivity"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="false"
+            />
 
 
 

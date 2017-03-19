@@ -64,6 +64,16 @@ public class ShoppingListActivity extends Activity {
     RelativeLayout rlyShoppingListTopBarLeftMenu;
     @BindView(R.id.rly_shoppinglist_topbar_rightmenu)
     RelativeLayout rlyShoppingListTopBarRightMenu;
+
+
+    @BindView(R.id.rly_shoppinglist_i_know_click)
+    RelativeLayout rlyShoppingListIKnowClick;
+    @OnClick(R.id.rly_shoppinglist_i_know_click)
+    public void rlyShoppingListIKnowClickOnclick(){
+        rlyShoppingListIKnow.setVisibility(View.GONE);
+    }
+    @BindView(R.id.rly_shoppinglist_i_know)
+    RelativeLayout rlyShoppingListIKnow;
     PostcardAdapter adapter;
     private final int RESULT_FOODSMENU = 12;//菜单
     private List<GoodsBean> goodsBeanList;

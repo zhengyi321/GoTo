@@ -200,6 +200,16 @@ public class HelpMeBuyActivity extends Activity  {
     @BindView(R.id.lly_helpmebuy_content_newadd)
     LinearLayout llyHelpMeBuyContentNewAdd;
     /*备注*/
+    /*价格计算方式*/
+    @BindView(R.id.rly_helpmebuy_bottombar_fee)
+    RelativeLayout rlyHelpMeBuyBottomBarFee;
+    @OnClick(R.id.rly_helpmebuy_bottombar_fee)
+    public void rlyHelpMeBuyBottomBarFeeOnclick(){
+        Intent intent = new Intent(this,ShouFeiBiaoZhunActivity.class);
+        startActivity(intent);
+    }
+    /*价格计算方式*/
+
     private final int RESULT_BUY = 10;//购买地址
     private double blat=0,rlat=0,blon=0,rlon=0;
     private final int RESULT_RECE = 11;//收件人信息

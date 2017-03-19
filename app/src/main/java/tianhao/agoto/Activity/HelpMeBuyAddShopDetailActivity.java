@@ -17,12 +17,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
@@ -80,7 +82,9 @@ import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import tianhao.agoto.Adapter.RecyclerViewAdapter;
 import tianhao.agoto.Common.Widget.EditText.EditTextWithDel;
+import tianhao.agoto.Common.Widget.XRecycleView.XRecyclerView;
 import tianhao.agoto.R;
 import com.baidu.mapapi.map.MarkerOptions.MarkerAnimateType;
 import tianhao.agoto.Utils.SystemUtils;
@@ -144,9 +148,54 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
     /*地名转换经纬度*/
     @BindView(R.id.et_helpmebuyaddselleraddress_content_address)
     EditText etHelpMeBuyAddSellerAddressContentAddress;
-
+    private boolean isAddress = false;
     private String city;
     /*地名转换经纬度*/
+    /*上拉*/
+    @BindView(R.id.rly_helpmebuyadd_shopdetail_content_up)
+    RelativeLayout rlyHelpMeBuyAddShopDetailContentUp;
+    @BindView(R.id.lly_helpmebuyadd_shopdetail_bottom)
+    LinearLayout llyHelpMeBuyAddShopDetailBottom;
+    @OnClick(R.id.rly_helpmebuyadd_shopdetail_content_up)
+    public void rlyHelpMeBuyAddShopDetailContentUpOnclick(){
+        int tempHeight = 0;
+        if(!isUp){
+            isUp = true;
+            ViewGroup.LayoutParams layoutParams = llyHelpMeBuyAddShopDetailBottom.getLayoutParams();
+            SystemUtils systemUtils = new SystemUtils(this);
+            tempHeight = layoutParams.height;
+
+            // 初始化需要加载的动画资源
+            Animation animation = AnimationUtils
+                    .loadAnimation(this, R.anim.pop_enter);
+            animation.setDuration(1000);
+            layoutParams.height = 0;
+            llyHelpMeBuyAddShopDetailBottom.setLayoutParams(layoutParams);
+            llyHelpMeBuyAddShopDetailBottom.startAnimation(animation);
+            layoutParams.height += systemUtils.getWindowHeight()/2;
+            llyHelpMeBuyAddShopDetailBottom.setLayoutParams(layoutParams);
+            ivHelpMeBuyAddShopDetailContentUp.setBackgroundResource(R.drawable.down_arrow);
+            /*rlyHelpMeBuyAddShopDetailContentUp.setAnimation(R.style.PopupAnimation);;*/
+        }else{
+            ViewGroup.LayoutParams layoutParams = llyHelpMeBuyAddShopDetailBottom.getLayoutParams();
+
+             layoutParams.height =tempHeight ;
+
+            // 初始化需要加载的动画资源
+            Animation animation = AnimationUtils
+                    .loadAnimation(this, R.anim.pop_exit);
+            /*animation.setDuration(1000);*/
+            llyHelpMeBuyAddShopDetailBottom.startAnimation(animation);
+            llyHelpMeBuyAddShopDetailBottom.setLayoutParams(layoutParams);
+            isUp = false;
+            ivHelpMeBuyAddShopDetailContentUp.setBackgroundResource(R.drawable.up_arrow);
+        }
+    }
+    @BindView(R.id.iv_helpmebuyadd_shopdetail_content_uparrow)
+    ImageView ivHelpMeBuyAddShopDetailContentUp;
+    private boolean isUp = false;
+    /*上拉*/
+
     /*关键字poi检索*/
     private PoiSearch poiSearch;
     /*关键字poi检索*/
@@ -159,7 +208,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
     private LocationMode mCurrentMode;
     private LatLng currentPt = new LatLng(0,0);
     private Marker mMarkerA;
-
+    InitRecycleView initRecycleView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -190,14 +239,20 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
     private void init(){
         ButterKnife.bind(this);
         initSwitchContent();
-
+        /*Thread2 thread2 = new Thread2();
+        thread2.start();*/
         initBaiDuMap();
         /*initGlassBg();*/
         /*initTran();*/
 
 
     }
+    class Thread2 extends Thread {
+        public void Run(){
+            initSwitchContent();
+        }
 
+    }
 
     /*viewpage recycleview 历史记录 收藏地址 功能*/
     private void initSwitchContent(){
@@ -221,14 +276,15 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
     private void InitTabBg(Boolean isFirst) {
         if(isFirst) {
             tvHelpMeBuyAddSellerAddressTabBarNearAddress.setTextColor(getResources().getColor(R.color.colorHelpMeBuyAddSellerAddressActivityTabBarGreenBg));
-            ivHelpMeBuyAddSellerAddressTabBarNearAddress.setImageResource(R.drawable.historyrecordselect);
-            tvHelpMeBuyAddSellerAddressTabBarHistory.setTextColor(getResources().getColor(R.color.colorHelpMeBuyAddSellerAddressActivityTabBarGrayBg));
-            ivHelpMeBuyAddSellerAddressTabBarNearAddress.setImageResource(R.drawable.collectaddressnormal);
-        }else{
-            tvHelpMeBuyAddSellerAddressTabBarHistory.setTextColor(getResources().getColor(R.color.colorHelpMeBuyAddSellerAddressActivityTabBarGrayBg));
-            ivHelpMeBuyAddSellerAddressTabBarHistory.setImageResource(R.drawable.historyrecordnormal);
-            tvHelpMeBuyAddSellerAddressTabBarNearAddress.setTextColor(getResources().getColor(R.color.colorHelpMeBuyAddSellerAddressActivityTabBarGreenBg));
             ivHelpMeBuyAddSellerAddressTabBarNearAddress.setImageResource(R.drawable.collectaddressselect);
+            ivHelpMeBuyAddSellerAddressTabBarHistory.setImageResource(R.drawable.historyrecordnormal);
+            tvHelpMeBuyAddSellerAddressTabBarHistory.setTextColor(getResources().getColor(R.color.colorHelpMeBuyAddSellerAddressActivityTabBarGrayBg));
+            poiSearchInCity(etHelpMeBuyAddSellerAddressContentAddress.getText().toString());
+        }else{
+            tvHelpMeBuyAddSellerAddressTabBarHistory.setTextColor(getResources().getColor(R.color.colorHelpMeBuyAddSellerAddressActivityTabBarGreenBg));
+            ivHelpMeBuyAddSellerAddressTabBarHistory.setImageResource(R.drawable.historyrecordselect);
+            tvHelpMeBuyAddSellerAddressTabBarNearAddress.setTextColor(getResources().getColor(R.color.colorHelpMeBuyAddSellerAddressActivityTabBarGrayBg));
+            ivHelpMeBuyAddSellerAddressTabBarNearAddress.setImageResource(R.drawable.collectaddressnormal);
         }
     }
 
@@ -264,12 +320,12 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
         vpHelpMeBuyAddSellerAddressContent.setAdapter(new MyPagerAdapter(viewList));
         vpHelpMeBuyAddSellerAddressContent.setCurrentItem(0);
         vpHelpMeBuyAddSellerAddressContent.addOnPageChangeListener(new MyOnPageChangeListener());
-
-        List<String> dataList = new ArrayList<String>();
+        initRecycleView = new InitRecycleView(viewList.get(0));
+        initRecycleView.initXRV();
        /* dataList.add("");
         dataList.add("");
         dataList.add("");*/
-        initRecycleView(0,dataList);
+
     }
 
 
@@ -332,20 +388,29 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
 
     /*RecycleView适配器*/
 
-    private class MyRecycleViewAdapter extends RecyclerView.Adapter<MyRecycleViewAdapter.ItemContentViewHolder>{
+    public class MyRecycleViewAdapter extends RecyclerView.Adapter<MyRecycleViewAdapter.ItemContentViewHolder>{
 
-        private List<String> testList;
+        private List<PoiInfo> testList;
         private Context context;
         private LayoutInflater inflater;
-        public MyRecycleViewAdapter(Context context,List<String> stringList){
+        public MyRecycleViewAdapter(Context context1,List<PoiInfo> stringList){
             testList = stringList;
-            this.context = context;
-            inflater = LayoutInflater.from(context);
+            this.context = context1;
+            inflater = LayoutInflater.from(context1);
         }
 
-        public void setDataList(List<String> dataList){
-            this.testList = dataList;
-            this.notifyDataSetChanged();
+        public void setDataList(List<PoiInfo> dataList){
+            int count = testList.size();
+            testList.clear();
+            notifyItemRangeRemoved(0,count);
+            notifyItemRangeChanged(0,count);
+
+            if(dataList != null) {
+                testList.addAll(dataList);
+                notifyItemRangeInserted(0,dataList.size());
+                notifyItemRangeChanged(0,dataList.size());
+
+            }
         }
 
 
@@ -357,6 +422,9 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
 
         @Override
         public void onBindViewHolder(MyRecycleViewAdapter.ItemContentViewHolder holder, int position) {
+            if((testList.get(position)!= null)&&(getItemCount() > 0)){
+                holder.tvHelpMeBuyAddShopDetailContentVPItemRVItemAddr.setText(testList.get(position).address+testList.get(position).describeContents());/*testList.get(position).address+testList.get(position).describeContents()*/
+            }
 
         }
 
@@ -372,10 +440,18 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
 
 
         public class ItemContentViewHolder extends RecyclerView.ViewHolder{
-
+            @BindView(R.id.rly_helpmebuyadd_shopdetail_content_vp_itemrv_item_addr)
+            RelativeLayout rlyHelpMeBuyAddShopDetailContentVpItemRVItemAddr;
+            @OnClick(R.id.rly_helpmebuyadd_shopdetail_content_vp_itemrv_item_addr)
+            public void rlyHelpMeBuyAddShopDetailContentVpItemRVItemAddrOnclick(){
+                etHelpMeBuyAddSellerAddressContentAddress.setText(tvHelpMeBuyAddShopDetailContentVPItemRVItemAddr.getText().toString());
+            }
+            @BindView(R.id.tv_helpmebuyadd_shopdetail_content_vp_itemrv_item_addr)
+            TextView tvHelpMeBuyAddShopDetailContentVPItemRVItemAddr;
 
             public ItemContentViewHolder(View itemView) {
                 super(itemView);
+                ButterKnife.bind(this,itemView);
             }
         }
     }
@@ -419,7 +495,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
             dataList.add("");
             dataList.add("");
             dataList.add("");*/
-            initRecycleView(arg0,dataList);
+
             switch (arg0){
                 case 0:
                     InitTabBg(true);
@@ -439,19 +515,22 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
     }
 
 
-    private void initRecycleView(int pos,List<String> dataList){
-        int count = pos + 1;
-        if(count <= dataList.size()) {
-            RecyclerView rv = null;
-        /*多线程运行 行不通*/
-            MyRecycleViewAdapter adapter = new MyRecycleViewAdapter(viewList.get(pos).getContext(), dataList);
-            rv = (RecyclerView) viewList.get(pos).findViewById(R.id.rv_helpmebuyadd_receiverdetail_vp_item);
-            rv.setAdapter(adapter);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(viewList.get(pos).getContext());
-            //设置为垂直布局，这也是默认的
-            layoutManager.setOrientation(OrientationHelper.VERTICAL);
-            //设置布局管理器
-            rv.setLayoutManager(layoutManager);
+    public class  InitRecycleView{
+        @BindView(R.id.xrv_helpmebuyaddshopdetail_vp_item)
+        XRecyclerView xrvHelpMeBuyAddShopDetailVPItem;
+        public MyRecycleViewAdapter adapter ;
+
+        private List<PoiInfo> poiInfoList = new ArrayList<>();
+        public InitRecycleView(View view){
+            ButterKnife.bind(this,view);
+            initXRV();
+        }
+
+        private void initXRV(){
+            adapter = new MyRecycleViewAdapter(getBaseContext(),poiInfoList);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext(),LinearLayoutManager.VERTICAL,false);
+            xrvHelpMeBuyAddShopDetailVPItem.setLayoutManager(layoutManager);
+            xrvHelpMeBuyAddShopDetailVPItem.setAdapter(adapter);
         }
     }
 
@@ -567,7 +646,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
         /*etHelpMeBuyAddSellerAddressContentAddress.setText(location.getAddrStr() + location.getBuildingName() +location.getFloor()+location.getStreet()+location.getStreetNumber());*/
         addressLocation=location.getAddrStr()+" "+location.getLocationDescribe();
         etHelpMeBuyAddSellerAddressContentAddress.setText(addressLocation);
-
+        poiSearchInCity(addressLocation);
         /*initOverly(latLng);*/
 
 
@@ -621,6 +700,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
 
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 if(isNameCall) {
+                    isAddress = false;
                     String keyword = "";
                     keyword = v.getText().toString();
                     //写你要做的事情
@@ -630,17 +710,13 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
                             .radius(600000)
                             .keyword(keyword)
                             .pageNum(0).pageCapacity(30));
+
                 }else{
+                    isAddress = true;
                     String address = "";
                     address = v.getText().toString();
-                    int index = address.indexOf("市");
-                    if(index > 0){
-                        String city = address.substring(0,index);
-                        address = address.substring(index,address.length());
-                        mSearch.geocode(new GeoCodeOption().city(city).address(address));
-                    }else{
-                        mSearch.geocode(new GeoCodeOption().city("温州市").address(address));
-                    }
+                    poiSearchInCity(address);
+
                     /*beginSearchLalByAddress(address);*/
                 }
                     hideInput(HelpMeBuyAddShopDetailActivity.this);//隐藏软键盘
@@ -664,7 +740,22 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
     /*软键盘监听*/
 
     /*poi附近检索*/
+    /*poi城市检索*/
+    private void poiSearchInCity(String address){
+        isAddress = true;
+        int index = address.indexOf("市");
+        if(index > 0){
+            String city = address.substring(0,index);
+            address = address.substring(index,address.length());
+            poiSearch.searchInCity(new PoiCitySearchOption().city(city).pageCapacity(30).pageNum(0).keyword(address));
+                        /*mSearch.geocode(new GeoCodeOption().city(city).address(address));*///根据地名查找经纬度
+        }else{
+            poiSearch.searchInCity(new PoiCitySearchOption().city("温州市").pageCapacity(30).pageNum(0).keyword(address));
+                        /*mSearch.geocode(new GeoCodeOption().city("温州市").address(address));*/
+        }
+    }
 
+    /*poi城市检索*/
 
     /**根据经纬度找地图地址并动画显示在屏幕中间  有关mark网站的出处http://blog.csdn.net/callmesen/article/details/40540895**/
     private void location(LatLng ll){
@@ -782,9 +873,14 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
             return;
         }
         if(result.getAllPoi() != null) {
+            if(!isAddress) {
             /*找到关键词所标注的地方*/
-            getPoisFromKeyWordSearch(result.getAllPoi());
+                getPoisFromKeyWordSearch(result.getAllPoi());
             /*找到关键词所标注的地方*/
+            }
+               initRecycleView.adapter.setDataList(result.getAllPoi());
+
+
         }
     }
 

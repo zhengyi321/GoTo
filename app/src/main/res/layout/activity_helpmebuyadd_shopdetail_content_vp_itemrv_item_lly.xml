@@ -24,7 +24,7 @@
         android:layout_weight="6"
         android:orientation="vertical"
         >
-        <RelativeLayout
+       <!-- <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/zero"
             android:layout_weight="1"
@@ -50,14 +50,15 @@
                 android:layout_toRightOf="@id/tv_helpmesendaddcontacter_tab_vp_rv_name"
                 android:layout_marginLeft="20dp"
                 />
-        </RelativeLayout>
+        </RelativeLayout>-->
         <RelativeLayout
+            android:id="@+id/rly_helpmebuyadd_shopdetail_content_vp_itemrv_item_addr"
             android:layout_width="match_parent"
             android:layout_height="@dimen/zero"
             android:layout_weight="1"
             >
             <TextView
-                android:id="@+id/tv_helpmesendaddcontacter_tab_vp_rv_address"
+                android:id="@+id/tv_helpmebuyadd_shopdetail_content_vp_itemrv_item_addr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/addressTest"
