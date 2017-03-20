@@ -91,7 +91,7 @@ public class PriceUtil {
 
 
 
-    public String gotoHelpMeSendlFee(float dis,float weight){
+    public String gotoHelpMeSendlFee(float dis/*,float weight*/){
         String price = "￥";
         TimeUtil timeUtil = new TimeUtil();
         int hour = timeUtil.getHour(new Date());
@@ -101,7 +101,7 @@ public class PriceUtil {
         }
 
         if((hour >=10)&&(hour <=21)){
-            if(weight <= 10){
+           /* if(weight <= 10){*/
                 if(dis <= 3) {
                     price += "7";
                 }else if((dis >= 3)&&(dis <= 20)){
@@ -111,7 +111,7 @@ public class PriceUtil {
                     float fee =2*(7 + 2*(dis -3));
                     price += ""+fee;
                 }
-            }else if(weight > 10){
+          /*  }else if(weight > 10){
                 if(dis <= 3) {
                     float fee = 7 + ((weight -10)*2);
                     price += ""+fee;
@@ -122,11 +122,11 @@ public class PriceUtil {
                     float fee =2*(7 + ((weight -10)*2) + (2*(dis -3)));
                     price += ""+fee;
                 }
-            }
+            }*/
         }else if((hour > 21)||(hour <= 1)){
 
 
-            if(weight <= 10) {
+           /* if(weight <= 10) {*/
                 if (dis <= 3) {
                     float fee = 7 * 2;
                     price += "" + fee;
@@ -137,7 +137,7 @@ public class PriceUtil {
                     float fee = 2 * (7 + 2 * (dis - 3)) * 2;
                     price += "" + fee;
                 }
-            }else if(weight > 10){
+        /*    }else if(weight > 10){
 
                     if(dis <= 3) {
                         float fee = (7 + ((weight -10)*2))*2;
@@ -150,7 +150,7 @@ public class PriceUtil {
                         price += ""+fee;
                     }
 
-            }
+            }*/
         }else if((hour > 1)&&(hour < 10)){
             Toast.makeText(activity,"尊敬的客户，我们兔子还没有出门呢（快递员还没有上班，10点开始上班）",Toast.LENGTH_LONG).show();
         }

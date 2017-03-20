@@ -37,6 +37,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import tianhao.agoto.Bean.GoodsBean;
 import tianhao.agoto.Bean.OrderDetail;
+import tianhao.agoto.Common.DialogAlterView.LikeIosStyle.AlertView;
+import tianhao.agoto.Common.DialogAlterView.LikeIosStyle.OnItemClickListener;
 import tianhao.agoto.Common.DialogPopupWindow.PopupOnClickEvents;
 import tianhao.agoto.Common.Widget.DB.XCCacheManager.xccache.XCCacheManager;
 import tianhao.agoto.R;
@@ -102,14 +104,44 @@ public class HelpMeSendActivity extends Activity {
     @OnClick(R.id.lly_helpmesend_content_weight)
 
     public void llyHelpMeSendContentWeightOnclick(){
-        popupOnClickEvents.GoodsWeightSelect(llyHelpMeSend,tvHelpMeSendContentGoodsWeight);
+        new AlertView.Builder().setContext(this)
+                .setStyle(AlertView.Style.ActionSheet)
+                .setTitle("物品重量")
+                .setMessage(null)
+                .setCancelText("取消")
+                .setDestructive("超出10公斤(超出部分需另收费)")
+                .setDestructive1("10公斤以内")
+                .setOthers(null)
+                .setOnItemClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        /*Toast.makeText(getBaseContext(),"pos"+position,Toast.LENGTH_SHORT).show();*/
+                        switch (position){
+                            case 0:
+                                tvHelpMeSendContentGoodsWeight.setText("超出10公斤");
+
+                                break;
+                            case 1:
+                                tvHelpMeSendContentGoodsWeight.setText("10公斤以内");
+
+                                break;
+                            case -1:
+                                break;
+                        }
+                    }
+                })
+                .build()
+                .show();
+        startBikeNaviSearch();
+
+ /*       popupOnClickEvents.GoodsWeightSelect(llyHelpMeSend,tvHelpMeSendContentGoodsWeight);
         popupOnClickEvents.setOnGoodsWeightSelectListener(new PopupOnClickEvents.OnGoodsWeightSelectListener() {
             @Override
             public void select() {
-                /*Toast.makeText(getBaseContext(),"here is onclick",Toast.LENGTH_SHORT).show();*/
+                *//*Toast.makeText(getBaseContext(),"here is onclick",Toast.LENGTH_SHORT).show();*//*
                 startBikeNaviSearch();
             }
-        });
+        });*/
     }
 
 
@@ -166,6 +198,15 @@ public class HelpMeSendActivity extends Activity {
 
         popupOnClickEvents.PayConfirm(llyHelpMeSend,orderDetail);
     }
+    /*费用说明*/
+    @BindView(R.id.rly_helpmesend_bottombar_feecontent)
+    RelativeLayout rlyHelpMeSendBottomBarFeeContent;
+    @OnClick(R.id.rly_helpmesend_bottombar_feecontent)
+    public void rlyHelpMeSendBottomBarFeeContentOnclick(){
+        Intent intent = new Intent(this,ShouFeiBiaoZhunActivity.class);
+        startActivity(intent);
+    }
+    /*费用说明*/
     /*底部栏支付*/
     private String usid = "";
     private String userName = "";
@@ -403,14 +444,16 @@ public class HelpMeSendActivity extends Activity {
                 weight = weight.substring(0,index);
                 if(phoneFormatCheckUtils.isDouble(weight)){
                     float tempWeight = Float.parseFloat(weight);
-                    price = priceUtil.gotoHelpMeSendlFee(dis, tempWeight);
+                    /*price = priceUtil.gotoHelpMeSendlFee(dis, tempWeight);*/
+                    price = priceUtil.gotoHelpMeSendlFee(dis);
                 }else {
                     Toast.makeText(this, "请正确输入重量", Toast.LENGTH_SHORT).show();
                 }
             }else{
                 if(phoneFormatCheckUtils.isDouble(weight)){
                     float tempWeight = Float.parseFloat(weight);
-                    price = priceUtil.gotoHelpMeSendlFee(dis, tempWeight);
+                    /*price = priceUtil.gotoHelpMeSendlFee(dis, tempWeight);*/
+                    price = priceUtil.gotoHelpMeSendlFee(dis);
                 }else {
                     Toast.makeText(this, "请正确输入重量", Toast.LENGTH_SHORT).show();
                 }

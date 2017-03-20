@@ -694,6 +694,51 @@ public class TimeUtil {
         return c.get(Calendar.MINUTE);
     }
 
+
+    public  String getDayofweek(String date){
+
+        Calendar cal = Calendar.getInstance();
+//   cal.setTime(new Date(System.currentTimeMillis()));
+        if (date.equals("")) {
+            cal.setTime(new Date(System.currentTimeMillis()));
+        }else {
+            cal.setTime(new Date(getDateByStr2(date).getTime()));
+        }
+        int tempWeek = cal.get(Calendar.DAY_OF_WEEK);
+        String week = (""+tempWeek).substring(0,1);
+        switch (week){
+            case "1":
+                return "周日";
+            case "2":
+                return "周一";
+            case "3":
+                return "周二";
+            case "4":
+                return "周三";
+            case "5":
+                return "周四";
+            case "6":
+                return "周五";
+            case "7":
+                return "周六";
+
+        }
+        return "";
+    }
+
+    public  Date getDateByStr2(String dd)
+    {
+
+        SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        try {
+            date = sd.parse(dd);
+        } catch (ParseException e) {
+            date = null;
+            e.printStackTrace();
+        }
+        return date;
+    }
     /**
      * 功能：返回星期 1：星期一，2:星期二 ... 6:星期六 7:星期日
      *
@@ -704,12 +749,29 @@ public class TimeUtil {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         int week = c.get(Calendar.DAY_OF_WEEK) - 1;
-        if (week == 0) {
+
+        if (week <= 0) {
             return 7;
         } else {
             return week;
         }
     }
+    /**
+     * 功能：返回星期 1：星期一，2:星期二 ... 6:星期六 7:星期日
+     *
+     * @param date
+     * @return
+     *//*
+    public  int getChinaWeek(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        int week = c.get(Calendar.DAY_OF_WEEK) - 1;
+        if (week == 0) {
+            return 7;
+        } else {
+            return week;
+        }
+    }*/
 
     /**
      * 功能：返回秒
@@ -1211,7 +1273,22 @@ public class TimeUtil {
      *
      * @return 当前日期是星期几
      */
-    public  String getWeekOfDate() {
+    public  String getWeekOfDate(int w) {
+//        String[] weekDays = {"7", "1", "2", "3", "4", "5", "6"};
+        String[] weekDays = {"周日", "周一", "周二", "周三", "周四", "周五", "周六"};
+        Calendar cal = Calendar.getInstance();
+//        cal.setTime(dt);
+        w -= 1;
+        if (w < 0)
+            w = 0;
+        return weekDays[w];
+    }
+    /**
+     * 获取当前日期是星期几<br>
+     *
+     * @return 当前日期是星期几
+     */
+    public  String getWeekOfCurrentDate() {
         String[] weekDays = {"7", "1", "2", "3", "4", "5", "6"};
 //        String[] weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
         Calendar cal = Calendar.getInstance();

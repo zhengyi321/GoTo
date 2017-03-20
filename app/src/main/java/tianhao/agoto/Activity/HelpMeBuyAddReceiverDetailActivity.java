@@ -28,7 +28,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -56,6 +59,7 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.geocode.GeoCodeOption;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
@@ -65,6 +69,7 @@ import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
 import com.baidu.mapapi.search.poi.PoiCitySearchOption;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
 import com.baidu.mapapi.search.poi.PoiIndoorResult;
+import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
 import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
@@ -75,6 +80,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import tianhao.agoto.Common.Widget.EditText.EditTextWithDel;
+import tianhao.agoto.Common.Widget.XRecycleView.XRecyclerView;
 import tianhao.agoto.R;
 import tianhao.agoto.Utils.SystemUtils;
 
@@ -82,25 +88,25 @@ import tianhao.agoto.Utils.SystemUtils;
  * Created by admin on 2017/2/28.
  */
 
-public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGetGeoCoderResultListener {
+public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGetGeoCoderResultListener,OnGetPoiSearchResultListener {
 
     /*viewpage recycleview 历史记录 收藏地址 功能 begin*/
+    @BindView(R.id.tv_helpmebuyadd_receiverdetail_tabbar_nearby)
+    TextView tvHelpMeBuyAddReceiverDetailTabBarNearBy;
+    @BindView(R.id.iv_helpmebuyadd_receiverdetail_tabbar_nearby)
+    ImageView ivHelpMeBuyAddReceiverDetailTabBarNearBy;
     @BindView(R.id.tv_helpmebuyadd_receiverdetail_tabbar_history)
     TextView tvHelpMeBuyAddReceiverDetailTabBarHistory;
     @BindView(R.id.iv_helpmebuyadd_receiverdetail_tabbar_history)
     ImageView ivHelpMeBuyAddReceiverDetailTabBarHistory;
-    @BindView(R.id.tv_helpmebuyadd_receiverdetail_tabbar_collectaddress)
-    TextView tvHelpMeBuyAddReceiverDetailTabBarCollectAddress;
-    @BindView(R.id.iv_helpmebuyadd_receiverdetail_tabbar_collectaddress)
-    ImageView ivHelpMeBuyAddReceiverDetailTabBarCollectAddress;
     @BindView(R.id.iv_helpmebuyadd_receiverdetail_tab_greenbottom)
     ImageView ivHelpMeBuyAddReceiverDetailTabGreenBottom;
     @BindView(R.id.vp_helpmebuyadd_receiverdetail_content)
     ViewPager vpHelpMeBuyAddReceiverDetailContent;
+    @BindView(R.id.rly_helpmebuyadd_receiverdetail_tabbar_nearby)
+    RelativeLayout rlyHelpMeBuyAddReceiverDetailTabBarNearBy;
     @BindView(R.id.rly_helpmebuyadd_receiverdetail_tabbar_history)
     RelativeLayout rlyHelpMeBuyAddReceiverDetailTabBarHistory;
-    @BindView(R.id.rly_helpmebuyadd_receiverdetail_tabbar_collectaddress)
-    RelativeLayout rlyHelpMeBuyAddReceiverDetailTabBarCollectAddress;
     private int offset = 0;// 动画图片偏移量
     private int currIndex = 0;// 当前页卡编号
     private List<View> viewList; // Tab页面列表
@@ -114,7 +120,8 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
     private BaiduMap mBaiduMap;
     private LocationClient locationClient=null;
     private BDLocationListener locationListener= new MyLocationListener();
-
+    private BaiduMap.OnMapTouchListener mapTouchListener;
+    InitRecycleView initRecycleView;
     private String addressLocation = "";
     private Boolean isFirst = true;
     private LocationMode mCurrentMode;
@@ -124,9 +131,12 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
 */
 
     /*地名转换经纬度*/
-    @BindView(R.id.tv_helpmebuyadd_receiverdetail_contentaddress)
-    TextView tvHelpMeBuyAddReceiverDetailContentAddress;
+    @BindView(R.id.et_helpmebuyadd_receiverdetail_contentaddress)
+    EditText etHelpMeBuyAddReceiverDetailContentAddress;
     private GeoCoder search=null;
+    /*关键字poi检索*/
+    private PoiSearch poiSearch;
+    /*关键字poi检索*/
     /*地名转换经纬度*/
     /*百度地图定位 end2*/
     @BindView(R.id.lly_helpmebuyadd_receiverdetail_addresssearch)
@@ -138,7 +148,50 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
     EditText etHelpMeBuyAddReceiverDetailContentName;
     @BindView(R.id.et_helpmebuyadd_receiverdetail_content_tel)
     EditText etHelpMeBuyAddReceiverDetailContentTel;
+    /*上拉*/
+    @BindView(R.id.rly_helpmebuyadd_receiverdetail_tabbar_up)
+    RelativeLayout rlyHelpMeBuyAddReceiverDetailTabBarUp;
+    @BindView(R.id.lly_helpmebuyadd_receiverdetail_tabbar_bottom)
+    LinearLayout llyHelpMeBuyAddReceiverDetailTarBarBottom;
+    @OnClick(R.id.rly_helpmebuyadd_receiverdetail_tabbar_up)
+    public void rlyHelpMeBuyAddReceiverDetailTabBarUpOnclick(){
+        int tempHeight = 0;
+        if(!isUp){
+            isUp = true;
+            ViewGroup.LayoutParams layoutParams = llyHelpMeBuyAddReceiverDetailTarBarBottom.getLayoutParams();
+            SystemUtils systemUtils = new SystemUtils(this);
+            tempHeight = layoutParams.height;
 
+            // 初始化需要加载的动画资源
+            Animation animation = AnimationUtils
+                    .loadAnimation(this, R.anim.pop_enter);
+            animation.setDuration(1000);
+            layoutParams.height = 0;
+            llyHelpMeBuyAddReceiverDetailTarBarBottom.setLayoutParams(layoutParams);
+            llyHelpMeBuyAddReceiverDetailTarBarBottom.startAnimation(animation);
+            layoutParams.height += systemUtils.getWindowHeight()/2;
+            llyHelpMeBuyAddReceiverDetailTarBarBottom.setLayoutParams(layoutParams);
+            ivHelpMeBuyAddShopDetailContentUp.setBackgroundResource(R.drawable.down_arrow);
+            /*rlyHelpMeBuyAddShopDetailContentUp.setAnimation(R.style.PopupAnimation);;*/
+        }else{
+            ViewGroup.LayoutParams layoutParams = llyHelpMeBuyAddReceiverDetailTarBarBottom.getLayoutParams();
+
+            layoutParams.height =tempHeight ;
+
+            // 初始化需要加载的动画资源
+            Animation animation = AnimationUtils
+                    .loadAnimation(this, R.anim.pop_exit);
+            /*animation.setDuration(1000);*/
+            llyHelpMeBuyAddReceiverDetailTarBarBottom.startAnimation(animation);
+            llyHelpMeBuyAddReceiverDetailTarBarBottom.setLayoutParams(layoutParams);
+            isUp = false;
+            ivHelpMeBuyAddShopDetailContentUp.setBackgroundResource(R.drawable.up_arrow);
+        }
+    }
+    @BindView(R.id.iv_helpmebuyadd_receiverdetail_tabbar_uparrow)
+    ImageView ivHelpMeBuyAddShopDetailContentUp;
+    private boolean isUp = false;
+    /*上拉*/
     /*手机通讯录*/
     /*返回*/
     @BindView(R.id.rly_helpmebuyadd_receiverdetail_topbar_leftmenu)
@@ -166,18 +219,24 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
 
     private void init(){
         ButterKnife.bind(this);
+        initEditText();
         initSwitchContent();
         initBaiDuMap();
         /*initGlassBg();*/
         /*initTran();*/
     }
+    private void initEditText(){
+
+        etHelpMeBuyAddReceiverDetailContentAddress.setHorizontallyScrolling(false);
+        etHelpMeBuyAddReceiverDetailContentAddress.setMaxLines(Integer.MAX_VALUE);
+    }
 
     /*viewpage recycleview 历史记录 收藏地址 功能*/
     private void initSwitchContent(){
-        InitTabBg(true);
+        /*InitTabBg(true);*/
         InitImageView();
         InitViewPager();
-        initEditAddress();
+        /*initEditAddress();*/
     }
     /*初始化输入地址框 保证随时找到新地址*/
     private void initEditAddress(){
@@ -205,7 +264,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
         Bundle bundle = new Bundle();
         bundle.putString("nameCall",etHelpMeBuyAddReceiverDetailContentName.getText().toString());
         bundle.putString("tel",etHelpMeBuyAddReceiverDetailContentTel.getText().toString());
-        bundle.putString("address",tvHelpMeBuyAddReceiverDetailContentAddress.getText().toString());
+        bundle.putString("address",etHelpMeBuyAddReceiverDetailContentAddress.getText().toString());
         bundle.putString("rlat", "" + rlat);
         bundle.putString("rlon", "" + rlon);
         /*Toast.makeText(getBaseContext(),"rlyHelpMeBuyAddReceiverDetailTopBarRightMenuOnclick:"+rlat+" "+rlon+" ",Toast.LENGTH_SHORT).show();*/
@@ -290,7 +349,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
             if ((lat != null) && (lon != null)) {
                 LatLng latLng = new LatLng(Double.parseDouble(lat),Double.parseDouble(lon));
                 location(latLng);
-                tvHelpMeBuyAddReceiverDetailContentAddress.setText(address);
+                etHelpMeBuyAddReceiverDetailContentAddress.setText(address);
             }
         }
     }
@@ -298,17 +357,47 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
     /**
      * 初始化头标
      */
-    private void InitTabBg(Boolean isFirst) {
-        if(isFirst) {
-            tvHelpMeBuyAddReceiverDetailTabBarHistory.setTextColor(getResources().getColor(R.color.colorHelpMeSendAddContacterActivityTabBarGreenBg));
-            ivHelpMeBuyAddReceiverDetailTabBarHistory.setImageResource(R.drawable.historyrecordselect);
-            tvHelpMeBuyAddReceiverDetailTabBarCollectAddress.setTextColor(getResources().getColor(R.color.colorHelpMeSendAddContacterActivityTabBarGrayBg));
-            ivHelpMeBuyAddReceiverDetailTabBarCollectAddress.setImageResource(R.drawable.collectaddressnormal);
-        }else{
-            tvHelpMeBuyAddReceiverDetailTabBarHistory.setTextColor(getResources().getColor(R.color.colorHelpMeSendAddContacterActivityTabBarGrayBg));
-            ivHelpMeBuyAddReceiverDetailTabBarHistory.setImageResource(R.drawable.historyrecordnormal);
-            tvHelpMeBuyAddReceiverDetailTabBarCollectAddress.setTextColor(getResources().getColor(R.color.colorHelpMeSendAddContacterActivityTabBarGreenBg));
-            ivHelpMeBuyAddReceiverDetailTabBarCollectAddress.setImageResource(R.drawable.collectaddressselect);
+    private void InitTabBg(int ag0) {
+
+
+        int one = offset * 2;// 页卡1 -> 页卡2 偏移量
+        int two = one * 2;// 页卡1 -> 页卡3 偏移量
+        Animation animation = null;
+        switch (ag0) {
+           /* if (isFirst) {*/
+            case 0:
+                if (currIndex == 1) {
+                    animation = new TranslateAnimation(one, 0, 0, 0);
+                } else if (currIndex == 2) {
+                    animation = new TranslateAnimation(two, 0, 0, 0);
+                }
+                currIndex = 0;
+                animation.setFillAfter(true);// True:图片停在动画结束位置
+                animation.setDuration(200);
+                ivHelpMeBuyAddReceiverDetailTabGreenBottom.startAnimation(animation);
+                tvHelpMeBuyAddReceiverDetailTabBarNearBy.setTextColor(getResources().getColor(R.color.colorHelpMeSendAddContacterActivityTabBarGreenBg));
+                ivHelpMeBuyAddReceiverDetailTabBarNearBy.setImageResource(R.drawable.collectaddressselect);
+                tvHelpMeBuyAddReceiverDetailTabBarHistory.setTextColor(getResources().getColor(R.color.colorHelpMeSendAddContacterActivityTabBarGrayBg));
+                ivHelpMeBuyAddReceiverDetailTabBarHistory.setImageResource(R.drawable.historyrecordnormal);
+                beginSearchLalByAddress(etHelpMeBuyAddReceiverDetailContentAddress.getText().toString());
+                break;
+         /*   } else {*/
+            case 1:
+                if (currIndex == 0) {
+                    animation = new TranslateAnimation(offset, one, 0, 0);
+                } else if (currIndex == 2) {
+                    animation = new TranslateAnimation(two, one, 0, 0);
+                }
+                currIndex = 1;
+                animation.setFillAfter(true);// True:图片停在动画结束位置
+                animation.setDuration(200);
+                ivHelpMeBuyAddReceiverDetailTabGreenBottom.startAnimation(animation);
+                tvHelpMeBuyAddReceiverDetailTabBarNearBy.setTextColor(getResources().getColor(R.color.colorHelpMeSendAddContacterActivityTabBarGrayBg));
+                ivHelpMeBuyAddReceiverDetailTabBarNearBy.setImageResource(R.drawable.collectaddressnormal);
+                tvHelpMeBuyAddReceiverDetailTabBarHistory.setTextColor(getResources().getColor(R.color.colorHelpMeSendAddContacterActivityTabBarGreenBg));
+                ivHelpMeBuyAddReceiverDetailTabBarHistory.setImageResource(R.drawable.historyrecordselect);
+                break;
+          /*  }*/
         }
     }
 
@@ -345,12 +434,14 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
         vpHelpMeBuyAddReceiverDetailContent.setAdapter(new MyPagerAdapter(viewList));
         vpHelpMeBuyAddReceiverDetailContent.setCurrentItem(0);
         vpHelpMeBuyAddReceiverDetailContent.addOnPageChangeListener(new MyOnPageChangeListener());
-        List<String> dataList = new ArrayList<String>();
+        initRecycleView = new InitRecycleView(viewList.get(0));
+        initRecycleView.initXRV();
    /*     dataList.add("");
         dataList.add("");
         dataList.add("");*/
-        initRecycleView(0,dataList);
+
     }
+
 
 
 
@@ -411,32 +502,38 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
 
     /*RecycleView适配器*/
 
-    private class MyRecycleViewAdapter extends RecyclerView.Adapter<MyRecycleViewAdapter.ItemContentViewHolder>{
+    public class MyRecycleViewAdapter extends RecyclerView.Adapter<MyRecycleViewAdapter.ItemContentViewHolder>{
 
-        private List<String> testList;
+        private List<PoiInfo> testList;
         private Context context;
         private LayoutInflater inflater;
-        public MyRecycleViewAdapter(Context context,List<String> stringList){
+        public MyRecycleViewAdapter(Context context,List<PoiInfo> stringList){
             testList = stringList;
             this.context = context;
             inflater = LayoutInflater.from(context);
         }
 
-        public void setDataList(List<String> dataList){
+        public void setDataList(List<PoiInfo> dataList){
             this.testList = dataList;
             this.notifyDataSetChanged();
         }
 
 
         @Override
-        public MyRecycleViewAdapter.ItemContentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new MyRecycleViewAdapter.ItemContentViewHolder(inflater.inflate(R.layout.activity_helpmebuyadd_receiverdetail_content_vp_itemrv_item_lly, parent, false));
+        public ItemContentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new ItemContentViewHolder(inflater.inflate(R.layout.activity_helpmebuyadd_receiverdetail_content_vp_itemrv_item_lly, parent, false));
 
         }
 
         @Override
-        public void onBindViewHolder(MyRecycleViewAdapter.ItemContentViewHolder holder, int position) {
+        public void onBindViewHolder(ItemContentViewHolder holder, int position) {
+            try {
+                if (testList.size() != 0) {
+                    holder.tvHelpMeBuyAddReceiverDetailContentVPItemRVItemAddr.setText(testList.get(position).city + testList.get(position).name);/*testList.get(position).address+testList.get(position).describeContents()*/
+                }
+            }catch (Exception e){
 
+            }
         }
 
         @Override
@@ -451,10 +548,18 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
 
 
         public class ItemContentViewHolder extends RecyclerView.ViewHolder{
-
+            @BindView(R.id.lly_helpmebuyadd_receiverdetail_content_vp_itemrv_item_total)
+            LinearLayout llyHelpMeBuyAddReceiverDetailContentVPItemRVItemTotal;
+            @OnClick(R.id.lly_helpmebuyadd_receiverdetail_content_vp_itemrv_item_total)
+            public void llyHelpMeBuyAddReceiverDetailContentVPItemRVItemTotalOnclick(){
+                etHelpMeBuyAddReceiverDetailContentAddress.setText(tvHelpMeBuyAddReceiverDetailContentVPItemRVItemAddr.getText().toString());
+            }
+            @BindView(R.id.tv_helpmebuyadd_receiverdetail_content_vp_itemrv_item_addr)
+            public TextView tvHelpMeBuyAddReceiverDetailContentVPItemRVItemAddr;
 
             public ItemContentViewHolder(View itemView) {
                 super(itemView);
+                ButterKnife.bind(this,itemView);
             }
         }
     }
@@ -467,45 +572,14 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
      */
     public class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
 
-        int one = offset * 2 ;// 页卡1 -> 页卡2 偏移量
-        int two = one * 2;// 页卡1 -> 页卡3 偏移量
-
         public void onPageSelected(int arg0) {
-            Animation animation = null;
-            switch (arg0) {
-                case 0:
-                    if (currIndex == 1) {
-                        animation = new TranslateAnimation(one, 0, 0, 0);
-                    } else if (currIndex == 2) {
-                        animation = new TranslateAnimation(two, 0, 0, 0);
-                    }
-                    break;
-                case 1:
-                    if (currIndex == 0) {
-                        animation = new TranslateAnimation(offset, one, 0, 0);
-                    } else if (currIndex == 2) {
-                        animation = new TranslateAnimation(two, one, 0, 0);
-                    }
-                    break;
 
-            }
-            currIndex = arg0;
-            animation.setFillAfter(true);// True:图片停在动画结束位置
-            animation.setDuration(200);
-            ivHelpMeBuyAddReceiverDetailTabGreenBottom.startAnimation(animation);
-
-            List<String> dataList = new ArrayList<String>();
-           /* dataList.add("");
-            dataList.add("");
-            dataList.add("");
-            dataList.add("");*/
-            initRecycleView(arg0,dataList);
             switch (arg0){
                 case 0:
-                    InitTabBg(true);
+                    InitTabBg(arg0);
                     break;
                 case 1:
-                    InitTabBg(false);
+                    InitTabBg(arg0);
 
                     break;
             }
@@ -518,31 +592,38 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
 
     }
 
+    public class  InitRecycleView{
+        @BindView(R.id.xrv_helpmebuyaddshopdetail_vp_item)
+        XRecyclerView xrvHelpMeBuyAddShopDetailVPItem;
+        public MyRecycleViewAdapter adapter ;
 
+        private List<PoiInfo> poiInfoList = new ArrayList<>();
+        public InitRecycleView(View view){
+            ButterKnife.bind(this,view);
+            initXRV();
+        }
 
-    private void initRecycleView(int pos,List<String> dataList){
-        int count = pos + 1;
-        if(count <= dataList.size()) {
-            RecyclerView rv = null;
-        /*多线程运行 行不通*/
-            MyRecycleViewAdapter adapter = new MyRecycleViewAdapter(viewList.get(pos).getContext(), dataList);
-            rv = (RecyclerView) viewList.get(pos).findViewById(R.id.rv_helpmebuyadd_receiverdetail_vp_item);
-            rv.setAdapter(adapter);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(viewList.get(pos).getContext());
-            //设置为垂直布局，这也是默认的
-            layoutManager.setOrientation(OrientationHelper.VERTICAL);
-            //设置布局管理器
-            rv.setLayoutManager(layoutManager);
+        private void initXRV(){
+            adapter = new MyRecycleViewAdapter(getBaseContext(),poiInfoList);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext(),LinearLayoutManager.VERTICAL,false);
+            xrvHelpMeBuyAddShopDetailVPItem.setLayoutManager(layoutManager);
+            xrvHelpMeBuyAddShopDetailVPItem.setAdapter(adapter);
         }
     }
-    @OnClick(R.id.rly_helpmebuyadd_receiverdetail_tabbar_history)
-    public void rlyHelpMeSendAddContacterTabBarHistoryOnclick(){
+
+
+    @OnClick(R.id.rly_helpmebuyadd_receiverdetail_tabbar_nearby)
+    public void rlyHelpMeSendAddContacterTabBarNearByOnclick(){
         vpHelpMeBuyAddReceiverDetailContent.setCurrentItem(0);
+        currIndex = 1;
+        InitTabBg(0);
     }
 
-    @OnClick(R.id.rly_helpmebuyadd_receiverdetail_tabbar_collectaddress)
-    public void rlyHelpMeSendAddContacterTabBarCollectAddressOnclick(){
+    @OnClick(R.id.rly_helpmebuyadd_receiverdetail_tabbar_history)
+    public void rlyHelpMeSendAddContacterTabBarHistoryOnclick(){
         vpHelpMeBuyAddReceiverDetailContent.setCurrentItem(1);
+        currIndex = 0;
+        InitTabBg(1);
     }
 
 
@@ -592,32 +673,90 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
 
         return super.onKeyDown(keyCode, event);
     }
+    /*输入地址poi附近检索*/
+    private void poiBeginSearch( ){
+        /*Toast.makeText(getBaseContext(),"poiBeginSearch",Toast.LENGTH_SHORT).show();*/
+        etHelpMeBuyAddReceiverDetailContentAddress.setOnEditorActionListener(new MyEditorActionListener());
+
+    }
+    /*地图移动坐标不动*/
+    /*软键盘监听*/
+    public class MyEditorActionListener implements TextView.OnEditorActionListener {
 
 
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+
+                    String keyword = "";
+                    keyword = v.getText().toString();
+                    if(!keyword.isEmpty()) {
+                        beginSearchLalByAddress(keyword);
+                    }else {
+                        mBaiduMap.clear();
+                    }
+                    //写你要做的事情
+                    /*Toast.makeText(getBaseContext(), "" + keyword, Toast.LENGTH_SHORT).show();*/
+                    /*poiSearch.searchNearby((new PoiNearbySearchOption())
+                            .location(latLng)
+                            .radius(600000)
+                            .keyword(keyword)
+                            .pageNum(0).pageCapacity(30));*/
+                hideInput(HelpMeBuyAddReceiverDetailActivity.this);//隐藏软键盘
+
+                return true;
+            }
+            return false;
+        }
+    }
+    private InputMethodManager manager;
+    private void hideInput(Activity activity) {
+        // 输入法管理器 用户隐藏软键盘
+        if(manager==null){
+            manager = ((InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE));
+        }
+
+        manager.hideSoftInputFromWindow(( activity)
+                        .getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+    /*软键盘监听*/
     private void initBaiDuMap(){
-
+        initPoiSearch();
         mBaiduMap = mMapView.getMap();
-        search= GeoCoder.newInstance();
-        /**根据经纬度得到屏幕中心点地址**/
-        search.setOnGetGeoCodeResultListener(this);
+
         initOverlyWithMapView();
         //设置缩放级别，默认级别为12
         mBaiduMap.setMyLocationEnabled(true);
-        //普通地图
-        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
         locationClient=new LocationClient(getApplicationContext());
         locationClient.registerLocationListener(locationListener);
+        //普通地图
+        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
+        search= GeoCoder.newInstance();
+        /**根据经纬度得到屏幕中心点地址**/
+        search.setOnGetGeoCodeResultListener(this);
         initLocation();
         locationClient.start();
 
 
     }
+    /*poi城市内检索*/
+    private void initPoiSearch(){
+        poiSearch = PoiSearch.newInstance();
+        poiSearch.setOnGetPoiSearchResultListener(this);
+
+    }
     /*地图移动坐标不动*/
     private void initOverlyWithMapView(){
-        mBaiduMap.setOnMapTouchListener(new BaiduMap.OnMapTouchListener() {
+
+        mapTouchListener = new BaiduMap.OnMapTouchListener() {
             @Override
             public void onTouch(MotionEvent motionEvent) {
-                /*Toast.makeText(getBaseContext(),"here is ontouch",Toast.LENGTH_SHORT).show();*/
+                  /*滑动动作的时候设置为滑动状态*/
+
+                /*滑动动作的时候设置为滑动状态*/
+            /*Toast.makeText(getBaseContext(),"here is ontouch",Toast.LENGTH_SHORT).show();*/
                 //http://blog.csdn.net/sjf0115/article/details/7306284 获取控件在屏幕上的坐标
                 int[] location = new int[2];
                 ivHelpMeBuyAddReceiverDetailCenterLoc.getLocationOnScreen(location);
@@ -630,9 +769,11 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
                 search.reverseGeoCode(new ReverseGeoCodeOption().location(currentPt));
                 rlat = currentPt.latitude;
                 rlon = currentPt.longitude;
-
             }
-        });
+        };
+        mBaiduMap.setOnMapTouchListener(mapTouchListener);
+
+
 
     }
     /*地图移动坐标不动*/
@@ -689,10 +830,11 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
         /*定位蓝色点*/
         LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
         location(latLng);
-
+        poiBeginSearch();
         /*etHelpMeBuyAddSellerAddressContentAddress.setText(location.getAddrStr() + location.getBuildingName() +location.getFloor()+location.getStreet()+location.getStreetNumber());*/
         addressLocation=location.getAddrStr()+" "+location.getLocationDescribe();
-        tvHelpMeBuyAddReceiverDetailContentAddress.setText(addressLocation);
+        etHelpMeBuyAddReceiverDetailContentAddress.setText(addressLocation);
+        beginSearchLalByAddress(addressLocation);
     }
 
 
@@ -712,9 +854,34 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
 
     }
     @Override
+    public void onGetPoiResult(PoiResult result) {
+        if(result.getAllPoi() != null) {
+
+/*
+            Toast.makeText(this,"this is onGetPoiResult"+result.getAllAddr().get(0).address,Toast.LENGTH_LONG).show();*/
+            initRecycleView.adapter.setDataList(result.getAllPoi());
+
+
+        }
+    }
+
+    @Override
+    public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
+
+    }
+
+    @Override
+    public void onGetPoiIndoorResult(PoiIndoorResult poiIndoorResult) {
+
+    }
+
+    @Override
     public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
         if (geoCodeResult.getLocation() != null) {
             location(geoCodeResult.getLocation());
+            /*搜索附近地址*/
+            poiSearchNearBy(geoCodeResult.getAddress(),geoCodeResult.getLocation());
+            /*搜索附近地址*/
         }
     }
 
@@ -726,18 +893,61 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
         }
      /*   mBaiduMap.clear();
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(result.getLocation()));*/
-
+        LatLng latLng = result.getLocation();
         addressLocation = result.getAddress();
         /*if(isFirst) {*/
-        tvHelpMeBuyAddReceiverDetailContentAddress.setText(addressLocation+"  "+result.getSematicDescription());
-
+        etHelpMeBuyAddReceiverDetailContentAddress.setText(addressLocation+"  "+result.getSematicDescription());
+        poiSearchNearBy(addressLocation,latLng);
 
     }
 
 
+    /*poi附近检索*/
+    private void poiSearchNearBy(String keyword,LatLng latLng){
+        int indexBlank = keyword.indexOf(" ");
+        if(indexBlank > 0){
+            if((latLng != null)&&(keyword!=null)) {
+                keyword = keyword.substring(0, indexBlank);
+                poiSearch.searchNearby((new PoiNearbySearchOption())
+                        .location(latLng)
+                        .radius(9000)
+                        .keyword(keyword)
+                        .pageNum(0).pageCapacity(30));
+            }
+        }else{
+                if((latLng != null)&&(keyword!=null)) {
+
+                    poiSearch.searchNearby((new PoiNearbySearchOption())
+                            .location(latLng)
+                            .radius(9000)
+                            .keyword(keyword)
+                            .pageNum(0).pageCapacity(30));
+                }
+                }
+
+    }
 
 
+    /*poi附近检索*/
 
+    /*根据地名开始查找经纬度*/
+    private void beginSearchLalByAddress(String address){
+       /* String address = etHelpMeBuyAddSellerAddressContentAddress.getText().toString();*/
+        int index = address.indexOf("市");
+        try {
+            if (index > 0) {
+                String city = address.substring(0, index);
+                address = address.substring(index, address.length());
+                search.geocode(new GeoCodeOption().city(city).address(address));
+            } else {
+                search.geocode(new GeoCodeOption().city("温州市").address(address));
+            }
+        }catch (Exception e){
+
+        }
+    }
+
+    /*根据地名开始查找经纬度*/
 
 
 

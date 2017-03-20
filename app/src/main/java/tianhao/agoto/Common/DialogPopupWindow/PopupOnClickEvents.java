@@ -9,11 +9,13 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import java.util.Date;
 import java.util.List;
 
 import tianhao.agoto.Bean.OrderDetail;
 import tianhao.agoto.Common.DialogAlterView.LikeIosStyle.CompanyCustomTelDialog;
 import tianhao.agoto.Common.DialogAlterView.LikeIosStyle.ShouDongShuRuDialog;
+import tianhao.agoto.Utils.TimeUtil;
 
 /**
  * Created by zhyan on 2017/2/20.
@@ -43,10 +45,25 @@ public class PopupOnClickEvents {
         setBackgroundAlpha(0.5f);
         /*hourMinTimePopup.setFocusable(true);*/
         hourMinTimePopup.showAtLocation(layout, Gravity.BOTTOM, 0, 0);
-        hourMinTimePopup.setOnDateTimePopupListener(new HourMinTimePopup.OnDateTimePopupListener() {
+        hourMinTimePopup.setOnDateTimePopupListener(new HourMinTimePopup.OnDateTimePopupListener(){
             @Override
-            public void onClick(String day, String hour, String min) {
+            public void onClick(String day, String ampm, String hour, String min) {
                 if(textView != null) {
+                    TimeUtil timeUtil = new TimeUtil();
+                    if(day.equals("今天")) {
+
+                        day = timeUtil.getLongYMD();
+                    }else{
+                        day = timeUtil.getYear(new Date())+"-" + day;
+                    }
+                    int indexWeek = day.indexOf("周");
+                    if(indexWeek > 0){
+                        day = day.substring(0,indexWeek);
+                    }
+                   /* day.replace("-","月");
+                    day.replace("-","日");*/
+                    day = day.replace("月","-");
+                    day = day.replace("日","-");
                     textView.setText(day + " "+hour+":"+min);
                 }
             }

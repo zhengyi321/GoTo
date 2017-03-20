@@ -156,8 +156,8 @@
             android:layout_height="match_parent"
             android:layout_weight="4.5"
             >
-            <TextView
-                android:id="@+id/tv_helpmebuyadd_receiverdetail_contentaddress"
+            <EditText
+                android:id="@+id/et_helpmebuyadd_receiverdetail_contentaddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorActivityAddressManageAddContacterContentBlackWordBg"
@@ -165,7 +165,9 @@
                 android:background="@null"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
+                android:imeOptions="actionSearch"
                 android:maxLines="2"
+                android:inputType="text|textCapSentences"
                 />
             <!--<EditText
                 android:id="@+id/et_helpmebuyadd_receiverdetail_contentaddress"
@@ -227,6 +229,7 @@
     <!--百度地图-->
 
     <LinearLayout
+        android:id="@+id/lly_helpmebuyadd_receiverdetail_tabbar_bottom"
         android:layout_width="match_parent"
         android:layout_height="@dimen/zero"
         android:layout_weight="2.5"
@@ -243,53 +246,70 @@
             <!--历史记录-->
 
             <RelativeLayout
-                android:id="@+id/rly_helpmebuyadd_receiverdetail_tabbar_history"
+                android:id="@+id/rly_helpmebuyadd_receiverdetail_tabbar_nearby"
                 android:layout_width="@dimen/zero"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 >
 
                 <TextView
-                    android:id="@+id/tv_helpmebuyadd_receiverdetail_tabbar_history"
+                    android:id="@+id/tv_helpmebuyadd_receiverdetail_tabbar_nearby"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="@string/historyRecord"
+                    android:text="@string/nearAddress"
                     android:textSize="14sp"
                     android:textColor="@color/colorActivityMyOrderTabSwitchSelectedWordGreenBg" />
                 <ImageView
-                    android:id="@+id/iv_helpmebuyadd_receiverdetail_tabbar_history"
+                    android:id="@+id/iv_helpmebuyadd_receiverdetail_tabbar_nearby"
                     android:layout_width="@dimen/activity_helpmesendaddcontacter_tabbar_ico_width"
                     android:layout_height="@dimen/activity_helpmesendaddcontacter_tabbar_ico_height"
-                    android:src="@drawable/historyrecordselect"
+                    android:src="@drawable/collectaddressselect"
                     android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@id/tv_helpmebuyadd_receiverdetail_tabbar_history"
+                    android:layout_toLeftOf="@id/tv_helpmebuyadd_receiverdetail_tabbar_nearby"
                     android:layout_marginRight="@dimen/activity_helpmesendaddcontacter_tabbar_ico_margin_left_right_size"
                     />
             </RelativeLayout>
             <!--历史记录-->
+            <!--向上拉-->
+            <RelativeLayout
+                android:id="@+id/rly_helpmebuyadd_receiverdetail_tabbar_up"
+                android:layout_width="@dimen/zero"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
+                >
+                <ImageView
+                    android:id="@+id/iv_helpmebuyadd_receiverdetail_tabbar_uparrow"
+                    android:layout_width="13dp"
+                    android:layout_height="8dp"
+                    android:background="@drawable/up_arrow"
+                    android:layout_centerInParent="true"
+                    />
+
+            </RelativeLayout>
+            <!--向上拉-->
             <!--收藏地址-->
             <RelativeLayout
-                android:id="@+id/rly_helpmebuyadd_receiverdetail_tabbar_collectaddress"
+                android:id="@+id/rly_helpmebuyadd_receiverdetail_tabbar_history"
                 android:layout_width="@dimen/zero"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 >
                 <TextView
-                    android:id="@+id/tv_helpmebuyadd_receiverdetail_tabbar_collectaddress"
+                    android:id="@+id/tv_helpmebuyadd_receiverdetail_tabbar_history"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:textSize="14sp"
-                    android:text="@string/collectAddress"
+                    android:text="@string/historyRecord"
                     android:textColor="@color/colorActivityMyOrderTabSwitchUnSelectedWordGrayBg" />
                 <ImageView
-                    android:id="@+id/iv_helpmebuyadd_receiverdetail_tabbar_collectaddress"
+                    android:id="@+id/iv_helpmebuyadd_receiverdetail_tabbar_history"
                     android:layout_width="@dimen/activity_helpmesendaddcontacter_tabbar_ico_collect_width"
                     android:layout_height="@dimen/activity_helpmesendaddcontacter_tabbar_ico_collect_height"
-                    android:src="@drawable/collectaddressnormal"
+                    android:src="@drawable/historyrecordnormal"
                     android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@id/tv_helpmebuyadd_receiverdetail_tabbar_collectaddress"
+                    android:layout_toLeftOf="@id/tv_helpmebuyadd_receiverdetail_tabbar_history"
                     android:layout_marginRight="@dimen/activity_helpmesendaddcontacter_tabbar_ico_margin_left_right_size"
                     />
             </RelativeLayout>

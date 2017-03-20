@@ -3,6 +3,7 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="@dimen/activity_helpmesendaddcontacter_tabbar_vp_rv_item_height"
     android:background="@color/colorHelpMeSendAddContacterActivityTabBarBlackBg"
+    android:id="@+id/lly_helpmebuyadd_receiverdetail_content_vp_itemrv_item_total"
     >
     <RelativeLayout
         android:layout_width="@dimen/zero"
@@ -28,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/zero"
             android:layout_weight="1"
+            android:visibility="gone"
             >
             <TextView
                 android:id="@+id/tv_helpmesendaddcontacter_tab_vp_rv_name"
@@ -57,7 +59,7 @@
             android:layout_weight="1"
             >
             <TextView
-                android:id="@+id/tv_helpmesendaddcontacter_tab_vp_rv_address"
+                android:id="@+id/tv_helpmebuyadd_receiverdetail_content_vp_itemrv_item_addr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/addressTest"

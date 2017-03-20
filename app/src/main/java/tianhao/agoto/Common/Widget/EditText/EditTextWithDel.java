@@ -15,6 +15,8 @@ import android.widget.EditText;
 import tianhao.agoto.R;
 
 /**
+ *
+ * http://blog.csdn.net/jifashihan/article/details/50704948 edit解决输入多行支持搜索的问题
  * Created by admin on 2017/3/6.
  * http://blog.csdn.net/ff20081528/article/details/17121911
  */

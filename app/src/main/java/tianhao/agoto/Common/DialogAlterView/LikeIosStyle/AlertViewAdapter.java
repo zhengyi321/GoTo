@@ -18,7 +18,7 @@ import tianhao.agoto.R;
 public class AlertViewAdapter extends BaseAdapter{
     private List<String> mDatas;
     private List<String> mDestructive;
-    public AlertViewAdapter(List<String> datas,List<String> destructive){
+    public AlertViewAdapter(List<String> datas,List<String> destructive,List<String> destructive1){
         this.mDatas =datas;
         this.mDestructive =destructive;
     }

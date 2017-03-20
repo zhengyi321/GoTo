@@ -44,8 +44,10 @@ public class AlertView {
     private String title;
     private String msg;
     private String[] destructive;
+    private String[] destructive1;
     private String[] others;
     private List<String> mDestructive;
+    private List<String> mDestructive1;
     private List<String> mOthers;
     private String cancel;
     private ArrayList<String> mDatas = new ArrayList<String>();
@@ -73,21 +75,22 @@ public class AlertView {
         this.msg = builder.msg;
         this.cancel = builder.cancel;
         this.destructive = builder.destructive;
+        this.destructive1 = builder.destructive1;
         this.others = builder.others;
         this.onItemClickListener = builder.onItemClickListener;
 
-        initData(title, msg, cancel, destructive, others);
+        initData(title, msg, cancel, destructive,destructive1, others);
         initViews();
         init();
         initEvents();
     }
 
-    public AlertView(String title, String msg, String cancel, String[] destructive, String[] others, Context context, Style style,OnItemClickListener onItemClickListener){
+    public AlertView(String title, String msg, String cancel, String[] destructive, String[] destructive1, String[] others, Context context, Style style,OnItemClickListener onItemClickListener){
         this.contextWeak = new WeakReference<>(context);
         if(style != null)this.style = style;
         this.onItemClickListener = onItemClickListener;
 
-        initData(title, msg, cancel, destructive, others);
+        initData(title, msg, cancel, destructive,destructive1, others);
         initViews();
         init();
         initEvents();
@@ -96,13 +99,17 @@ public class AlertView {
     /**
      * 获取数据
      */
-    protected void initData(String title, String msg, String cancel, String[] destructive, String[] others) {
+    protected void initData(String title, String msg, String cancel, String[] destructive,String[] destructive1, String[] others) {
 
         this.title = title;
         this.msg = msg;
         if (destructive != null){
             this.mDestructive = Arrays.asList(destructive);
             this.mDatas.addAll(mDestructive);
+        }
+        if (destructive1 != null){
+            this.mDestructive1 = Arrays.asList(destructive1);
+            this.mDatas.addAll(mDestructive1);
         }
         if (others != null){
             this.mOthers = Arrays.asList(others);
@@ -179,7 +186,7 @@ public class AlertView {
             tvAlert.setOnClickListener(new OnTextClickListener(CANCELPOSITION));
             alertButtonListView.addFooterView(itemView);
         }
-        AlertViewAdapter adapter = new AlertViewAdapter(mDatas,mDestructive);
+        AlertViewAdapter adapter = new AlertViewAdapter(mDatas,mDestructive,mDestructive1);
         alertButtonListView.setAdapter(adapter);
         alertButtonListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -250,6 +257,9 @@ public class AlertView {
                 //高亮按钮的样式
                 else if (mDestructive!= null && mDestructive.contains(data)){
                     tvAlert.setTextColor(context.getResources().getColor(R.color.textColor_alert_button_destructive));
+                }
+                else if (mDestructive1!= null && mDestructive1.contains(data)){
+                    tvAlert.setTextColor(context.getResources().getColor(R.color.textColor_alert_button_cancel));
                 }
 
                 tvAlert.setOnClickListener(new OnTextClickListener(position));
@@ -412,6 +422,7 @@ public class AlertView {
         private String msg;
         private String cancel;
         private String[] destructive;
+        private String[] destructive1;
         private String[] others;
         private OnItemClickListener onItemClickListener;
 
@@ -444,6 +455,10 @@ public class AlertView {
 
         public Builder setDestructive(String... destructive) {
             this.destructive = destructive;
+            return this;
+        }
+        public Builder setDestructive1(String... destructive1) {
+            this.destructive1 = destructive1;
             return this;
         }
 

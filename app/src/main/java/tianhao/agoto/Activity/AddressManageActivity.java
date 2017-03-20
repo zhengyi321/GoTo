@@ -121,9 +121,9 @@ public class AddressManageActivity extends Activity implements OnItemClickListen
 
     private void initAlterViewDialog(){
         imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        mAlertView = new AlertView("标题", "内容", "取消", new String[]{"确定"}, null, this, AlertView.Style.Alert, this).setCancelable(true).setOnDismissListener(this);
+        mAlertView = new AlertView("标题", "内容", "取消", new String[]{"确定"}, new String[]{"确定"}, null, this, AlertView.Style.Alert, this).setCancelable(true).setOnDismissListener(this);
         //拓展窗口
-        mAlertViewExt = new AlertView("提示", "请完善你的个人资料！", "取消", null, new String[]{"完成"}, this, AlertView.Style.Alert, this);
+        mAlertViewExt = new AlertView("提示", "请完善你的个人资料！", "取消", null, new String[]{"完成"},new String[]{"完成"}, this, AlertView.Style.Alert, this);
 
     }
 
