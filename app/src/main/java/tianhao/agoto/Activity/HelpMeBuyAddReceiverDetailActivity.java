@@ -171,7 +171,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
             llyHelpMeBuyAddReceiverDetailTarBarBottom.startAnimation(animation);
             layoutParams.height += systemUtils.getWindowHeight()/2;
             llyHelpMeBuyAddReceiverDetailTarBarBottom.setLayoutParams(layoutParams);
-            ivHelpMeBuyAddShopDetailContentUp.setBackgroundResource(R.drawable.down_arrow);
+            ivHelpMeBuyAddReceiverDetailTabBarUpArrow.setBackgroundResource(R.drawable.down_arrow);
             /*rlyHelpMeBuyAddShopDetailContentUp.setAnimation(R.style.PopupAnimation);;*/
         }else{
             ViewGroup.LayoutParams layoutParams = llyHelpMeBuyAddReceiverDetailTarBarBottom.getLayoutParams();
@@ -185,11 +185,11 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
             llyHelpMeBuyAddReceiverDetailTarBarBottom.startAnimation(animation);
             llyHelpMeBuyAddReceiverDetailTarBarBottom.setLayoutParams(layoutParams);
             isUp = false;
-            ivHelpMeBuyAddShopDetailContentUp.setBackgroundResource(R.drawable.up_arrow);
+            ivHelpMeBuyAddReceiverDetailTabBarUpArrow.setBackgroundResource(R.drawable.up_arrow);
         }
     }
     @BindView(R.id.iv_helpmebuyadd_receiverdetail_tabbar_uparrow)
-    ImageView ivHelpMeBuyAddShopDetailContentUp;
+    ImageView ivHelpMeBuyAddReceiverDetailTabBarUpArrow;
     private boolean isUp = false;
     /*上拉*/
     /*手机通讯录*/
@@ -238,18 +238,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
         InitViewPager();
         /*initEditAddress();*/
     }
-    /*初始化输入地址框 保证随时找到新地址*/
-    private void initEditAddress(){
-        /*搜索参数初始化*/
-       /* suggestionSearchOption = new SuggestionSearchOption();*/
-        // 实例化PoiSearch
-  /*      mpoiSearch = PoiSearch.newInstance();
-        // 注册搜索事件监听
-        mpoiSearch.setOnGetPoiSearchResultListener(this);*/
 
-    }
-
-    /*初始化输入地址框 保证随时找到新地址*/
 
 
     /*返回上级菜单*/
@@ -530,6 +519,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
             try {
                 if (testList.size() != 0) {
                     holder.tvHelpMeBuyAddReceiverDetailContentVPItemRVItemAddr.setText(testList.get(position).city + testList.get(position).name);/*testList.get(position).address+testList.get(position).describeContents()*/
+                    holder.lng = testList.get(position).location;
                 }
             }catch (Exception e){
 
@@ -548,11 +538,17 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
 
 
         public class ItemContentViewHolder extends RecyclerView.ViewHolder{
+            public LatLng lng;
             @BindView(R.id.lly_helpmebuyadd_receiverdetail_content_vp_itemrv_item_total)
             LinearLayout llyHelpMeBuyAddReceiverDetailContentVPItemRVItemTotal;
             @OnClick(R.id.lly_helpmebuyadd_receiverdetail_content_vp_itemrv_item_total)
             public void llyHelpMeBuyAddReceiverDetailContentVPItemRVItemTotalOnclick(){
                 etHelpMeBuyAddReceiverDetailContentAddress.setText(tvHelpMeBuyAddReceiverDetailContentVPItemRVItemAddr.getText().toString());
+                if(lng != null){
+                    rlat = lng.latitude;
+                    rlon = lng.longitude;
+                }
+
             }
             @BindView(R.id.tv_helpmebuyadd_receiverdetail_content_vp_itemrv_item_addr)
             public TextView tvHelpMeBuyAddReceiverDetailContentVPItemRVItemAddr;
@@ -875,6 +871,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
 
     }
 
+    //地名转经纬度结果
     @Override
     public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
         if (geoCodeResult.getLocation() != null) {
@@ -885,6 +882,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
         }
     }
 
+    //经纬度转地名结果
     @Override
     public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
         if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
@@ -896,6 +894,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
         LatLng latLng = result.getLocation();
         addressLocation = result.getAddress();
         /*if(isFirst) {*/
+      /*  location(latLng);*/
         etHelpMeBuyAddReceiverDetailContentAddress.setText(addressLocation+"  "+result.getSematicDescription());
         poiSearchNearBy(addressLocation,latLng);
 

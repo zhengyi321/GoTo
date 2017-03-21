@@ -154,13 +154,13 @@ public class MainFragment extends Fragment {
         super.onStop();
         tvMainAd.stopScroll();
         initLoop.setStop();
-        tvMainAd.destroyDrawingCache();
+       /* tvMainAd.destroyDrawingCache();*/
     }
     public void onPause(){
         super.onPause();
         tvMainAd.stopScroll();
         initLoop.setStop();
-        tvMainAd.destroyDrawingCache();
+        /*tvMainAd.destroyDrawingCache();*/
 
     }
     /*各种初始化*/

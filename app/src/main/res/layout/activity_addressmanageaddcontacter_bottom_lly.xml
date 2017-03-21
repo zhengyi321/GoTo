@@ -3,6 +3,7 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="@dimen/activity_helpmebuy_bottombar_zhifu_height"
     android:background="@color/colorActivityIdeaSubmitBottomBlackBg"
+    android:id="@+id/rly_addressmanageaddcontacter_bottom_total"
     >
     <TextView
         android:layout_width="wrap_content"

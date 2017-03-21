@@ -33,14 +33,15 @@
             android:layout_height="match_parent"
             android:layout_weight="1.5"
             >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/nameTest"
+            <EditText
+                android:id="@+id/et_addressmanageaddcontacter_content_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:textColor="@color/colorActivityAddressManageAddContacterContentBlackWordBg"
                 android:textSize="15sp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
+                android:background="@null"
                 />
 
         </RelativeLayout>
@@ -66,19 +67,20 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/telTest"
+            <EditText
+                android:id="@+id/et_addressmanageaddcontacter_content_tel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:textColor="@color/colorActivityAddressManageAddContacterContentBlackWordBg"
                 android:textSize="15sp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
+                android:background="@null"
                 />
 
         </RelativeLayout>
         <RelativeLayout
-            android:id="@+id/rly_addressmanageaddcontacter_phonecontact"
+            android:id="@+id/rly_addressmanageaddcontacter_content_phonecontact"
             android:layout_width="@dimen/zero"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -135,21 +137,25 @@
             android:layout_weight="4.5"
             >
             <EditText
-                android:id="@+id/et_addressmanageaddcontacter_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/et_addressmanageaddcontacter_content_addr"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:text="@string/addressTest"
                 android:textColor="@color/colorActivityAddressManageAddContacterContentBlackWordBg"
                 android:textSize="15sp"
                 android:background="@null"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
+                android:imeOptions="actionSearch"
+                android:maxLines="2"
+                android:inputType="text|textCapSentences"
+
                 />
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/rly_addressmanageaddcontacter_addresssearch"
+            android:id="@+id/rly_addressmanageaddcontacter_content_addresssearch"
             android:layout_width="@dimen/zero"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -166,14 +172,14 @@
     <!--地址-->
     <!--百度地图-->
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/zero"
         android:orientation="horizontal"
         android:layout_weight="7"
         >
         <com.baidu.mapapi.map.MapView
-            android:id="@+id/mv_addressmanageaddcontacter_content"
+            android:id="@+id/mv_addressmanageaddcontacter_content_map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
@@ -183,7 +189,13 @@
             android:layout_height="match_parent">
 
         </com.baidu.mapapi.map.MapView>-->
-
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/iv_addressmanageaddcontacter_content_centerloc"
+            android:layout_width="16dp"
+            android:layout_height="19dp"
+            android:background="@drawable/search_map"
+            android:layout_centerInParent="true"
+            />
+    </RelativeLayout>
     <!--百度地图-->
 </LinearLayout>

@@ -118,7 +118,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
 
     /*百度地图定位 begin2*/
     @BindView(R.id.mv_helpmebuyaddselleraddress_content)
-    MapView mMapView;
+    MapView mvHelpMeBuyAddSellerAddressContent;
     @BindView(R.id.iv_helpmebuyadd_shopdetail_content_centerloc)
     ImageView ivHelpMeBuyAddShopdetailContentCenterLoc;
     private BaiduMap mBaiduMap;
@@ -136,8 +136,8 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
     /*地名转换经纬度*/
     @BindView(R.id.et_helpmebuyaddselleraddress_content_address)
     EditText etHelpMeBuyAddSellerAddressContentAddress;
-    private boolean isAddress = false;
-    private String city;
+    private boolean isAddress = true;
+
     /*地名转换经纬度*/
     /*上拉*/
     @BindView(R.id.rly_helpmebuyadd_shopdetail_content_up)
@@ -162,7 +162,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
             llyHelpMeBuyAddShopDetailBottom.startAnimation(animation);
             layoutParams.height += systemUtils.getWindowHeight()/2;
             llyHelpMeBuyAddShopDetailBottom.setLayoutParams(layoutParams);
-            ivHelpMeBuyAddShopDetailContentUp.setBackgroundResource(R.drawable.down_arrow);
+            ivHelpMeBuyAddShopDetailContentUpArrow.setBackgroundResource(R.drawable.down_arrow);
             /*rlyHelpMeBuyAddShopDetailContentUp.setAnimation(R.style.PopupAnimation);;*/
         }else{
             ViewGroup.LayoutParams layoutParams = llyHelpMeBuyAddShopDetailBottom.getLayoutParams();
@@ -176,11 +176,11 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
             llyHelpMeBuyAddShopDetailBottom.startAnimation(animation);
             llyHelpMeBuyAddShopDetailBottom.setLayoutParams(layoutParams);
             isUp = false;
-            ivHelpMeBuyAddShopDetailContentUp.setBackgroundResource(R.drawable.up_arrow);
+            ivHelpMeBuyAddShopDetailContentUpArrow.setBackgroundResource(R.drawable.up_arrow);
         }
     }
     @BindView(R.id.iv_helpmebuyadd_shopdetail_content_uparrow)
-    ImageView ivHelpMeBuyAddShopDetailContentUp;
+    ImageView ivHelpMeBuyAddShopDetailContentUpArrow;
     private boolean isUp = false;
     /*上拉*/
 
@@ -443,6 +443,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
             try {
                 if (testList.size() != 0) {
                     holder.tvHelpMeBuyAddShopDetailContentVPItemRVItemAddr.setText(testList.get(position).city + testList.get(position).name);/*testList.get(position).address+testList.get(position).describeContents()*/
+                    holder.lng = testList.get(position).location;
                 }
             }catch (Exception e){
 
@@ -458,11 +459,16 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
 
 
         public class ItemContentViewHolder extends RecyclerView.ViewHolder{
+            public LatLng lng;
             @BindView(R.id.rly_helpmebuyadd_shopdetail_content_vp_itemrv_item_addr)
             RelativeLayout rlyHelpMeBuyAddShopDetailContentVpItemRVItemAddr;
             @OnClick(R.id.rly_helpmebuyadd_shopdetail_content_vp_itemrv_item_addr)
             public void rlyHelpMeBuyAddShopDetailContentVpItemRVItemAddrOnclick(){
                 etHelpMeBuyAddSellerAddressContentAddress.setText(tvHelpMeBuyAddShopDetailContentVPItemRVItemAddr.getText().toString());
+                if(lng != null){
+                    blat = lng.latitude;
+                    blon = lng.longitude;
+                }
             }
             @BindView(R.id.tv_helpmebuyadd_shopdetail_content_vp_itemrv_item_addr)
             public TextView tvHelpMeBuyAddShopDetailContentVPItemRVItemAddr;
@@ -551,7 +557,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
         /*监听输入框的变化*/
         /*监听输入框的变化*/
         initPoiSearch();
-        mBaiduMap = mMapView.getMap();
+        mBaiduMap = mvHelpMeBuyAddSellerAddressContent.getMap();
         // 开启定位图层
         mBaiduMap.setMyLocationEnabled(true);
         locationClient=new LocationClient(getApplicationContext());
@@ -603,7 +609,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
         @Override
         public void onReceiveLocation(BDLocation location) {
             //Receive Location
-            if (location == null || mMapView == null) {
+            if (location == null || mvHelpMeBuyAddSellerAddressContent == null) {
                 return;
             }
 
@@ -958,6 +964,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
         LatLng latLng = result.getLocation();
         addressLocation = result.getAddress()+ "  " + result.getSematicDescription();
         etHelpMeBuyAddSellerAddressContentAddress.setText(addressLocation );
+     /*   location(latLng);*/
         poiSearchNearBy(addressLocation,latLng);
     }
        /*根据经纬度获取具体地址*/
@@ -1009,7 +1016,7 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
         mBaiduMap.clear();
         mSearch.destroy();
         isFirst = true;
-        mMapView.onDestroy();
+        mvHelpMeBuyAddSellerAddressContent.onDestroy();
         poiSearch.destroy();
         locationClient.unRegisterLocationListener(locationListener);
         if(locationClient!=null){
@@ -1023,11 +1030,11 @@ public class HelpMeBuyAddShopDetailActivity extends Activity implements OnGetGeo
     protected void onResume(){
         /*init();*/
         super.onResume();
-        mMapView.onResume();
+        mvHelpMeBuyAddSellerAddressContent.onResume();
     }
     protected void onPause(){
         super.onPause();
-        mMapView.onPause();
+        mvHelpMeBuyAddSellerAddressContent.onPause();
 
     }
 }

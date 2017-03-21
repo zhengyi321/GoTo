@@ -5,7 +5,7 @@
 
     >
     <RelativeLayout
-        android:id="@+id/rly_helpmebuy_topbar_leftmenu"
+        android:id="@+id/rly_addressmanageaddselleraddress_topbar_leftmenu"
         android:layout_width="@dimen/zero"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
@@ -41,6 +41,7 @@
     </RelativeLayout>
     <!--标题-->
     <RelativeLayout
+        android:id="@+id/rly_addressmanageaddselleraddress_topbar_rightmenu_confirm"
         android:layout_width="@dimen/zero"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -48,8 +49,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
             android:text="@string/query"
             android:textColor="@color/colorActivityShoppingListTopBarGreenWordBg"
             android:textSize="13sp"

@@ -6,10 +6,11 @@
     >
 
 
-
+    <!--android:layout_height="@dimen/activity_userreg_head_rly_height"-->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/activity_userreg_head_rly_height"
+        android:layout_height="@dimen/zero"
+        android:layout_weight="1"
         android:layout_marginTop="@dimen/activity_userreg_head_rly_margin_top_size"
         >
         <ImageView
@@ -23,10 +24,11 @@
 
 
 
-    <!--请输入手机号码 请输入密码  请输入验证码-->
+    <!--请输入手机号码 请输入密码  请输入验证码  android:layout_height="match_parent"-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/zero"
+        android:layout_weight="2"
         android:orientation="vertical"
         android:layout_marginTop="@dimen/activity_login_input_margin_tab_size"
         android:layout_marginLeft="@dimen/activity_altertel_content_margin_left_right_size"
@@ -225,7 +227,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/zero"
-                android:layout_weight="0.7"
+                android:layout_weight="1"
                 android:layout_marginTop="@dimen/activity_login_content_agree_login_margin_top_size"
                 >
                 <RelativeLayout

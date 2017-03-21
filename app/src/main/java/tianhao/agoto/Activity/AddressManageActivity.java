@@ -44,10 +44,14 @@ public class AddressManageActivity extends Activity implements OnItemClickListen
     /*添加地址*/
     @BindView(R.id.rly_addressmanage_topbar_addaddress)
     RelativeLayout rlyAddressManageTopBarAddAddress;
-
     @OnClick(R.id.rly_addressmanage_topbar_addaddress)
+    public void rlyAddressManageTopBarAddAddressOnclick(){
+        Intent intent = new Intent(this,AddressManageAddSellerAddressActivity.class);
+        startActivity(intent);
+    }
+   /* @OnClick(R.id.rly_addressmanage_topbar_addaddress)
     public void rlyAddressManageTopBarAddAddressOnclick() {
-        /*new AlertView("请选择要添加的地址类型", "添加联系人地址","添加商家地址", new String[]{"取消"}, null, this, AlertView.Style.Alert, this).show();*/
+        *//*new AlertView("请选择要添加的地址类型", "添加联系人地址","添加商家地址", new String[]{"取消"}, null, this, AlertView.Style.Alert, this).show();*//*
         addAddressInAddressManageDialog = new AddAddressInAddressManageDialog(this).Build.setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -92,7 +96,7 @@ public class AddressManageActivity extends Activity implements OnItemClickListen
     }
 
 
-    /*添加地址*/
+    *//*添加地址*//*
     private void showDialog(){
         if((addAddressInAddressManageDialog != null)&&(!addAddressInAddressManageDialog.isShowing())){
             addAddressInAddressManageDialog.show();
@@ -102,7 +106,7 @@ public class AddressManageActivity extends Activity implements OnItemClickListen
         if((addAddressInAddressManageDialog != null)&&(addAddressInAddressManageDialog.isShowing())) {
             addAddressInAddressManageDialog.dismiss();
         }
-    }
+    }*/
     private AlertView mAlertView;//避免创建重复View，先创建View，然后需要的时候show出来，推荐这个做法
     private InputMethodManager imm;
     private AlertView mAlertViewExt;//窗口拓展例子
@@ -116,16 +120,16 @@ public class AddressManageActivity extends Activity implements OnItemClickListen
     }
     private void init(){
         ButterKnife.bind(this);
-        initAlterViewDialog();
+        /*initAlterViewDialog();*/
     }
 
-    private void initAlterViewDialog(){
+/*    private void initAlterViewDialog(){
         imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         mAlertView = new AlertView("标题", "内容", "取消", new String[]{"确定"}, new String[]{"确定"}, null, this, AlertView.Style.Alert, this).setCancelable(true).setOnDismissListener(this);
         //拓展窗口
         mAlertViewExt = new AlertView("提示", "请完善你的个人资料！", "取消", null, new String[]{"完成"},new String[]{"完成"}, this, AlertView.Style.Alert, this);
 
-    }
+    }*/
 
 
 

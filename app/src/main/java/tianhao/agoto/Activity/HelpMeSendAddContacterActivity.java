@@ -18,12 +18,16 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,6 +52,7 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.geocode.GeoCodeOption;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
@@ -59,10 +64,17 @@ import java.util.List;
 
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
+import com.baidu.mapapi.search.poi.PoiDetailResult;
+import com.baidu.mapapi.search.poi.PoiIndoorResult;
+import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
+import com.baidu.mapapi.search.poi.PoiResult;
+import com.baidu.mapapi.search.poi.PoiSearch;
 
 import butterknife.ButterKnife;
 import butterknife.BindView;
 import butterknife.OnClick;
+import tianhao.agoto.Common.Widget.XRecycleView.XRecyclerView;
 import tianhao.agoto.R;
 import tianhao.agoto.Utils.SystemUtils;
 
@@ -71,21 +83,21 @@ import tianhao.agoto.Utils.SystemUtils;
  * Created by zhyan on 2017/2/19.
  */
 
-public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeoCoderResultListener {
+public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeoCoderResultListener,OnGetPoiSearchResultListener {
 
     /*viewpage recycleview 历史记录 收藏地址 功能 begin*/
+    @BindView(R.id.tv_helpmesendadd_contacter_tabbar_nearby)
+    TextView tvHelpMeSendAddContacterTabBarNearBy;
+    @BindView(R.id.iv_helpmesendadd_contacter_tabbar_nearby)
+    ImageView ivHelpMeSendAddContacterTabBarNearBy;
+    @BindView(R.id.rly_helpmesendadd_contacter_tabbar_nearby)
+    RelativeLayout rlyHelpMeSendAddContacterTabBarNearBy;
     @BindView(R.id.tv_helpmesendadd_contacter_tabbar_history)
     TextView tvHelpMeSendAddContacterTabBarHistory;
     @BindView(R.id.iv_helpmesendadd_contacter_tabbar_history)
     ImageView ivHelpMeSendAddContacterTabBarHistory;
     @BindView(R.id.rly_helpmesendadd_contacter_tabbar_history)
     RelativeLayout rlyHelpMeSendAddContacterTabBarHistory;
-    @BindView(R.id.tv_helpmesendadd_contacter_tabbar_collectaddress)
-    TextView tvHelpMeSendAddContacterTabBarCollectAddress;
-    @BindView(R.id.iv_helpmesendadd_contacter_tabbar_collectaddress)
-    ImageView ivHelpMeSendAddContacterTabBarCollectAddress;
-    @BindView(R.id.rly_helpmesendadd_contacter_tabbar_collectaddress)
-    RelativeLayout rlyHelpMeSendAddContacterTabBarCollectAddress;
     @BindView(R.id.iv_helpmesendadd_contacter_tab_greenbottom)
     ImageView ivHelpMeSendAddContacterTabGreenBottom;
     @BindView(R.id.vp_helpmesendadd_contacter_content)
@@ -121,9 +133,12 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
     RelativeLayout rlyHelpMeSendAddContacterSearchContacter;
 
     /*地名转换经纬度*/
-    @BindView(R.id.tv_helpmesendadd_contacter_contentaddr)
-    TextView tvHelpMeSendAddContacterContentAddr;
+    @BindView(R.id.et_helpmesendadd_contacter_contentaddr)
+    EditText etHelpMeSendAddContacterContentAddr;
     private GeoCoder search=null;
+    /*关键字poi检索*/
+    private PoiSearch poiSearch;
+    /*关键字poi检索*/
     private String city;
     /*地名转换经纬度*/
     /*百度地图定位 end2*/
@@ -133,6 +148,8 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
     private LocationMode mCurrentMode;
     private  final int accuracyCircleFillColor = 0xAAFFFF88;
     private  final int accuracyCircleStrokeColor = 0xAA00FF00;
+    private InitRecycleView initRecycleView;
+    private BaiduMap.OnMapTouchListener mapTouchListener;
     @BindView(R.id.lly_helpmesendadd_contacter_searchaddress)
     LinearLayout llyHelpMeSendAddContacterSearchAddress;
 
@@ -140,6 +157,53 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
     RelativeLayout rlyHelpMeSendAddContacterTopBarLeftMenu;
     @BindView(R.id.rly_helpmesendadd_contacter_topbar_rightmenu)
     RelativeLayout rlyHelpMeSendAddContacterTopBarRightMenu;
+
+    /*上拉*/
+    @BindView(R.id.rly_helpmesendadd_contacter_tabbar_up)
+    RelativeLayout rlyHelpMeSendAddContacterTabbarUp;
+    @BindView(R.id.lly_helpmesendadd_contacter_content_bottom)
+    LinearLayout llyHelpMeSendAddContacterContentBottom;
+    @OnClick(R.id.rly_helpmesendadd_contacter_tabbar_up)
+    public void rlyHelpMeSendAddContacterTabbarUpOnclick(){
+        int tempHeight = 0;
+        if(!isUp){
+            isUp = true;
+            ViewGroup.LayoutParams layoutParams = llyHelpMeSendAddContacterContentBottom.getLayoutParams();
+            SystemUtils systemUtils = new SystemUtils(this);
+            tempHeight = layoutParams.height;
+
+            // 初始化需要加载的动画资源
+            Animation animation = AnimationUtils
+                    .loadAnimation(this, R.anim.pop_enter);
+            animation.setDuration(1000);
+            layoutParams.height = 0;
+            llyHelpMeSendAddContacterContentBottom.setLayoutParams(layoutParams);
+            llyHelpMeSendAddContacterContentBottom.startAnimation(animation);
+            layoutParams.height += systemUtils.getWindowHeight()/2;
+            llyHelpMeSendAddContacterContentBottom.setLayoutParams(layoutParams);
+            ivHelpMeSendAddContacterTabbarUpArrow.setBackgroundResource(R.drawable.down_arrow);
+            /*rlyHelpMeBuyAddShopDetailContentUp.setAnimation(R.style.PopupAnimation);;*/
+        }else{
+            ViewGroup.LayoutParams layoutParams = llyHelpMeSendAddContacterContentBottom.getLayoutParams();
+
+            layoutParams.height =tempHeight ;
+
+            // 初始化需要加载的动画资源
+            Animation animation = AnimationUtils
+                    .loadAnimation(this, R.anim.pop_exit);
+            /*animation.setDuration(1000);*/
+            llyHelpMeSendAddContacterContentBottom.startAnimation(animation);
+            llyHelpMeSendAddContacterContentBottom.setLayoutParams(layoutParams);
+            isUp = false;
+            ivHelpMeSendAddContacterTabbarUpArrow.setBackgroundResource(R.drawable.up_arrow);
+        }
+    }
+    @BindView(R.id.iv_helpmesendadd_contacter_tabbar_uparrow)
+    ImageView ivHelpMeSendAddContacterTabbarUpArrow;
+    private boolean isUp = false;
+    /*上拉*/
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,12 +214,20 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
 
     private void init(){
         ButterKnife.bind(this);
+        initEditText();
         initSwitchContent();
         initBaiDuMap();
         initResultType();
         /*initGlassBg();*/
         /*initTran();*/
     }
+    //软键盘实现搜索和多行
+    private void initEditText(){
+
+        etHelpMeSendAddContacterContentAddr.setHorizontallyScrolling(false);
+        etHelpMeSendAddContacterContentAddr.setMaxLines(Integer.MAX_VALUE);
+    }
+    //软键盘实现搜索和多行
     private void initResultType(){
         Bundle bundle = this.getIntent().getExtras();
         String sender = bundle.getString("sender");
@@ -170,7 +242,7 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
     }
     /*viewpage recycleview 历史记录 收藏地址 功能*/
     private void initSwitchContent(){
-        InitTabBg(true);
+      /*  InitTabBg(true);*/
         InitImageView();
         InitViewPager();
     }
@@ -178,17 +250,48 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
     /**
      * 初始化头标
      */
-    private void InitTabBg(Boolean isFirst) {
-        if(isFirst) {
-            tvHelpMeSendAddContacterTabBarHistory.setTextColor(getResources().getColor(R.color.colorHelpMeSendAddContacterActivityTabBarGreenBg));
-            ivHelpMeSendAddContacterTabBarHistory.setImageResource(R.drawable.historyrecordselect);
-            tvHelpMeSendAddContacterTabBarCollectAddress.setTextColor(getResources().getColor(R.color.colorHelpMeSendAddContacterActivityTabBarGrayBg));
-            ivHelpMeSendAddContacterTabBarCollectAddress.setImageResource(R.drawable.collectaddressnormal);
-        }else{
-            tvHelpMeSendAddContacterTabBarHistory.setTextColor(getResources().getColor(R.color.colorHelpMeSendAddContacterActivityTabBarGrayBg));
-            ivHelpMeSendAddContacterTabBarHistory.setImageResource(R.drawable.historyrecordnormal);
-            tvHelpMeSendAddContacterTabBarCollectAddress.setTextColor(getResources().getColor(R.color.colorHelpMeSendAddContacterActivityTabBarGreenBg));
-            ivHelpMeSendAddContacterTabBarCollectAddress.setImageResource(R.drawable.collectaddressselect);
+    private void InitTabBg(int ag0) {
+
+
+
+        int one = offset * 2;// 页卡1 -> 页卡2 偏移量
+        int two = one * 2;// 页卡1 -> 页卡3 偏移量
+        Animation animation = null;
+        switch (ag0) {
+           /* if (isFirst) {*/
+            case 0:
+                if (currIndex == 1) {
+                    animation = new TranslateAnimation(one, 0, 0, 0);
+                } else if (currIndex == 2) {
+                    animation = new TranslateAnimation(two, 0, 0, 0);
+                }
+                currIndex = 0;
+                animation.setFillAfter(true);// True:图片停在动画结束位置
+                animation.setDuration(200);
+                ivHelpMeSendAddContacterTabGreenBottom.startAnimation(animation);
+                tvHelpMeSendAddContacterTabBarNearBy.setTextColor(getResources().getColor(R.color.colorHelpMeSendAddContacterActivityTabBarGreenBg));
+                ivHelpMeSendAddContacterTabBarNearBy.setImageResource(R.drawable.collectaddressselect);
+                tvHelpMeSendAddContacterTabBarHistory.setTextColor(getResources().getColor(R.color.colorHelpMeSendAddContacterActivityTabBarGrayBg));
+                ivHelpMeSendAddContacterTabBarHistory.setImageResource(R.drawable.historyrecordnormal);
+                beginSearchLalByAddress(etHelpMeSendAddContacterContentAddr.getText().toString());
+                break;
+         /*   } else {*/
+            case 1:
+                if (currIndex == 0) {
+                    animation = new TranslateAnimation(offset, one, 0, 0);
+                } else if (currIndex == 2) {
+                    animation = new TranslateAnimation(two, one, 0, 0);
+                }
+                currIndex = 1;
+                animation.setFillAfter(true);// True:图片停在动画结束位置
+                animation.setDuration(200);
+                ivHelpMeSendAddContacterTabGreenBottom.startAnimation(animation);
+                tvHelpMeSendAddContacterTabBarNearBy.setTextColor(getResources().getColor(R.color.colorHelpMeSendAddContacterActivityTabBarGrayBg));
+                ivHelpMeSendAddContacterTabBarNearBy.setImageResource(R.drawable.collectaddressnormal);
+                tvHelpMeSendAddContacterTabBarHistory.setTextColor(getResources().getColor(R.color.colorHelpMeSendAddContacterActivityTabBarGreenBg));
+                ivHelpMeSendAddContacterTabBarHistory.setImageResource(R.drawable.historyrecordselect);
+                break;
+          /*  }*/
         }
     }
 
@@ -224,12 +327,29 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
         vpHelpMeSendAddContacterContent.setAdapter(new MyPagerAdapter(viewList));
         vpHelpMeSendAddContacterContent.setCurrentItem(0);
         vpHelpMeSendAddContacterContent.setOnPageChangeListener(new MyOnPageChangeListener());
-        List<String> dataList = new ArrayList<String>();
-
-        initRecycleView(0,dataList);
+        initRecycleView = new InitRecycleView(viewList.get(0));
+        initRecycleView.initXRV();
     }
 
 
+    public class  InitRecycleView{
+        @BindView(R.id.xrv_helpmesendadd_contacter_vp_item)
+        XRecyclerView xrvHelpMeSendAddContacterVPItem;
+        public MyRecycleViewAdapter adapter ;
+
+        private List<PoiInfo> poiInfoList = new ArrayList<>();
+        public InitRecycleView(View view){
+            ButterKnife.bind(this,view);
+            initXRV();
+        }
+
+        private void initXRV(){
+            adapter = new MyRecycleViewAdapter(getBaseContext(),poiInfoList);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext(),LinearLayoutManager.VERTICAL,false);
+            xrvHelpMeSendAddContacterVPItem.setLayoutManager(layoutManager);
+            xrvHelpMeSendAddContacterVPItem.setAdapter(adapter);
+        }
+    }
     /**
      * ViewPager适配器
      */
@@ -287,18 +407,18 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
 
     /*RecycleView适配器*/
 
-    private class MyRecycleViewAdapter extends RecyclerView.Adapter<MyRecycleViewAdapter.ItemContentViewHolder>{
+    public class MyRecycleViewAdapter extends RecyclerView.Adapter<MyRecycleViewAdapter.ItemContentViewHolder>{
 
-        private List<String> testList;
+        private List<PoiInfo> testList;
         private Context context;
         private LayoutInflater inflater;
-        public MyRecycleViewAdapter(Context context,List<String> stringList){
+        public MyRecycleViewAdapter(Context context1,List<PoiInfo> stringList){
             testList = stringList;
-            this.context = context;
-            inflater = LayoutInflater.from(context);
+            this.context = context1;
+            inflater = LayoutInflater.from(context1);
         }
 
-        public void setDataList(List<String> dataList){
+        public void setDataList(List<PoiInfo> dataList){
             this.testList = dataList;
             this.notifyDataSetChanged();
         }
@@ -312,7 +432,13 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
 
         @Override
         public void onBindViewHolder(ItemContentViewHolder holder, int position) {
+            try {
+                if (testList.size() != 0) {
+                    holder.tvHelpMeSendAddContacterContentVPItemRVItemAddress.setText(testList.get(position).city + testList.get(position).name);/*testList.get(position).address+testList.get(position).describeContents()*/
+                }
+            }catch (Exception e){
 
+            }
         }
 
         @Override
@@ -327,10 +453,22 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
 
 
         public class ItemContentViewHolder extends RecyclerView.ViewHolder{
-
-
+            public LatLng lng;
+            @BindView(R.id.lly_helpmesendadd_contacter_content_vp_itemrv_item_total)
+            LinearLayout llyHelpMeSendAddContacterContentVPItemRVItemTotal;
+            @BindView(R.id.tv_helpmesendadd_contacter_content_vp_itemrv_item_address)
+            TextView tvHelpMeSendAddContacterContentVPItemRVItemAddress;
+            @OnClick(R.id.lly_helpmesendadd_contacter_content_vp_itemrv_item_total)
+            public void llyHelpMeSendAddContacterContentVPItemRVItemTotalOnclick(){
+                etHelpMeSendAddContacterContentAddr.setText(tvHelpMeSendAddContacterContentVPItemRVItemAddress.getText().toString());
+                if(lng != null){
+                    lat = lng.latitude;
+                    lon = lng.longitude;
+                }
+            }
             public ItemContentViewHolder(View itemView) {
                 super(itemView);
+                ButterKnife.bind(this,itemView);
             }
         }
     }
@@ -346,39 +484,12 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
         int two = one * 2;// 页卡1 -> 页卡3 偏移量
 
         public void onPageSelected(int arg0) {
-            Animation animation = null;
-            switch (arg0) {
-                case 0:
-                    if (currIndex == 1) {
-                        animation = new TranslateAnimation(one, 0, 0, 0);
-                    } else if (currIndex == 2) {
-                        animation = new TranslateAnimation(two, 0, 0, 0);
-                    }
-                    break;
-                case 1:
-                    if (currIndex == 0) {
-                        animation = new TranslateAnimation(offset, one, 0, 0);
-                    } else if (currIndex == 2) {
-                        animation = new TranslateAnimation(two, one, 0, 0);
-                    }
-                    break;
-
-            }
-            currIndex = arg0;
-            animation.setFillAfter(true);// True:图片停在动画结束位置
-            animation.setDuration(200);
-            ivHelpMeSendAddContacterTabGreenBottom.startAnimation(animation);
-
-            List<String> dataList = new ArrayList<String>();
-            dataList.add("");
-
-            initRecycleView(arg0,dataList);
             switch (arg0){
                 case 0:
-                    InitTabBg(true);
+                    InitTabBg(arg0);
                     break;
                 case 1:
-                    InitTabBg(false);
+                    InitTabBg(arg0);
 
                     break;
             }
@@ -393,32 +504,19 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
 
 
 
-    private void initRecycleView(int pos,List<String> dataList){
-        int count = pos + 1;
-        if(count <= dataList.size()) {
-            RecyclerView rv = null;
-            /*多线程运行 行不通*/
-            MyRecycleViewAdapter adapter = new MyRecycleViewAdapter(viewList.get(pos).getContext(),dataList);
-            rv =(RecyclerView) viewList.get(pos).findViewById(R.id.rv_helpmesendadd_contacter_vp_item);
-            rv.setAdapter(adapter);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(viewList.get(pos).getContext());
-            //设置为垂直布局，这也是默认的
-            layoutManager.setOrientation(OrientationHelper. VERTICAL);
-            //设置布局管理器
-            rv.setLayoutManager(layoutManager);
-        }
 
+    @OnClick(R.id.rly_helpmesendadd_contacter_tabbar_nearby)
+    public void setRlyHelpMeSendAddContacterTabBarNearByOnclick(){
+        vpHelpMeSendAddContacterContent.setCurrentItem(0);
+        currIndex = 1;
+        InitTabBg(0);
     }
-
 
     @OnClick(R.id.rly_helpmesendadd_contacter_tabbar_history)
-    public void rlyHelpMeSendAddContacterTabBarHistoryOnclick(){
-        vpHelpMeSendAddContacterContent.setCurrentItem(0);
-    }
-
-    @OnClick(R.id.rly_helpmesendadd_contacter_tabbar_collectaddress)
-    public void rlyHelpMeSendAddContacterTabBarCollectAddressOnclick(){
+    public void setRlyHelpMeSendAddContacterTabBarHistoryOnclick(){
         vpHelpMeSendAddContacterContent.setCurrentItem(1);
+        currIndex = 0;
+        InitTabBg(1);
 
     }
     /*viewpage recycleview 历史记录 收藏地址 功能 end*/
@@ -432,7 +530,7 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
 
 
     private void initBaiDuMap(){
-
+        initPoiSearch();
         mBaiduMap = mMapView.getMap();
 
         search= GeoCoder.newInstance();
@@ -448,15 +546,91 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
 
         initLocation();
         locationClient.start();
+    }
 
+
+    private void initPoiSearch(){
+        poiSearch = PoiSearch.newInstance();
+        poiSearch.setOnGetPoiSearchResultListener(this);
+    }
+
+    /*输入地址poi附近检索*/
+    private void poiBeginSearch(){
+        /*Toast.makeText(getBaseContext(),"poiBeginSearch",Toast.LENGTH_SHORT).show();*/
+        etHelpMeSendAddContacterContentAddr.setOnEditorActionListener(new MyEditorActionListener());
 
     }
     /*地图移动坐标不动*/
+    /*软键盘监听*/
+    public class MyEditorActionListener implements TextView.OnEditorActionListener {
+
+
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+
+                String keyword = "";
+                keyword = v.getText().toString();
+                if(!keyword.isEmpty()) {
+                    beginSearchLalByAddress(keyword);
+                }else {
+                    mBaiduMap.clear();
+                }
+                //写你要做的事情
+                    /*Toast.makeText(getBaseContext(), "" + keyword, Toast.LENGTH_SHORT).show();*/
+                    /*poiSearch.searchNearby((new PoiNearbySearchOption())
+                            .location(latLng)
+                            .radius(600000)
+                            .keyword(keyword)
+                            .pageNum(0).pageCapacity(30));*/
+                hideInput(HelpMeSendAddContacterActivity.this);//隐藏软键盘
+
+                return true;
+            }
+            return false;
+        }
+    }
+    private InputMethodManager manager;
+    private void hideInput(Activity activity) {
+        // 输入法管理器 用户隐藏软键盘
+        if(manager==null){
+            manager = ((InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE));
+        }
+
+        manager.hideSoftInputFromWindow(( activity)
+                        .getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+    /*软键盘监听*/
+     /*根据地名开始查找经纬度*/
+    private void beginSearchLalByAddress(String address){
+       /* String address = etHelpMeBuyAddSellerAddressContentAddress.getText().toString();*/
+        int index = address.indexOf("市");
+        try {
+            if (index > 0) {
+                String city = address.substring(0, index);
+                address = address.substring(index, address.length());
+                search.geocode(new GeoCodeOption().city(city).address(address));
+            } else {
+                search.geocode(new GeoCodeOption().city("温州市").address(address));
+            }
+        }catch (Exception e){
+
+        }
+    }
+
+    /*根据地名开始查找经纬度*/
+    /*地图移动坐标不动*/
     private void initOverlyWithMapView(){
-        mBaiduMap.setOnMapTouchListener(new BaiduMap.OnMapTouchListener() {
+
+        mapTouchListener = new BaiduMap.OnMapTouchListener() {
             @Override
             public void onTouch(MotionEvent motionEvent) {
-                /*Toast.makeText(getBaseContext(),"here is ontouch",Toast.LENGTH_SHORT).show();*/
+                  /*滑动动作的时候设置为滑动状态*/
+
+                /*滑动动作的时候设置为滑动状态*/
+            /*Toast.makeText(getBaseContext(),"here is ontouch",Toast.LENGTH_SHORT).show();*/
                 //http://blog.csdn.net/sjf0115/article/details/7306284 获取控件在屏幕上的坐标
                 int[] location = new int[2];
                 ivHelpMeSendAddContacterCenterLoc.getLocationOnScreen(location);
@@ -469,9 +643,9 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
                 search.reverseGeoCode(new ReverseGeoCodeOption().location(currentPt));
                 lat = currentPt.latitude;
                 lon = currentPt.longitude;
-
             }
-        });
+        };
+        mBaiduMap.setOnMapTouchListener(mapTouchListener);
 
     }
     /*地图移动坐标不动*/
@@ -542,7 +716,7 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
             if((latt != null) && (lonn != null)) {
                 LatLng latLng = new LatLng(Double.parseDouble(latt), Double.parseDouble(lonn));
                 location(latLng);
-                tvHelpMeSendAddContacterContentAddr.setText(address);
+                etHelpMeSendAddContacterContentAddr.setText(address);
             }
         }
     }
@@ -587,7 +761,7 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
         Bundle bundle = new Bundle();
         bundle.putString("nameCall",etHelpMeSendAddContacterContentName.getText().toString());
         bundle.putString("tel",etHelpMeSendAddContacterContentTel.getText().toString());
-        bundle.putString("address",tvHelpMeSendAddContacterContentAddr.getText().toString());
+        bundle.putString("address",etHelpMeSendAddContacterContentAddr.getText().toString());
         bundle.putString("lat", "" + lat);
         bundle.putString("lon", "" + lon);
         Intent intent = new Intent();
@@ -654,10 +828,11 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
         /*定位蓝色点*/
         LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
         location(latLng);
-
+        poiBeginSearch();
         /*etHelpMeBuyAddSellerAddressContentAddress.setText(location.getAddrStr() + location.getBuildingName() +location.getFloor()+location.getStreet()+location.getStreetNumber());*/
         addressLocation=location.getAddrStr()+" "+location.getLocationDescribe();
-        tvHelpMeSendAddContacterContentAddr.setText(addressLocation);
+        etHelpMeSendAddContacterContentAddr.setText(addressLocation);
+        beginSearchLalByAddress(addressLocation);
     }
 
     /**经纬度地址动画显示在屏幕中间  有关mark网站的出处http://blog.csdn.net/callmesen/article/details/40540895**/
@@ -678,10 +853,42 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
 
      /*根据经纬度搜索地址*/
 
+
+
+
+
+
+
+
+    @Override
+    public void onGetPoiResult(PoiResult result) {
+        if(result.getAllPoi() != null) {
+
+            initRecycleView.adapter.setDataList(result.getAllPoi());
+
+        }
+    }
+
+    @Override
+    public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
+
+    }
+
+    @Override
+    public void onGetPoiIndoorResult(PoiIndoorResult poiIndoorResult) {
+
+    }
+
+
+
+
     @Override
     public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
         if (geoCodeResult.getLocation() != null) {
             location(geoCodeResult.getLocation());
+             /*搜索附近地址*/
+            poiSearchNearBy(geoCodeResult.getAddress(),geoCodeResult.getLocation());
+            /*搜索附近地址*/
         }
     }
 
@@ -695,11 +902,39 @@ public class HelpMeSendAddContacterActivity extends Activity implements OnGetGeo
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(result.getLocation()));*/
         LatLng latLng = result.getLocation();
         addressLocation = result.getAddress();
-        tvHelpMeSendAddContacterContentAddr.setText(addressLocation+"  "+result.getSematicDescription());
+        etHelpMeSendAddContacterContentAddr.setText(addressLocation+"  "+result.getSematicDescription());
+   /*     location(latLng);*/
+        poiSearchNearBy(addressLocation,latLng);
     /*    location(latLng);*/
     }
     /*根据经纬度搜索地址*/
+    /*poi附近检索*/
+    private void poiSearchNearBy(String keyword,LatLng latLng){
+        int indexBlank = keyword.indexOf(" ");
+        if(indexBlank > 0){
+            if((latLng != null)&&(keyword!=null)) {
+                keyword = keyword.substring(0, indexBlank);
+                poiSearch.searchNearby((new PoiNearbySearchOption())
+                        .location(latLng)
+                        .radius(9000)
+                        .keyword(keyword)
+                        .pageNum(0).pageCapacity(30));
+            }
+        }else{
+            if((latLng != null)&&(keyword!=null)) {
 
+                poiSearch.searchNearby((new PoiNearbySearchOption())
+                        .location(latLng)
+                        .radius(9000)
+                        .keyword(keyword)
+                        .pageNum(0).pageCapacity(30));
+            }
+        }
+
+    }
+
+
+    /*poi附近检索*/
 
 
 
