@@ -45,7 +45,7 @@ public class AddressManageNetWorks extends BaseNetWork {
         /*用户地址添加*/
         /*用户地址列表查找*/
         @GET("clientaddr/addrfind.do")
-        Observable<List<UserAddressListBean>> getUserAddrList(@Query("userUsid") String userUsid);
+        Observable<List<UserAddressListBean>> getUserAddress(@Query("userUsid") String userUsid);
         /*用户地址列表查找 484914c632db43e081b9a5eb75cc3971*/
     }
 
@@ -61,7 +61,7 @@ public class AddressManageNetWorks extends BaseNetWork {
     public void addUserAddress(String userUsid, String clientaddrAddr, float clientaddrLat, float clientaddrLong, String clientaddrIsdefault, Observer<BaseBean> observer) {
         setSubscribe(service.addUserAddress(userUsid, clientaddrAddr, clientaddrLat, clientaddrLong, clientaddrIsdefault), observer);
     }
-    public void getUserAddrList(String userUsid,Observer<List<UserAddressListBean>> observer) {
-        setSubscribe( service.getUserAddrList(userUsid),observer);
+    public  void getUserAddress(String userUsidObserver,Observer<List<UserAddressListBean>> observable){
+        setSubscribe(service.getUserAddress(userUsidObserver),observable);
     }
 }

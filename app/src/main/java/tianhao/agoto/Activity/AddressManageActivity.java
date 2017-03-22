@@ -127,8 +127,8 @@ public class AddressManageActivity extends Activity implements OnItemClickListen
     private EditText etName;//拓展View内容
     @BindView(R.id.xrv_addressmanage_useraddrlist)
     XRecyclerView xrvAddressManageUserAddrList;
-/*    @BindView(R.id.xrv_addressmanage_shopaddrlist)
-    XRecyclerView xrvAddressManageShopAddrList;*/
+    @BindView(R.id.xrv_addressmanage_shopaddrlist)
+    XRecyclerView xrvAddressManageShopAddrList;
     private AddressManageAddShopRVAdapter shopRVAdapter;
     private AddressManageAddUserRVAdapter userRVAdapter;
     private List<ShopAddressListBean> shopAddressListBeanList;
@@ -139,8 +139,8 @@ public class AddressManageActivity extends Activity implements OnItemClickListen
     @OnClick(R.id.rb_addressmanage_addshop)
     public void rbAddressManageAddShopOnclick()
     {
-        /*getDetailDataFromNet("shop");*/
-        getUserAddressFromNet();
+        getDetailDataFromNet("shop");
+        /*getUserAddressFromNet();*/
     }
     /*添加商家地址*/
     /*添加联系人地址*/
@@ -149,8 +149,8 @@ public class AddressManageActivity extends Activity implements OnItemClickListen
     @OnClick(R.id.rb_addressmanage_addcontacter)
     public void rbAddressManageAddContacterOnclick()
     {
-        /*getDetailDataFromNet("user");*/
-        getUserAddressFromNet();
+        getDetailDataFromNet("user");
+  /*      getUserAddressFromNet();*/
     }
     /*添加联系人地址*/
     @Override
@@ -164,8 +164,8 @@ public class AddressManageActivity extends Activity implements OnItemClickListen
         ButterKnife.bind(this);
 
         initXRV();
-        getUserAddressFromNet();
-       /* getDetailDataFromNet("user");*/
+      /*  getUserAddressFromNet();*/
+        getDetailDataFromNet("user");
         /*initAlterViewDialog();*/
     }
     private void initXRV(){
@@ -177,9 +177,9 @@ public class AddressManageActivity extends Activity implements OnItemClickListen
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(this);
         layoutManager1.setOrientation(LinearLayoutManager.VERTICAL);
-        /*xrvAddressManageShopAddrList.setAdapter(shopRVAdapter);*/
+        xrvAddressManageShopAddrList.setAdapter(shopRVAdapter);
         xrvAddressManageUserAddrList.setAdapter(userRVAdapter);
-   /*     xrvAddressManageShopAddrList.setLayoutManager(layoutManager);*/
+        xrvAddressManageShopAddrList.setLayoutManager(layoutManager);
         xrvAddressManageUserAddrList.setLayoutManager(layoutManager1);
 
     }
@@ -192,26 +192,25 @@ public class AddressManageActivity extends Activity implements OnItemClickListen
 
             xrvAddressManageUserAddrList.setVisibility(View.VISIBLE);
          /*   xrvAddressManageShopAddrList.setVisibility(View.GONE);*/
-            addressManageNetWorks.getUserAddrList(usid, new Observer<List<UserAddressListBean>>() {
+            Toast.makeText(getBaseContext(),"this is usid:"+usid,Toast.LENGTH_SHORT).show();
+            addressManageNetWorks.getUserAddress(usid, new Observer<List<UserAddressListBean>>() {
                 @Override
                 public void onCompleted() {
-                                /*Toast.makeText(getBaseContext(),"this is onCompleted:",Toast.LENGTH_SHORT).show();*/
+
                 }
 
                 @Override
                 public void onError(Throwable e) {
-                                /*Toast.makeText(getBaseContext(),"this is userlist:"+e,Toast.LENGTH_SHORT).show();*/
+
                 }
 
                 @Override
-                public void onNext(List<UserAddressListBean> userAddressList) {
-
-                    userRVAdapter.setDataList(userAddressList);
-
-                    Toast.makeText(getBaseContext(),"this is userlist:"+userAddressList.size(),Toast.LENGTH_SHORT).show();
-
+                public void onNext(List<UserAddressListBean> userAddressListBeen) {
+                    userRVAdapter.setDataList(userAddressListBeen);
+                    /*Toast.makeText(getBaseContext(),"this is userlist:"+userAddressListBeen.size(),Toast.LENGTH_SHORT).show();*/
                 }
-            });
+            }
+        );
         }
 
 
@@ -226,30 +225,30 @@ public class AddressManageActivity extends Activity implements OnItemClickListen
             switch (type){
                 case "user":
                     xrvAddressManageUserAddrList.setVisibility(View.VISIBLE);
-                    /*xrvAddressManageShopAddrList.setVisibility(View.GONE);*/
+                    xrvAddressManageShopAddrList.setVisibility(View.GONE);
+                    addressManageNetWorks.getUserAddress(usid, new Observer<List<UserAddressListBean>>() {
+                        @Override
+                        public void onCompleted() {
 
-                        addressManageNetWorks.getUserAddrList(usid, new Observer<List<UserAddressListBean>>() {
-                            @Override
-                            public void onCompleted() {
-                                /*Toast.makeText(getBaseContext(),"this is onCompleted:",Toast.LENGTH_SHORT).show();*/
-                            }
+                        }
 
-                            @Override
-                            public void onError(Throwable e) {
-                                /*Toast.makeText(getBaseContext(),"this is userlist:"+e,Toast.LENGTH_SHORT).show();*/
-                            }
+                        @Override
+                        public void onError(Throwable e) {
 
-                            @Override
-                            public void onNext(List<UserAddressListBean> userAddressList) {
-                                userRVAdapter.setDataList(userAddressList);
-                                /*Toast.makeText(getBaseContext(),"this is userlist:"+userAddressList.size(),Toast.LENGTH_SHORT).show();*/
+                        }
 
-                            }
-                        });
+                        @Override
+                        public void onNext(List<UserAddressListBean> userAddressListBeen) {
+                            /*Toast.makeText(getBaseContext(),"this is userlist:"+userAddressListBeen.size(),Toast.LENGTH_SHORT).show();*/
+                            userRVAdapter.setDataList(userAddressListBeen);
+
+                        }
+                    });
+
                     break;
                 case "shop":
                     xrvAddressManageUserAddrList.setVisibility(View.GONE);
-                    /*xrvAddressManageShopAddrList.setVisibility(View.VISIBLE);*/
+                    xrvAddressManageShopAddrList.setVisibility(View.VISIBLE);
                     addressManageNetWorks.getShopAddrList(usid, new Observer<List<ShopAddressListBean>>() {
                         @Override
                         public void onCompleted() {

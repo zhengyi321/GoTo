@@ -7,12 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.util.Collection;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import tianhao.agoto.Bean.ShopAddressListBean;
 import tianhao.agoto.Bean.UserAddressListBean;
 import tianhao.agoto.R;
@@ -31,13 +34,13 @@ public class AddressManageAddUserRVAdapter extends RecyclerView.Adapter<AddressM
         userAddressListBeanList = userAddressListBeanList1;
         inflater = LayoutInflater.from(context1);
     }
-    public void setDataList(Collection<UserAddressListBean> userAddressList){
-        if(userAddressList == null){
+    public void setDataList(Collection<UserAddressListBean> userAddressList1){
+        if(userAddressListBeanList == null){
             return;
         }
-        int count = userAddressList.size();
-        userAddressList.clear();
-        userAddressList.addAll(userAddressList);
+        int count = userAddressListBeanList.size();
+        userAddressListBeanList.clear();
+        userAddressListBeanList.addAll(userAddressList1);
         notifyDataSetChanged();
     }
     @Override
@@ -47,7 +50,9 @@ public class AddressManageAddUserRVAdapter extends RecyclerView.Adapter<AddressM
 
     @Override
     public void onBindViewHolder(ItemContentViewHolder holder, int position) {
-
+        if(holder != null){
+            holder.pos = position;
+        }
     }
 
     @Override
@@ -56,10 +61,17 @@ public class AddressManageAddUserRVAdapter extends RecyclerView.Adapter<AddressM
     }
 
     public class ItemContentViewHolder extends RecyclerView.ViewHolder{
+        public int pos = 0;
         @BindView(R.id.lly_addressmanage_content_user_rv_item_total)
         LinearLayout llyAddressManageContentRVItemTotal;
         @BindView(R.id.fly_addressmanage_content_user_rv_item)
         FrameLayout flyAddressManageContentRVItem;
+        @BindView(R.id.rly_addressmanage_content_user_rv_item_delete)
+        RelativeLayout rlyAddressManageContentUserRVItemDelete;
+        @OnClick(R.id.rly_addressmanage_content_user_rv_item_delete)
+        public void rlyAddressManageContentUserRVItemDeleteOnclick(){
+            /*Toast.makeText(context,"i am:"+pos,Toast.LENGTH_LONG).show();*/
+        }
         /*  @OnClick(R.id.fly_addressmanage_content_rv_item)
           public void flyAddressManageContentRVItemOnclick(){
               Toast.makeText(context,""+shopAddressListBeanList.get())

@@ -51,9 +51,15 @@
             android:layout_height="match_parent"
             >
 
-
         </tianhao.agoto.Common.Widget.XRecycleView.XRecyclerView>
 
+        <tianhao.agoto.Common.Widget.XRecycleView.XRecyclerView
+            android:id="@+id/xrv_addressmanage_shopaddrlist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            >
 
+        </tianhao.agoto.Common.Widget.XRecycleView.XRecyclerView>
     </FrameLayout>
 </LinearLayout>
