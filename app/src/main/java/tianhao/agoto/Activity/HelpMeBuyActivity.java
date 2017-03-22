@@ -460,17 +460,31 @@ public class HelpMeBuyActivity extends Activity  {
         }
     }
     /*帮我买购物清单*/
-    /*购买地址*/
+/*    *//*商家地址*//*
     @OnClick(R.id.lly_helpmebuy_sellerdetail)
     public void llyHelpMeBuySellerDetailOnclick(){
         Intent intent = new Intent(this,HelpMeBuyAddShopDetailActivity.class);
         startActivityForResult(intent,RESULT_BUY);
     }
-    /*购买地址*/
-    /*收件人信息*/
+    *//*商家地址*//*
+    *//*收件人信息*//*
     @OnClick(R.id.lly_helpmebuy_contacterdetail)
     public void llyHelpMeBuyContacterDetailOnclick(){
         Intent intent = new Intent(this,HelpMeBuyAddReceiverDetailActivity.class);
+        startActivityForResult(intent,RESULT_RECE);
+    }
+    *//*收件人信息*/
+    /*商家地址*/
+    @OnClick(R.id.lly_helpmebuy_sellerdetail)
+    public void llyHelpMeBuySellerDetailOnclick(){
+        Intent intent = new Intent(this,AddressManageActivity.class);
+        startActivityForResult(intent,RESULT_BUY);
+    }
+    /*商家地址*/
+    /*收件人信息*/
+    @OnClick(R.id.lly_helpmebuy_contacterdetail)
+    public void llyHelpMeBuyContacterDetailOnclick(){
+        Intent intent = new Intent(this,AddressManageActivity.class);
         startActivityForResult(intent,RESULT_RECE);
     }
     /*收件人信息*/

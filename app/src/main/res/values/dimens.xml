@@ -266,7 +266,7 @@
     <!--服务协议-->
     <!--地址管理-->
     <dimen name="activity_addressmanage_rv_item_height">100dp</dimen>
-    <dimen name="activity_addressmanage_rv_item_margin">30dp</dimen>
+    <dimen name="activity_addressmanage_rv_item_margin">20dp</dimen>
     <dimen name="activity_addressmanage_icomo_width">25dp</dimen>
     <dimen name="activity_addressmanage_icomo_height">25dp</dimen>
     <dimen name="activity_addressmanage_ico_head_width">40dp</dimen>

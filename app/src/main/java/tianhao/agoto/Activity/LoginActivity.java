@@ -212,7 +212,9 @@ public class LoginActivity extends Activity implements Handler.Callback, Platfor
                 if(userLogin.getUserName() != null){
                     mCacheManager.writeCache(name,userLogin.getUserName());
                     mCacheManager.writeCache(phone,userLogin.getUserName());
+
                     mCacheManager.writeCache(usid,userLogin.getUserUsid());
+                    System.out.println("usid:"+userLogin.getUserUsid());
                     mCacheManager.writeCache(loginStatus,"yes");
                     /*mDao.deleteDate(name);
                     mDao.deleteDate(phone);

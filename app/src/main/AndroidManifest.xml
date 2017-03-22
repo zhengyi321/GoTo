@@ -377,6 +377,16 @@
             android:screenOrientation="portrait"
             android:hardwareAccelerated="false"
             />
+        <activity
+            android:name=".Activity.AddressManageAddShopFinalActivity"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="false"
+            />
+        <activity
+            android:name=".Activity.AddressManageAddUserFinalActivity"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="false"
+            />
 
 
 

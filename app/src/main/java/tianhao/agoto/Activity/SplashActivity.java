@@ -84,10 +84,19 @@ public class SplashActivity extends Activity {
         viewList= new ArrayList<View>();
         for(int i = 0;i<imgSize.length;i++) {
 
-            ImageView iv = new ImageView(this);
+     /*       ImageView iv = new ImageView(this);
             iv.setScaleType(ImageView.ScaleType.FIT_XY);
-            iv.setImageResource(imgSize[i]);
-            viewList.add(iv);
+            iv.setImageResource(imgSize[i]);*/
+            if(i == 0) {
+                View view = getLayoutInflater().inflate(R.layout.activity_splash_item_img1, null, false);
+                viewList.add(view);
+            }else if(i == 1){
+                View view = getLayoutInflater().inflate(R.layout.activity_splash_item_img2, null, false);
+                viewList.add(view);
+            }else if(i == 2){
+                View view = getLayoutInflater().inflate(R.layout.activity_splash_item_img3, null, false);
+                viewList.add(view);
+            }
             ImageView iv_dot = new ImageView(this);
      /*       viewList.add(iv_dot);*/
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(8,

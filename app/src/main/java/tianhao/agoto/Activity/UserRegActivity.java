@@ -228,7 +228,11 @@ public class UserRegActivity extends Activity {
             if(identity.isEmpty()){
                 Toast.makeText(this,"请输入验证码",Toast.LENGTH_LONG).show();
             }
-            mobsmssdkUtil.confirmVerifSubmit(tel,identity);
+            try {
+                mobsmssdkUtil.confirmVerifSubmit(tel, identity);
+            }catch (Exception e){
+
+            }
         }
     }
     /*注册提交点击事件*/

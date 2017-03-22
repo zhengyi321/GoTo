@@ -114,7 +114,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
 
     /*百度地图定位 begin2*/
     @BindView(R.id.mv_helpmebuyadd_receiverdetail_content)
-    MapView mMapView;
+    MapView mvHelpMeBuyAddReceiverDetailContent;
     @BindView(R.id.iv_helpmebuyadd_receiverdetail_centerloc)
     ImageView ivHelpMeBuyAddReceiverDetailCenterLoc;
     private BaiduMap mBaiduMap;
@@ -720,7 +720,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
     /*软键盘监听*/
     private void initBaiDuMap(){
         initPoiSearch();
-        mBaiduMap = mMapView.getMap();
+        mBaiduMap = mvHelpMeBuyAddReceiverDetailContent.getMap();
 
         initOverlyWithMapView();
         //设置缩放级别，默认级别为12
@@ -792,7 +792,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
         @Override
         public void onReceiveLocation(BDLocation location) {
             //Receive Location
-            if (location == null || mMapView == null) {
+            if (location == null || mvHelpMeBuyAddReceiverDetailContent == null) {
                 return;
             }
             if(isFirst){
@@ -960,7 +960,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
         mBaiduMap.setMyLocationEnabled(false);
         search.destroy();
         isFirst = true;
-        mMapView.onDestroy();
+        mvHelpMeBuyAddReceiverDetailContent.onDestroy();
         locationClient.unRegisterLocationListener(locationListener);
         if(locationClient!=null){
             locationClient.stop();
@@ -970,7 +970,7 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
     }
     @Override
     protected void onResume() {
-        mMapView.onResume();
+        mvHelpMeBuyAddReceiverDetailContent.onResume();
         super.onResume();
     }
 
@@ -979,6 +979,6 @@ public class HelpMeBuyAddReceiverDetailActivity extends Activity implements OnGe
     protected void onPause() {
         // TODO Auto-generated method stub
         super.onPause();
-        mMapView.onPause();
+        mvHelpMeBuyAddReceiverDetailContent.onPause();
     }
 }

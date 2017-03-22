@@ -121,6 +121,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/activity_main_leftmenu_paddingleft_right_size"
                 android:textStyle="normal"
+                android:visibility="gone"
                 />
         </RelativeLayout>
         <!--我的订单-->
@@ -225,6 +226,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/activity_main_leftmenu_paddingleft_right_size"
                 android:textStyle="normal"
+                android:visibility="gone"
                 />
         </RelativeLayout>
         <!--消息-->
@@ -267,6 +269,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/activity_main_leftmenu_paddingleft_right_size"
                 android:textStyle="normal"
+                android:visibility="gone"
                 />
         </RelativeLayout>
         <!--活动-->
@@ -341,6 +344,7 @@
                 android:textStyle="normal"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/activity_main_leftmenu_paddingleft_right_size"
+                android:visibility="gone"
                 />
         </RelativeLayout>
         <!--退出登录-->

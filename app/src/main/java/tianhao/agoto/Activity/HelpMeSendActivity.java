@@ -230,9 +230,16 @@ public class HelpMeSendActivity extends Activity {
     }
     private void init(){
         ButterKnife.bind(this);
+        initWeightAndReceiveTime();
+
         initIsLogin();
         initRoutePlanDisNavi();
     }
+    private void initWeightAndReceiveTime(){
+        tvHelpMeSendContentGoodsWeight.setText("10公斤以内");
+        tvHelpMeSendContentRecTime.setText("立即收件");
+    }
+
     private void initIsLogin(){
         xcCacheManager = XCCacheManager.getInstance(this);
         usid = xcCacheManager.readCache("usid");

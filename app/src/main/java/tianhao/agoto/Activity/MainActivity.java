@@ -253,12 +253,13 @@ public class MainActivity extends AppCompatActivity {
                     /*Toast.makeText(this,"initAfterLogin:",Toast.LENGTH_LONG).show();*/
                     /*if()*/
                     PhoneFormatCheckUtils phoneFormatCheckUtils = new PhoneFormatCheckUtils();
-                    if((phoneFormatCheckUtils.isChinaPhoneLegal(userName))&&(userName.length() > 9)){
+                    if((phoneFormatCheckUtils.IsNumber(userName))&&(userName.length() > 9)){
                         String tempBeg = userName.substring(0,3);
                         String tempEnd = userName.substring(userName.length()-4,userName.length());
                         userName = tempBeg+"****"+tempEnd;
+                        tvMainLeftMenuName.setText(userName);
                     }
-                    tvMainLeftMenuName.setText(userName);
+
                     String headImgUrl = xcCacheManager.readCache("headUrl");
                     if ((headImgUrl != null) && (!headImgUrl.isEmpty())) {
                         /*Toast.makeText(this, "headimgurl:" + headImgUrl, Toast.LENGTH_LONG).show();*/
