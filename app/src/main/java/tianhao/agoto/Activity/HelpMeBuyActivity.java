@@ -79,6 +79,7 @@ import tianhao.agoto.R;
 import tianhao.agoto.ThirdPay.ZhiFuBao.AuthResult;
 import tianhao.agoto.ThirdPay.ZhiFuBao.OrderInfoUtil2_0;
 import tianhao.agoto.ThirdPay.ZhiFuBao.PayResult;
+import tianhao.agoto.Utils.PhoneFormatCheckUtils;
 import tianhao.agoto.Utils.PriceUtil;
 import tianhao.agoto.Utils.TimeUtil;
 
@@ -212,6 +213,7 @@ public class HelpMeBuyActivity extends Activity  {
 
     private final int RESULT_BUY = 10;//购买地址
     private double blat=0,rlat=0,blon=0,rlon=0;
+    private String clientaddrThings1="",clientaddr1Things1="";
     private final int RESULT_RECE = 11;//收件人信息
     private final int RESULT_FOODSMENU = 12;//菜单
     /*百度骑行引擎*/
@@ -222,11 +224,11 @@ public class HelpMeBuyActivity extends Activity  {
     private String userName = "";
     /*百度骑行引擎*/
     /*当登录的时候 百度自动定位*/
-    private LocationClient locationClient=null;
-    private BDLocationListener locationListener= new MyLocationListener();
+/*    private LocationClient locationClient=null;
+    private BDLocationListener locationListener= new MyLocationListener();*/
     /*当登录的时候 百度自动定位*/
     private String goodsName,price;
-    private int dis = 0;
+    private double dis = 0;
     private boolean isFirstLocation = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -251,17 +253,16 @@ public class HelpMeBuyActivity extends Activity  {
             userName = "";
         }
         if(!usid.isEmpty()){
-            tvHelpMeBuyContentReceiveName.setText("尊敬的先生/女士");
+/*            tvHelpMeBuyContentReceiveName.setText("尊敬的先生/女士");
             tvHelpMeBuyContentReceiveTel.setText(userName);
             locationClient=new LocationClient(getApplicationContext());
             locationClient.registerLocationListener(locationListener);
             initLocation();
-            locationClient.start();
+            locationClient.start();*/
         }
     }
-    private void initLocation(){
+/*    private void initLocation(){
         LocationClientOption option=new LocationClientOption();
-        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
         option.setCoorType("bd09ll");
 //        int span=1000;
 //        option.setScanSpan(span);
@@ -273,9 +274,9 @@ public class HelpMeBuyActivity extends Activity  {
         option.setIgnoreKillProcess(false);
         option.setEnableSimulateGps(false);
         locationClient.setLocOption(option);
-    }
+    }*/
 
-    /**接收异步返回的定位结果**/
+   /* *//**接收异步返回的定位结果**//*
     public class MyLocationListener implements BDLocationListener{
 
         @Override
@@ -287,9 +288,9 @@ public class HelpMeBuyActivity extends Activity  {
                 rlon = location.getLongitude();
                 isFirstLocation = false;
             }
-            /*showCurrentPosition(location);*/
+            *//*showCurrentPosition(location);*//*
         }
-    }
+    }*/
     /*百度骑行导航初始化http://lbsyun.baidu.com/index.php?title=androidsdk/guide/bikenavi   http://wiki.lbsyun.baidu.com/cms/androidsdk/doc/v4_2_1/index.html
     * http://lbsyun.baidu.com/index.php?title=androidsdk/guide/tool里面的步行导航中有骑行导航  再加上doc文档即可解决
     * */
@@ -348,10 +349,12 @@ public class HelpMeBuyActivity extends Activity  {
     /*获取价格*/
     private void getPrice(){
         PriceUtil priceUtil = new PriceUtil(this);
-        float dist = dis/1000;
-        price = priceUtil.gotoHelpMeBuylFee(dist,helpMeBuyShoppingMenuRecyclerViewAdapter.getItemCount());
-        tvHelpMeBuyBottomBarFee.setVisibility(View.VISIBLE);
-        tvHelpMeBuyBottomBarFee.setText(price);
+        double dist = dis/1000;
+        price = priceUtil.gotoHelpMeBuylFee((float) dist,helpMeBuyShoppingMenuRecyclerViewAdapter.getItemCount());
+        if(!price.isEmpty()) {
+            tvHelpMeBuyBottomBarFee.setVisibility(View.VISIBLE);
+            tvHelpMeBuyBottomBarFee.setText("￥" + price);
+        }
     }
     /*获取价格*/
     /*开始骑行路线规划*/
@@ -477,6 +480,7 @@ public class HelpMeBuyActivity extends Activity  {
     /*商家地址*/
     @OnClick(R.id.lly_helpmebuy_sellerdetail)
     public void llyHelpMeBuySellerDetailOnclick(){
+        xcCacheManager.writeCache("addressManageType","shop");
         Intent intent = new Intent(this,AddressManageActivity.class);
         startActivityForResult(intent,RESULT_BUY);
     }
@@ -484,6 +488,7 @@ public class HelpMeBuyActivity extends Activity  {
     /*收件人信息*/
     @OnClick(R.id.lly_helpmebuy_contacterdetail)
     public void llyHelpMeBuyContacterDetailOnclick(){
+        xcCacheManager.writeCache("addressManageType","user");
         Intent intent = new Intent(this,AddressManageActivity.class);
         startActivityForResult(intent,RESULT_RECE);
     }
@@ -497,6 +502,7 @@ public class HelpMeBuyActivity extends Activity  {
                 Bundle b=data.getExtras(); //data为B中回传的Intent
                 String nameCall=b.getString("nameCall");//str即为回传的值
                 String address=b.getString("address");//str即为回传的值
+                clientaddr1Things1 = b.getString("clientaddr1Things1");
                 String lat = b.getString("blat");
                 String lon = b.getString("blon");
                 /*Toast.makeText(getBaseContext(),"RESULT_BUY:"+lat+" "+lon+" ",Toast.LENGTH_SHORT).show();*/
@@ -514,6 +520,7 @@ public class HelpMeBuyActivity extends Activity  {
                 Bundle r=data.getExtras(); //data为B中回传的Intent
                 String name=r.getString("nameCall");//str即为回传的值
                 String addr=r.getString("address");//str即为回传的值
+                clientaddrThings1 = r.getString("clientaddrThings1");
                 String tel =r.getString("tel");
                 String latt = r.getString("rlat");
                 String lonn = r.getString("rlon");
@@ -597,22 +604,33 @@ public class HelpMeBuyActivity extends Activity  {
     public void rlyHelpMeBuyBottomToPayOnclick(){
        /* Intent intent = new Intent(this, PayConfirmPopup.class);
         startActivity(intent);*/
-        initOrderDetail();
+        try {
+            initOrderDetail();
+            /*Toast.makeText(this,"initOrderOk",Toast.LENGTH_SHORT).show();*/
+            if (orderDetail.getUserUsid().isEmpty() || orderDetail.getClientaddrAddr().isEmpty() || orderDetail.getClientaddrAddr1().isEmpty() || orderDetail.getDetailsGoodsname().isEmpty()) {
+                Toast.makeText(this, "信息输入不全", Toast.LENGTH_LONG).show();
+                return;
+            }
+            PopupOnClickEvents popupOnClickEvents = new PopupOnClickEvents(this);
+            goodsName = "走兔订单号";
+            Toast.makeText(this,"click",Toast.LENGTH_SHORT).show();
+            popupOnClickEvents.PayConfirm(llyHelpMeBuy, orderDetail);
+        }catch (Exception e){
 
-        if (orderDetail.getUserUsid().isEmpty() || orderDetail.getClientaddrAddr().isEmpty() || orderDetail.getClientaddrAddr1().isEmpty() || orderDetail.getDetailsGoodsname().isEmpty()) {
-            Toast.makeText(this, "信息输入不全", Toast.LENGTH_LONG).show();
-            return;
         }
-        PopupOnClickEvents popupOnClickEvents = new PopupOnClickEvents(this);
-        goodsName = "走兔订单号";
-
-        popupOnClickEvents.PayConfirm(llyHelpMeBuy,orderDetail);
     }
 
     private void initOrderDetail(){
         orderDetail = new OrderDetail();
         /*Toast.makeText(this,"usid:"+usid,Toast.LENGTH_LONG).show();*/
         orderDetail.setUserUsid(usid);
+        orderDetail.setClientaddrThings1(clientaddrThings1);
+        orderDetail.setClientaddr1Things1(clientaddr1Things1);
+
+        orderDetail.setOrderLat((float)blat);
+        orderDetail.setOrderLong((float)blon);
+        orderDetail.setOrderDlat((float)rlat);
+        orderDetail.setOrderDlong((float)rlon);
         System.out.println(orderDetail.getUserUsid());
         orderDetail.setClientaddrAddr(tvHelpMeBuyContentBuyAddress.getText().toString() + ";"+tvHelpMeBuyContentReceiveAddressDetail.getText().toString());
         orderDetail.setClientaddrAddr1(tvHelpMeBuyContentReceiveName.getText().toString()+";"+tvHelpMeBuyContentReceiveTel.getText().toString()+";"+tvHelpMeBuyContentReceiveAddressDetail.getText().toString());
@@ -628,8 +646,10 @@ public class HelpMeBuyActivity extends Activity  {
             }
         }
         orderDetail.setOrderRemark(remark);
-        orderDetail.setOrderOrderprice(price);
-        orderDetail.setOrderMileage(""+dis);
+
+
+        orderDetail.setOrderOrderprice(Double.parseDouble(price));
+        orderDetail.setOrderMileage(dis);
         List<GoodsBean> goodsBeanList1 =  helpMeBuyShoppingMenuRecyclerViewAdapter.getGoodsBeanList();
         String menu = "";
         if((goodsBeanList1 != null)&&(goodsBeanList1.size() > 0)){
@@ -862,9 +882,9 @@ public class HelpMeBuyActivity extends Activity  {
     }
     protected void onDestroy(){
         super.onDestroy();
-        if(!usid.isEmpty()) {
+   /*     if(!usid.isEmpty()) {
             locationClient.unRegisterLocationListener(locationListener);
-        }
+        }*/
         BaiduMapNavigation.finish(this);
         mSearch.destroy();
         Log.d(LTAG, "引擎初始化成功");

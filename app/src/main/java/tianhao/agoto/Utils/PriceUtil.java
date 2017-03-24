@@ -18,7 +18,8 @@ public class PriceUtil {
    /* 走兔代购价格表:时间10点-21点  代购数量为1件物品的时候:3km以内10元、3+n km价格10+2n ：n小于等于17km、超20km价格为2*(10+2n)。代购数量为1+m件的时候：3km以内10+3m元、3+n km价格10+3m+2n ：n小于等于17km、超20km价格为2*(10+3m+2n)
                     时间为21点到临晨1点  代购数量为1件物品的时候:3km以内10*2元、3+n km价格（10+2n）*2 ：n小于等于17km、超20km价格为2*(10+2n)*2。代购数量为1+m件的时候：3km以内（10+3m）*2元、3+n km价格（10+3m+2n）*2 ：n小于等于17km、超20km价格为2*(10+3m+2n)*2*/
     public String gotoHelpMeBuylFee(float dis,int num){
-        String price = "￥";
+        /*String price = "￥";*/
+        String price = "";
         TimeUtil timeUtil = new TimeUtil();
         int hour = timeUtil.getHour(new Date());
         Log.i("gotoHelpMeBuylFee",""+hour);
@@ -92,7 +93,8 @@ public class PriceUtil {
 
 
     public String gotoHelpMeSendlFee(float dis/*,float weight*/){
-        String price = "￥";
+        /*String price = "￥";*/
+        String price = "";
         TimeUtil timeUtil = new TimeUtil();
         int hour = timeUtil.getHour(new Date());
         Log.i("gotoHelpMeSendlFee",""+hour);
@@ -156,9 +158,9 @@ public class PriceUtil {
         }
 
         Log.i("gotoHelpMeSendlFee",""+price);
-        if(price.length() < 2){
+        /*if(price.length() < 2){
             price = "";
-        }
+        }*/
         return price;
     }
 }

@@ -8,6 +8,7 @@
     android:id="@+id/lly_addressmanage_content_shop_rv_item_total"
     >
     <tianhao.agoto.Common.Widget.SwipeLayout.SwipeLayout.SwipeLayout
+        android:id="@+id/sly_addressmanage_content_shop_rv_item"
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_addressmanage_rv_item_height"
         android:layout_margin="@dimen/activity_addressmanage_rv_item_margin"

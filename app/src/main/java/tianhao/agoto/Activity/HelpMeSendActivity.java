@@ -44,6 +44,7 @@ import tianhao.agoto.Common.Widget.DB.XCCacheManager.xccache.XCCacheManager;
 import tianhao.agoto.R;
 import tianhao.agoto.Utils.PhoneFormatCheckUtils;
 import tianhao.agoto.Utils.PriceUtil;
+import tianhao.agoto.Utils.TimeUtil;
 
 /**
  *
@@ -61,7 +62,7 @@ public class HelpMeSendActivity extends Activity {
     /*缓存*/
     private OrderDetail orderDetail;
     /*距离*/
-    private int dis = 0;
+    private float dis = 0;
     /*距离*/
     private String goodsName="",price="";
     /*百度骑行引擎*/
@@ -188,15 +189,19 @@ public class HelpMeSendActivity extends Activity {
     RelativeLayout rlyHelpMeSendBottomBarPayConfirm;
     @OnClick(R.id.rly_helpmesend_bottombar_payconfirm)
     public void rlyHelpMeSendBottomBarPayConfirmOnclick(){
-        initOrderDetail();
-        if (orderDetail.getUserUsid().isEmpty() || orderDetail.getClientaddrAddr().isEmpty() || orderDetail.getClientaddrAddr1().isEmpty() || orderDetail.getOrderHeight().isEmpty()|| orderDetail.getDetailsGoodsname().isEmpty()|| orderDetail.getOrderTimeliness().isEmpty()) {
-            Toast.makeText(this, "信息输入不全", Toast.LENGTH_LONG).show();
-            return;
+        try {
+            initOrderDetail();
+            if (orderDetail.getUserUsid().isEmpty() || orderDetail.getClientaddrAddr().isEmpty() || orderDetail.getClientaddrAddr1().isEmpty()   || orderDetail.getOrderTimeliness().isEmpty()) {
+                Toast.makeText(this, "信息输入不全", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            PopupOnClickEvents popupOnClickEvents = new PopupOnClickEvents(this);
+
+            popupOnClickEvents.PayConfirm(llyHelpMeSend, orderDetail);
+        }catch (Exception e){
+
         }
-
-        PopupOnClickEvents popupOnClickEvents = new PopupOnClickEvents(this);
-
-        popupOnClickEvents.PayConfirm(llyHelpMeSend,orderDetail);
     }
     /*费用说明*/
     @BindView(R.id.rly_helpmesend_bottombar_feecontent)
@@ -211,17 +216,19 @@ public class HelpMeSendActivity extends Activity {
     private String usid = "";
     private String userName = "";
     /*当登录的时候 百度自动定位*/
-    private LocationClient locationClient=null;
+/*    private LocationClient locationClient=null;
     private BDLocationListener locationListener= new MyLocationListener();
-    private boolean isFirstLocation = true;
+    private boolean isFirstLocation = true;*/
     /*当登录的时候 百度自动定位*/
     private final int RESULT_SENDER = 10;
     private final int RESULT_RECEIVER = 11;
 
-    private Double blat=0.0;
-    private Double rlat=0.0;
-    private Double blon=0.0;
-    private Double rlon=0.0;
+    private double blat=0.0;
+    private double rlat=0.0;
+    private double blon=0.0;
+    private double rlon=0.0;
+    private String  bclientaddrThings1 = "";
+    private String  rclientaddrThings1 = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -250,32 +257,26 @@ public class HelpMeSendActivity extends Activity {
         if(userName == null){
             userName = "";
         }
-        if(!usid.isEmpty()){
+/*        if(!usid.isEmpty()){
             tvHelpMeSendContentSenderName.setText("尊敬的先生/女士");
             tvHelpMeSendContentSenderTel.setText(userName);
             locationClient=new LocationClient(getApplicationContext());
             locationClient.registerLocationListener(locationListener);
             initLocation();
             locationClient.start();
-        }
+        }*/
     }
-    private void initLocation(){
+  /*  private void initLocation(){
         LocationClientOption option=new LocationClientOption();
-        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-        option.setCoorType("bd09ll");
-//        int span=1000;
-//        option.setScanSpan(span);
-        option.setIsNeedAddress(true);
-        option.setOpenGps(true);
-        option.setLocationNotify(true);
-        option.setIsNeedLocationDescribe(true);
-        option.setIsNeedLocationPoiList(true);
-        option.setIgnoreKillProcess(false);
+        option.setOpenGps(true); // 打开gps
+        option.setCoorType("bd09ll"); // 设置坐标类型
+        option.setIsNeedAddress(true);//返回地址
+        option.setIsNeedLocationDescribe(true);//返回地址周边描述
         option.setEnableSimulateGps(false);
         locationClient.setLocOption(option);
     }
 
-    /**接收异步返回的定位结果**/
+    *//**接收异步返回的定位结果**//*
     public class MyLocationListener implements BDLocationListener {
 
         @Override
@@ -285,11 +286,12 @@ public class HelpMeSendActivity extends Activity {
                 tvHelpMeSendContentSenderAddr.setText(location.getAddrStr() + location.getLocationDescribe());
                 blat = location.getLatitude();
                 blon = location.getLongitude();
+                Toast.makeText(getBaseContext(),"blat:"+blat+" blon:"+blon,Toast.LENGTH_SHORT).show();
                 isFirstLocation = false;
             }
-            /*showCurrentPosition(location);*/
+            *//*showCurrentPosition(location);*//*
         }
-    }
+    }*/
 
     /*后退到主界面*/
     @OnClick(R.id.rly_helpmesend_topbar_leftmenu)
@@ -301,9 +303,10 @@ public class HelpMeSendActivity extends Activity {
     /*收件人信息*/
     @OnClick(R.id.lly_helpmesend_content_receiverdata)
     public void llyHelpMeSendReceiverDataOnclick(){
+        xcCacheManager.writeCache("addressManageType","send");
         Bundle bundle = new Bundle();
         bundle.putString("receiver",""+RESULT_RECEIVER);
-        Intent intent = new Intent(this,HelpMeSendAddContacterActivity.class);
+        Intent intent = new Intent(this,AddressManageActivity.class);
         intent.putExtras(bundle);
         startActivityForResult(intent,RESULT_RECEIVER);
     }
@@ -312,9 +315,10 @@ public class HelpMeSendActivity extends Activity {
     /*发件人*/
     @OnClick(R.id.lly_helpmesend_content_senderdata)
     public void llyHelpMeSendSenderDataOnclick(){
+        xcCacheManager.writeCache("addressManageType","send");
         Bundle bundle = new Bundle();
         bundle.putString("sender",""+RESULT_SENDER);
-        Intent intent = new Intent(this,HelpMeSendAddContacterActivity.class);
+        Intent intent = new Intent(this,AddressManageActivity.class);
         intent.putExtras(bundle);
         startActivityForResult(intent,RESULT_SENDER);
         /*startActivity(intent);*/
@@ -343,6 +347,7 @@ public class HelpMeSendActivity extends Activity {
             String nameCall=b.getString("nameCall");//str即为回传的值
             String address=b.getString("address");//str即为回传的值
             String telphone = b.getString("tel");
+            String clientaddrThings1 = b.getString("clientaddrThings1");
             String lat = b.getString("lat");
             String lon = b.getString("lon");
 
@@ -351,10 +356,12 @@ public class HelpMeSendActivity extends Activity {
                     blat = Double.parseDouble(lat);
                     blon = Double.parseDouble(lon);
                 }
+                bclientaddrThings1 = clientaddrThings1;
                 tvHelpMeSendContentSenderName.setText(nameCall);
                 tvHelpMeSendContentSenderAddr.setText(address);
                 tvHelpMeSendContentSenderTel.setText(telphone);
             }else{
+                rclientaddrThings1 = clientaddrThings1;
                 tvHelpMeSendContentReceiverName.setText(nameCall);
                 tvHelpMeSendContentReceiverAddr.setText(address);
                 tvHelpMeSendContentReceiverTel.setText(telphone);
@@ -363,6 +370,7 @@ public class HelpMeSendActivity extends Activity {
                     rlon = Double.parseDouble(lon);
                 }
             }
+            /*Toast.makeText(getBaseContext(),"lat:"+lat+" blat:"+blat+" rlat:"+rlat,Toast.LENGTH_SHORT).show();*/
             /*Toast.makeText(this,"this is helpmesend:lat"+lat+",lon:"+lon,Toast.LENGTH_SHORT).show();*/
         }
     }
@@ -443,7 +451,8 @@ public class HelpMeSendActivity extends Activity {
         PriceUtil priceUtil = new PriceUtil(this);
 
         tvHelpMeSendContentSendDis.setText(""+dis+"km");
-
+        price = priceUtil.gotoHelpMeSendlFee(dis);
+        /*
         if((tvHelpMeSendContentGoodsWeight.getText().toString() != null)&&(!tvHelpMeSendContentGoodsWeight.getText().toString().isEmpty())) {
             String weight = tvHelpMeSendContentGoodsWeight.getText().toString();
             int index = weight.indexOf("k");
@@ -451,7 +460,7 @@ public class HelpMeSendActivity extends Activity {
                 weight = weight.substring(0,index);
                 if(phoneFormatCheckUtils.isDouble(weight)){
                     float tempWeight = Float.parseFloat(weight);
-                    /*price = priceUtil.gotoHelpMeSendlFee(dis, tempWeight);*/
+                    *//*price = priceUtil.gotoHelpMeSendlFee(dis, tempWeight);*//*
                     price = priceUtil.gotoHelpMeSendlFee(dis);
                 }else {
                     Toast.makeText(this, "请正确输入重量", Toast.LENGTH_SHORT).show();
@@ -459,19 +468,21 @@ public class HelpMeSendActivity extends Activity {
             }else{
                 if(phoneFormatCheckUtils.isDouble(weight)){
                     float tempWeight = Float.parseFloat(weight);
-                    /*price = priceUtil.gotoHelpMeSendlFee(dis, tempWeight);*/
+                    *//*price = priceUtil.gotoHelpMeSendlFee(dis, tempWeight);*//*
                     price = priceUtil.gotoHelpMeSendlFee(dis);
                 }else {
                     Toast.makeText(this, "请正确输入重量", Toast.LENGTH_SHORT).show();
                 }
             }
-            /*float weight = Float.parseFloat(weigh);*/
+            *//*float weight = Float.parseFloat(weigh);*//*
 
-            /*Toast.makeText(getBaseContext(),"here is getPrice:"+price,Toast.LENGTH_SHORT).show();*/
-        }
-        tvHelpMeSendBottomBarPrice.setVisibility(View.VISIBLE);
+            *//*Toast.makeText(getBaseContext(),"here is getPrice:"+price,Toast.LENGTH_SHORT).show();*//*
+        }*/
+        if(!price.isEmpty()) {
+            tvHelpMeSendBottomBarPrice.setVisibility(View.VISIBLE);
         /*Toast.makeText(getBaseContext(),"here is getPrice tvHelpMeSendBottomBarPrice:"+price,Toast.LENGTH_SHORT).show();*/
-        tvHelpMeSendBottomBarPrice.setText(price);
+            tvHelpMeSendBottomBarPrice.setText("￥" + price);
+        }
     }
     /*获取价格*/
     /*开始骑行路线规划*/
@@ -519,18 +530,36 @@ public class HelpMeSendActivity extends Activity {
         /*Toast.makeText(this,"usid:"+usid,Toast.LENGTH_LONG).show();*/
         orderDetail.setUserUsid(usid);
         System.out.println(orderDetail.getUserUsid());
-        orderDetail.setClientaddrAddr(tvHelpMeSendContentSenderName.getText().toString() + " "+tvHelpMeSendContentSenderTel.getText().toString() + " "+tvHelpMeSendContentSenderAddr.getText().toString());
-        orderDetail.setClientaddrAddr1(tvHelpMeSendContentReceiverName.getText().toString()+" "+tvHelpMeSendContentReceiverTel.getText().toString()+" "+tvHelpMeSendContentReceiverAddr.getText().toString());
-        orderDetail.setOrderOrderprice(price);
+        orderDetail.setClientaddrAddr(tvHelpMeSendContentSenderName.getText().toString() + ";"+tvHelpMeSendContentSenderTel.getText().toString() + ";"+tvHelpMeSendContentSenderAddr.getText().toString());
+        orderDetail.setClientaddrAddr1(tvHelpMeSendContentReceiverName.getText().toString()+";"+tvHelpMeSendContentReceiverTel.getText().toString()+";"+tvHelpMeSendContentReceiverAddr.getText().toString());
+        orderDetail.setOrderOrderprice(Double.parseDouble(price));
+        orderDetail.setOrderLong((float)blon);
+        orderDetail.setOrderLat((float)blat);
+        orderDetail.setOrderDlat((float)rlat);
+        orderDetail.setOrderDlong((float)rlon);
+        orderDetail.setOrderMileage((double)dis);
+        orderDetail.setClientaddrThings1(bclientaddrThings1);
+        orderDetail.setClientaddr1Things1(rclientaddrThings1);
 
-        orderDetail.setOrderMileage(""+dis);
-
+        orderDetail.setDetailsGoodsname("");
         orderDetail.setOrderName(tvHelpMeSendContentGoodsType.getText().toString());
-        orderDetail.setOrderTimeliness(tvHelpMeSendContentRecTime.getText().toString());
-        orderDetail.setOrderRemark(etHelpMeSendContentRemark.getText().toString());
+        String time = tvHelpMeSendContentRecTime.getText().toString();
+        TimeUtil timeUtil = new TimeUtil();
+        if(time.equals("立即收件")){
+            time = timeUtil.getCurrentDateTime();
+            time = time.replace(" ","");
+        }
+        orderDetail.setOrderTimeliness(time);
+        String remark = etHelpMeSendContentRemark.getText().toString();
+        if((remark == null)||(remark.isEmpty())){
+            remark = "";
+        }
+        orderDetail.setOrderRemark(remark);
+        orderDetail.setClientaddrArea("");
         /*Toast.makeText(this,"helpmesend:"+tvHelpMeSendContentGoodsWeight.getText().toString(),Toast.LENGTH_SHORT).show();*/
 
-        orderDetail.setOrderHeight(tvHelpMeSendContentGoodsWeight.getText().toString());
+        /*orderDetail.setOrderHeight(tvHelpMeSendContentGoodsWeight.getText().toString());*/
+        /*orderDetail.setOrderHeight("10公斤以内");*/
 
     }
 
@@ -554,6 +583,7 @@ public class HelpMeSendActivity extends Activity {
     protected void onDestroy(){
         super.onDestroy();
         BaiduMapNavigation.finish(this);
+/*        locationClient.unRegisterLocationListener(locationListener);*/
         mSearch.destroy();
     }
 }

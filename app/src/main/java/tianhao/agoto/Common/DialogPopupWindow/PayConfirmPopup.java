@@ -35,8 +35,8 @@ import tianhao.agoto.Utils.PhoneFormatCheckUtils;
 
 public class PayConfirmPopup extends PopupWindow {
 
-    private HelpMeSendBuyNetWorks helpMeSendBuyNetWorks;
-    private PhoneFormatCheckUtils phoneFormatCheckUtils = new PhoneFormatCheckUtils();
+
+
     /*跑腿费用*/
     @BindView(R.id.tv_popup_thirdpay_payconfirm_fee)
     TextView tvPopupThirdPayPayConfirmFee;
@@ -91,9 +91,11 @@ public class PayConfirmPopup extends PopupWindow {
 
                 break;
             case "wx":
+                /*Toast.makeText(activity,"this is wx",Toast.LENGTH_SHORT).show();*/
                 payMethod("wx");
                 break;
             case "zfb":
+                /*Toast.makeText(activity,"this is zfb",Toast.LENGTH_SHORT).show();*/
                 payMethod("zfb");
                 break;
             default:
@@ -129,7 +131,8 @@ public class PayConfirmPopup extends PopupWindow {
     int type = 1;
     /*微信支付*/
     private ZhiFuBaoUtil zhiFuBaoUtil;
-    private String goodsName,price;
+    private String goodsName;
+    private Double dPrice =  0.0;
     private OrderDetail orderDetail;
     public PayConfirmPopup(Activity activity, OrderDetail orderDetail1){
 
@@ -139,8 +142,11 @@ public class PayConfirmPopup extends PopupWindow {
         this.activity = activity;
         goodsName = "走兔";
         orderDetail = orderDetail1;
+/*        Toast.makeText(activity,"goodsName",Toast.LENGTH_SHORT).show();*/
         if(orderDetail.getOrderOrderprice() != null) {
-            price = orderDetail.getOrderOrderprice();
+            /*price = orderDetail.getOrderOrderprice();*/
+            dPrice = orderDetail.getOrderOrderprice();
+    /*        Toast.makeText(activity,"dPrice"+dPrice,Toast.LENGTH_SHORT).show();*/
         }
         init();
 
@@ -189,7 +195,7 @@ public class PayConfirmPopup extends PopupWindow {
         this.setContentView(mPopView);
         this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
-        tvPopupThirdPayPayConfirmFee.setText(price);
+        tvPopupThirdPayPayConfirmFee.setText(""+dPrice);
         // 设置SelectPicPopupWindow弹出窗体可点击
         this.setFocusable(true);
         // 点击外面的控件也可以使得PopUpWindow dimiss
@@ -205,7 +211,7 @@ public class PayConfirmPopup extends PopupWindow {
     public void wxPay(final HelpMeBuyBean helpMeBuyBean){
         /*Toast.makeText(activity,"this is wxpay",Toast.LENGTH_SHORT).show();*/
         String body = "测试商品不描述";
-        WeChatPayService weChatPay = new WeChatPayService(activity,type, helpMeBuyBean.getOrderNo(), goodsName, price);
+        WeChatPayService weChatPay = new WeChatPayService(activity,type, helpMeBuyBean.getOrderNo(), goodsName, ""+dPrice);
         weChatPay.pay();
     }
     /*微信支付*/
@@ -213,11 +219,12 @@ public class PayConfirmPopup extends PopupWindow {
     public void zhiFuBaoPay(final HelpMeBuyBean helpMeBuyBean){
 
 /*Toast.makeText(activity, " onCompleted mPopView:"+goodsName+price, Toast.LENGTH_LONG).show();*/
-        zhiFuBaoUtil.payV2(mPopView, goodsName, price);
+        zhiFuBaoUtil.payV2(mPopView, goodsName, ""+dPrice);
                     /*去支付金钱*/
         zhiFuBaoUtil.setOnPaySuccessfulListener(new ZhiFuBaoUtil.OnPaySuccessfulListener() {
             @Override
             public void isSuccessful(boolean isSuccessful) {
+                HelpMeSendBuyNetWorks helpMeSendBuyNetWorks = new HelpMeSendBuyNetWorks();
                     /*Toast.makeText(activity," 我成功啦 isSuccessful:"+isSuccessful,Toast.LENGTH_LONG).show();*/
                 if (isSuccessful) {
                     if (helpMeBuyBean.getPaystatusPaystatus().equals("有待支付")) {
@@ -275,17 +282,20 @@ public class PayConfirmPopup extends PopupWindow {
             Toast.makeText(activity,"请登录",Toast.LENGTH_SHORT).show();
             return;
         }
-        if((goodsName!= null)&&(price != null)&&(price.length()> 1)) {
+        /*Toast.makeText(activity,"this is goodsName"+goodsName+" "+dPrice,Toast.LENGTH_SHORT).show();*/
+        if((goodsName!= null)&&(dPrice != null)) {
 
             /*int index = price.indexOf("￥");*/
-            String first = price.substring(0,1);
+          /*  String first = price.substring(0,1);
             if(!phoneFormatCheckUtils.IsIntNumber(first)) {
                 price = price.substring(1, price.length());
-                int index = price.indexOf(".");
+                dPrice = Double.parseDouble(price);
+                *//*int index = price.indexOf(".");
                 if (index > 0) {
                     price = price.substring(0, index);
-                }
-            }
+
+                }*//*
+            }*/
             pOrderToNet(method);
         }
     }
@@ -296,7 +306,7 @@ public class PayConfirmPopup extends PopupWindow {
     private void pOrderToNet(final String method){
         try {
             /*判断物件重量*/
-            String weight = orderDetail.getOrderHeight();
+            /*String weight = orderDetail.getOrderHeight();
             int indexW = weight.indexOf("k");
             if(indexW > 0){
                 weight = weight.substring(0,indexW);
@@ -307,10 +317,13 @@ public class PayConfirmPopup extends PopupWindow {
                 }
             }else{
                 orderDetail.setOrderHeight("0");
-            }
+            }*/
+
             /*判断物件重量*/
+            /*orderDetail.setOrderOrderprice(dPrice);*/
+            HelpMeSendBuyNetWorks helpMeSendBuyNetWorks;
             helpMeSendBuyNetWorks = new HelpMeSendBuyNetWorks();
-            Map<String, String> paramMap = new HashMap<String, String>();
+           /* Map<String, String> paramMap = new HashMap<String, String>();
             paramMap.put("userUsid", orderDetail.getUserUsid());
             paramMap.put("clientaddrAddr", orderDetail.getClientaddrAddr());
             paramMap.put("clientaddrAddr1", orderDetail.getClientaddrAddr1());
@@ -318,14 +331,14 @@ public class PayConfirmPopup extends PopupWindow {
             paramMap.put("orderName", orderDetail.getOrderName());
             paramMap.put("orderTimeliness", orderDetail.getOrderTimeliness());
             paramMap.put("orderRemark", orderDetail.getOrderRemark());
-            orderDetail.setOrderOrderprice(price);
+
             if (phoneFormatCheckUtils.isDouble(price)) {
 
                 paramMap.put("orderOrderprice", price);
             } else {
                 paramMap.put("orderOrderprice", "0");
             }
-            /*Toast.makeText(activity,"this is price:"+paramMap.get("orderOrderprice"),Toast.LENGTH_SHORT).show();*/
+            *//*Toast.makeText(activity,"this is price:"+paramMap.get("orderOrderprice"),Toast.LENGTH_SHORT).show();*//*
             if (phoneFormatCheckUtils.isDouble(orderDetail.getOrderMileage())) {
                 paramMap.put("orderMileage", orderDetail.getOrderMileage()+".0");
             } else {
@@ -336,21 +349,48 @@ public class PayConfirmPopup extends PopupWindow {
             System.out.println("userUsid=" + orderDetail.getUserUsid() + "&" + "clientaddrAddr=" + orderDetail.getClientaddrAddr() + "&" + "clientaddrAddr1=" + orderDetail.getClientaddrAddr1() + "&" + "orderHeight=" + orderDetail.getOrderHeight() + "&" + "orderName=" + orderDetail.getOrderName() + "&"
                     + "orderTimeliness=" + orderDetail.getOrderTimeliness() + "&" + "orderRemark=" + orderDetail.getOrderRemark() + "&" + "orderOrderprice=" + orderDetail.getOrderOrderprice() + "&" + "orderMileage=" + orderDetail.getOrderMileage() + "&" + "clientaddrArea=" + orderDetail.getClientaddrArea() + "&"
                     + "detailsGoodsname=" + orderDetail.getDetailsGoodsname()
-            );
-            helpMeSendBuyNetWorks.orderUpdate(paramMap, new Observer<HelpMeBuyBean>() {
+            );*/
+            System.out.println("usid:"+orderDetail.getUserUsid()+" olon:"+ orderDetail.getOrderLong()+" olat:"+ orderDetail.getOrderLat()+" dlon:"+ orderDetail.getOrderDlong()+" dlat:"+ orderDetail.getOrderDlat()+" ct1:"+ orderDetail.getClientaddrThings1()+" c1t1:"+ orderDetail.getClientaddr1Things1()+" weight:"+ orderDetail.getOrderHeight()+" on:"+ orderDetail.getOrderName()+" time:"+ orderDetail.getOrderTimeliness()+" mark:"+ orderDetail.getOrderRemark()+" price:"+ orderDetail.getOrderOrderprice()+"omile:"+ orderDetail.getOrderMileage()+" area:"+ orderDetail.getClientaddrArea()+" goodsname:"+ orderDetail.getDetailsGoodsname());
+            helpMeSendBuyNetWorks.orderSubmit(orderDetail.getUserUsid(), orderDetail.getOrderLong(), orderDetail.getOrderLat(), orderDetail.getOrderDlong(), orderDetail.getOrderDlat(), orderDetail.getClientaddrThings1(), orderDetail.getClientaddr1Things1(), orderDetail.getOrderHeight(), orderDetail.getOrderName(), orderDetail.getOrderTimeliness(), orderDetail.getOrderRemark(), orderDetail.getOrderOrderprice(), orderDetail.getOrderMileage(), orderDetail.getClientaddrArea(), orderDetail.getDetailsGoodsname(), new Observer<HelpMeBuyBean>() {
                 @Override
                 public void onCompleted() {
-                    /*Toast.makeText(activity, " onCompleted isSuccessful:", Toast.LENGTH_LONG).show();*/
+
                 }
 
                 @Override
                 public void onError(Throwable e) {
-                    /*Toast.makeText(activity, " onError isSuccessful:" + e, Toast.LENGTH_LONG).show();*/
+                    /*Toast.makeText(activity,"e:"+e,Toast.LENGTH_SHORT).show();*/
+                }
+
+                @Override
+                public void onNext(HelpMeBuyBean helpMeBuyBean) {
+
+                    goodsName = helpMeBuyBean.getOrderNo();
+                    /*Toast.makeText(activity,"goodsName:"+goodsName,Toast.LENGTH_SHORT).show();*/
+                    switch (method){
+                        case "wx":
+                            wxPay(helpMeBuyBean);
+                            break;
+                        case "zfb":
+                            zhiFuBaoPay(helpMeBuyBean);
+                            break;
+                    }
+                }
+            });
+/*            helpMeSendBuyNetWorks.orderUpdate(paramMap, new Observer<HelpMeBuyBean>() {
+                @Override
+                public void onCompleted() {
+                    *//*Toast.makeText(activity, " onCompleted isSuccessful:", Toast.LENGTH_LONG).show();*//*
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    *//*Toast.makeText(activity, " onError isSuccessful:" + e, Toast.LENGTH_LONG).show();*//*
                 }
 
                 @Override
                 public void onNext(final HelpMeBuyBean helpMeBuyBean) {
-                    /*Toast.makeText(activity, " onCompleted isSuccessful:", Toast.LENGTH_SHORT).show();*/
+                    *//*Toast.makeText(activity, " onCompleted isSuccessful:", Toast.LENGTH_SHORT).show();*//*
                     goodsName = helpMeBuyBean.getOrderNo();
                     switch (method){
                         case "wx":
@@ -362,7 +402,7 @@ public class PayConfirmPopup extends PopupWindow {
                     }
 
                 }
-            });
+            });*/
         }catch (Exception e){
             Toast.makeText(activity,"下单失败",Toast.LENGTH_SHORT).show();
         }

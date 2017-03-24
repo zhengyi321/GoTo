@@ -125,6 +125,7 @@ public class AddressManageActivity extends Activity implements OnItemClickListen
     private InputMethodManager imm;
     private AlertView mAlertViewExt;//窗口拓展例子
     private EditText etName;//拓展View内容
+    private  int RESULT_TYPE = 0;
     @BindView(R.id.xrv_addressmanage_useraddrlist)
     XRecyclerView xrvAddressManageUserAddrList;
     @BindView(R.id.xrv_addressmanage_shopaddrlist)
@@ -162,17 +163,32 @@ public class AddressManageActivity extends Activity implements OnItemClickListen
     }
     private void init(){
         ButterKnife.bind(this);
-
+        initResultType();
         initXRV();
       /*  getUserAddressFromNet();*/
         getDetailDataFromNet("user");
         /*initAlterViewDialog();*/
     }
+    private void initResultType(){
+        XCCacheManager xcCacheManager = XCCacheManager.getInstance(this);
+        String type = xcCacheManager.readCache("addressManageType");
+        if(type.equals("send")) {
+            Bundle bundle = this.getIntent().getExtras();
+            String sender = bundle.getString("sender");
+            String receiver = bundle.getString("receiver");
+            if (sender != null) {
+                RESULT_TYPE = Integer.valueOf(sender);
+            }
+            if (receiver != null) {
+                RESULT_TYPE = Integer.valueOf(receiver);
+            }
+        }
+    }
     private void initXRV(){
         shopAddressListBeanList = new ArrayList<>();
         userAddressListBeanList = new ArrayList<>();
         shopRVAdapter = new AddressManageAddShopRVAdapter(this,shopAddressListBeanList);
-        userRVAdapter = new AddressManageAddUserRVAdapter(this,userAddressListBeanList);
+        userRVAdapter = new AddressManageAddUserRVAdapter(this,userAddressListBeanList,RESULT_TYPE);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(this);
@@ -181,6 +197,7 @@ public class AddressManageActivity extends Activity implements OnItemClickListen
         xrvAddressManageUserAddrList.setAdapter(userRVAdapter);
         xrvAddressManageShopAddrList.setLayoutManager(layoutManager);
         xrvAddressManageUserAddrList.setLayoutManager(layoutManager1);
+
 
     }
 
@@ -311,4 +328,9 @@ public class AddressManageActivity extends Activity implements OnItemClickListen
 
     /*添加地址*/
 
+
+    protected void onResume(){
+        super.onResume();
+        getDetailDataFromNet("user");
+    }
 }

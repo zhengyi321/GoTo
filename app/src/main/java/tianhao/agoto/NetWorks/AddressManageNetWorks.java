@@ -39,6 +39,11 @@ public class AddressManageNetWorks extends BaseNetWork {
         Observable<List<ShopAddressListBean>> getShopAddrList(@Query("userUsid") String userUsid);
         /*商家地址列表查找*/
 
+        /*商家地址删除*/
+        @GET("clientaddr1/addrdelete.do")
+        Observable<BaseBean> deleteShopAddress(@Query("userUsid") String usid,@Query("clientaddr1Things1") String clientaddr1Things1);
+        /*商家地址删除*/
+
         /*用户地址添加*/
         @GET("clientaddr/addrsave.do")
         Observable<BaseBean> addUserAddress(@Query("userUsid") String userUsid, @Query("clientaddrAddr") String clientaddrAddr, @Query("clientaddrLat") float clientaddrLat, @Query("clientaddrLong") float clientaddrLong, @Query("clientaddrIsdefault") String clientaddrIsdefault);
@@ -47,6 +52,11 @@ public class AddressManageNetWorks extends BaseNetWork {
         @GET("clientaddr/addrfind.do")
         Observable<List<UserAddressListBean>> getUserAddress(@Query("userUsid") String userUsid);
         /*用户地址列表查找 484914c632db43e081b9a5eb75cc3971*/
+
+        /*用户地址删除*/
+        @GET("clientaddr/addrdelete.do")
+        Observable<BaseBean> deleteUserAddress(@Query("userUsid") String usid,@Query("clientaddrThings1") String clientaddrThings1);
+        /*用户地址删除*/
     }
 
 
@@ -58,10 +68,16 @@ public class AddressManageNetWorks extends BaseNetWork {
     public void getShopAddrList(String userUsid,Observer<List<ShopAddressListBean>> observer) {
         setSubscribe( service.getShopAddrList(userUsid),observer);
     }
+    public  void deleteShopAddress(String userUsid,String clientaddr1Things1,Observer<BaseBean> observable){
+        setSubscribe(service.deleteShopAddress(userUsid,clientaddr1Things1),observable);
+    }
     public void addUserAddress(String userUsid, String clientaddrAddr, float clientaddrLat, float clientaddrLong, String clientaddrIsdefault, Observer<BaseBean> observer) {
         setSubscribe(service.addUserAddress(userUsid, clientaddrAddr, clientaddrLat, clientaddrLong, clientaddrIsdefault), observer);
     }
-    public  void getUserAddress(String userUsidObserver,Observer<List<UserAddressListBean>> observable){
-        setSubscribe(service.getUserAddress(userUsidObserver),observable);
+    public  void getUserAddress(String userUsid,Observer<List<UserAddressListBean>> observable){
+        setSubscribe(service.getUserAddress(userUsid),observable);
+    }
+    public  void deleteUserAddress(String userUsid,String clientaddrThings1,Observer<BaseBean> observable){
+        setSubscribe(service.deleteUserAddress(userUsid,clientaddrThings1),observable);
     }
 }

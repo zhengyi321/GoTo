@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout rlyMainLeftMenuAddressManage;
     @OnClick(R.id.rly_main_leftmenu_addressmanage)
     public void rlyMainLeftMenuAddressManageOnclick(){
+        xcCacheManager.writeCache("addressManageType","main");
         Intent intent = new Intent(this,AddressManageActivity.class);
         startActivity(intent);
     }

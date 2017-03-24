@@ -6,40 +6,98 @@ package tianhao.agoto.Bean;
 
 public class OrderDetail {
     /*用户id*/
-    private String userUsid = " ";
+    private String userUsid = "";
     /*用户id*/
+
+    private float orderLong;
+    private float orderLat;
+    private float orderDlong;
+    private float orderDlat;
+
+    private String clientaddrThings1;
+
+    private String clientaddr1Things1;
+
     /*寄件信息:姓名＋详细地址＋联系方式*/
-    private String clientaddrAddr= " ";
+    private String clientaddrAddr= "";
     /*寄件信息:姓名＋详细地址＋联系方式*/
     /*收件信息:姓名＋详细地址＋联系方式*/
-    private String clientaddrAddr1= " ";
+    private String clientaddrAddr1= "";
     /*收件信息:姓名＋详细地址＋联系方式*/
     /*重量*/
-    private String orderHeight= " ";
+    private String orderHeight= "";
     /*重量*/
     /*物品种类*/
-    private String orderName= " ";
+    private String orderName= "";
     /*物品种类*/
     /*收件时间*/
-    private String orderTimeliness= " ";
+    private String orderTimeliness= "";
     /*收件时间*/
     /*备注*/
-    private String orderRemark= " ";
+    private String orderRemark= "";
     /*备注*/
     /*价格*/
-    private String orderOrderprice= " ";
+    private Double orderOrderprice;
     /*价格*/
     /*里程*/
 
 
-    private String orderMileage= " ";
+    private Double orderMileage;
     /*里程*/
     /*区域(镇名)*/
-    private String clientaddrArea= " ";
+    private String clientaddrArea= "";
     /*区域(镇名)*/
     /*清单*/
-    private String detailsGoodsname= " ";
+    private String detailsGoodsname= "";
     /*清单*/
+
+    public float getOrderLong() {
+        return orderLong;
+    }
+
+    public void setOrderLong(float orderLong) {
+        this.orderLong = orderLong;
+    }
+
+    public float getOrderLat() {
+        return orderLat;
+    }
+
+    public void setOrderLat(float orderLat) {
+        this.orderLat = orderLat;
+    }
+
+    public float getOrderDlong() {
+        return orderDlong;
+    }
+
+    public void setOrderDlong(float orderDlong) {
+        this.orderDlong = orderDlong;
+    }
+
+    public float getOrderDlat() {
+        return orderDlat;
+    }
+
+    public void setOrderDlat(float orderDlat) {
+        this.orderDlat = orderDlat;
+    }
+
+    public String getClientaddrThings1() {
+        return clientaddrThings1;
+    }
+
+    public void setClientaddrThings1(String clientaddrThings1) {
+        this.clientaddrThings1 = clientaddrThings1;
+    }
+
+    public String getClientaddr1Things1() {
+        return clientaddr1Things1;
+    }
+
+    public void setClientaddr1Things1(String clientaddr1Things1) {
+        this.clientaddr1Things1 = clientaddr1Things1;
+    }
 
     public String getUserUsid() {
         return userUsid;
@@ -97,19 +155,19 @@ public class OrderDetail {
         this.orderRemark = orderRemark;
     }
 
-    public String getOrderOrderprice() {
+    public Double getOrderOrderprice() {
         return orderOrderprice;
     }
 
-    public void setOrderOrderprice(String orderOrderprice) {
+    public void setOrderOrderprice(Double orderOrderprice) {
         this.orderOrderprice = orderOrderprice;
     }
 
-    public String getOrderMileage() {
+    public Double getOrderMileage() {
         return orderMileage;
     }
 
-    public void setOrderMileage(String orderMileage) {
+    public void setOrderMileage(Double orderMileage) {
         this.orderMileage = orderMileage;
     }
 
